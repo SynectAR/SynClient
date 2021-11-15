@@ -1,4 +1,4 @@
-package com.example.artemplateproject
+package com.example.synclient
 
 import android.graphics.Color
 import android.net.Uri

@@ -1,4 +1,4 @@
-package com.example.artemplateproject
+package com.example.synclient
 
 import org.junit.Test
 
