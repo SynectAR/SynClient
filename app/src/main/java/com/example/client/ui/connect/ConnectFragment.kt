@@ -24,8 +24,7 @@ class ConnectFragment : Fragment() {
     private var active: Boolean = false
     private lateinit var handler: Handler
     private lateinit var bitmap:Bitmap
-
-    private val address= "109.227.233.113"
+    private val address= "111.111.111.111"
     private var port = 8000
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,10 +70,9 @@ class ConnectFragment : Fragment() {
     }
 
     private fun client(address: String, port: Int){
-        val connect = SocketConnect()
-        var socket = connect.createSocket(address,port)
-        bitmap = connect.getBitmap(socket)
-        connect.closeSocket(socket)
+        val connect = SocketConnect(address,port)
+        bitmap = connect.getBitmap()
+        connect.closeSocket()
         handler.sendEmptyMessage(0)
     }
 

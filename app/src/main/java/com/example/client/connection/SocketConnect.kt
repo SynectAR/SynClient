@@ -6,15 +6,14 @@ import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.net.Socket;
 
-public class SocketConnect {
+public class SocketConnect(address: String, port: Int) {
+    private val socket: Socket = Socket(address,port)
 
-    fun createSocket(address: String, port: Int): Socket {
-        return Socket(address, port)
-    }
-    fun closeSocket(socket: Socket){
+    fun closeSocket():Boolean{
         socket.close()
+        return true
     }
-    fun getBitmap(socket:Socket): Bitmap{
+    fun getBitmap(): Bitmap{
         var bytesArray = getMessageByCustomProtocol(socket)
         return convertToBitmap(bytesArray)
     }
@@ -23,7 +22,7 @@ public class SocketConnect {
         val `in` = DataInputStream(BufferedInputStream(socket.getInputStream()))
         val messageMetadata = ByteArray(4)
         `in`.read(messageMetadata)
-        val messageSize = convert4byteToInt(messageMetadata,0)
+        val messageSize = convertBytesToInt(messageMetadata)
         val messageFromServer = ByteArray(messageSize)
         `in`.read(messageFromServer)
         `in`.close()
@@ -43,7 +42,7 @@ public class SocketConnect {
         return resultBitmap
     }
 
-    private fun convert4byteToInt(bytes: ByteArray, shift: Int): Int {
+    private fun convertBytesToInt(bytes: ByteArray): Int {
         return (bytes[3].toInt() shl 24) or
                 (bytes[2].toInt() and 0xff shl 16) or
                 (bytes[1].toInt() and 0xff shl 8) or
