@@ -16,10 +16,10 @@ import com.google.ar.core.Session
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.math.Vector3
-import com.google.ar.sceneform.rendering.ModelRenderable
-import com.google.ar.sceneform.rendering.ViewRenderable
+import com.google.ar.sceneform.rendering.*
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
+
 
 class MainActivity : AppCompatActivity(),View.OnClickListener {
 
@@ -64,9 +64,9 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         {
             val bear=TransformableNode(ArFragment.transformationSystem)
             bear.setParent(anchorNode)
-            bear.renderable= bearRenderable
+            bear.renderable= null
             bear.select()
-            AddName(anchorNode,bear,"Я пишу- Медведь")
+            AddName(anchorNode,bear,"Текст1")
         }
         if(selected==2)
         {
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             cat.setParent(anchorNode)
             cat.renderable= catRenderable
             cat.select()
-            AddName(anchorNode,cat,"Я пишу- Кошка")
+            AddName(anchorNode,cat,"Текст2")
         }
         if(selected==3)
         {
@@ -82,23 +82,23 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             cow.setParent(anchorNode)
             cow.renderable= cowRenderable
             cow.select()
-            AddName(anchorNode,cow,"Я пишу- Корова")
+            AddName(anchorNode,cow,"Текст3")
         }
 
     }
 
     private fun AddName(anchorNode: AnchorNode, node: TransformableNode, name: String) {
-        ViewRenderable.builder().setView(this,R.layout.example_widget)
+        ViewRenderable.builder().setView(this,R.layout.ar_info_display_widget)
             .build()
             .thenAccept { viewRenderable ->
                 val nameView= TransformableNode(ArFragment.transformationSystem)
-                nameView.localPosition = Vector3(0f,node.localPosition.y+0.5f,0f)
+                nameView.localPosition = Vector3(0f,node.localPosition.y+0.5f,0f) //0;0.5;0
                 nameView.setParent(anchorNode)
                 nameView.renderable=viewRenderable
                 nameView.select()
 
                 val textView=viewRenderable.view as View
-                var text= textView.findViewById<TextView>(R.id.exapmleText_id)
+                var text= textView.findViewById<TextView>(R.id.exampleText_id)
                 text.text = name
                 text.setOnClickListener{
                     anchorNode.setParent(null)
@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
     private fun setupModel() {
         ModelRenderable.builder()
-            .setSource(this, Uri.parse("models/pencil.glb"))
+            .setSource(this, Uri.parse("models/sphere-gltf-example.glb"))
             .setIsFilamentGltf(true)
             .build()
             .thenAccept{modelRenderable -> bearRenderable=modelRenderable}
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 null
             }
         ModelRenderable.builder()
-            .setSource(this,Uri.parse("models/pencil.glb"))
+            .setSource(this,Uri.parse("models/halloween.glb"))
             .setIsFilamentGltf(true)
             .build()
             .thenAccept{modelRenderable -> cowRenderable=modelRenderable}
