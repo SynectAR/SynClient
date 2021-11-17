@@ -23,9 +23,9 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
-    <fragment
+    <activity
         android:id="@+id/navigation_ar"
-        android:name="com.example.synclient.ui.ar.ARFragment"
+        android:name="com.example.synclient.ui.ar.ARCameraActivity"
         android:label="@string/title_ar"
-        tools:layout="@layout/fragment_ar" />
+        tools:layout="@layout/activity_ar_camera" />
 </navigation>
