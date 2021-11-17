@@ -16,12 +16,12 @@ import com.google.ar.core.Session
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.math.Vector3
-import com.google.ar.sceneform.rendering.*
+import com.google.ar.sceneform.rendering.ModelRenderable
+import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 
-
-class MainActivity : AppCompatActivity(),View.OnClickListener {
+class ARActivity : AppCompatActivity(), View.OnClickListener {
 
     var userARSetupRequest: Boolean = true
     var mSession: Session? = null
@@ -30,39 +30,39 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
 
     lateinit var arrayView: Array<ImageView>
-    lateinit var bearRenderable:ModelRenderable
-    lateinit var catRenderable:ModelRenderable
-    lateinit var cowRenderable:ModelRenderable
+    lateinit var bearRenderable: ModelRenderable
+    lateinit var catRenderable: ModelRenderable
+    lateinit var cowRenderable: ModelRenderable
 
     internal var selected= 1 //bear text
 
-    lateinit var ArFragment:ArFragment
+    lateinit var ArFragment: ArFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.fragment_ar)
+
 
         setupArray()
         setupClickListener()
         setupModel()
-        ArFragment= supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as ArFragment
-        ArFragment.setOnTapArPlaneListener{hitResult,plane,motionEvent->
-            val anchor= hitResult.createAnchor()
-            val anchorNode= AnchorNode(anchor)
+        ArFragment = supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as ArFragment
+        ArFragment.setOnTapArPlaneListener { hitResult, plane, motionEvent ->
+            val anchor = hitResult.createAnchor()
+            val anchorNode = AnchorNode(anchor)
             anchorNode.setParent(ArFragment.arSceneView.scene)
 
-            createModel(anchorNode,selected)
+            createModel(anchorNode, selected)
+
+
         }
-
-
-
     }
 
     private fun createModel(anchorNode: AnchorNode, selected: Int) {
         if(selected==1)
         {
-            val bear=TransformableNode(ArFragment.transformationSystem)
+            val bear= TransformableNode(ArFragment.transformationSystem)
             bear.setParent(anchorNode)
             bear.renderable= null
             bear.select()
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         }
         if(selected==2)
         {
-            val cat=TransformableNode(ArFragment.transformationSystem)
+            val cat= TransformableNode(ArFragment.transformationSystem)
             cat.setParent(anchorNode)
             cat.renderable= catRenderable
             cat.select()
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         }
         if(selected==3)
         {
-            val cow=TransformableNode(ArFragment.transformationSystem)
+            val cow= TransformableNode(ArFragment.transformationSystem)
             cow.setParent(anchorNode)
             cow.renderable= cowRenderable
             cow.select()
@@ -106,48 +106,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             }
     }
 
-    /*
-    private fun setupModel() {
-        ModelRenderable.builder()
-            .setSource(this, R.id.bear)
-            .build()
-            .thenAccept{modelRenderable -> bearRenderable=modelRenderable}
-            .exceptionally { throwable ->
-                Toast.makeText(this,"Unable to load bear model.",
-                    Toast.LENGTH_SHORT).show()
-                null
-              }
-        ModelRenderable.builder()
-            .setSource(this,R.id.cat)
-            .build()
-            .thenAccept{modelRenderable -> catRenderable=modelRenderable}
-            .exceptionally { throwable ->
-                Toast.makeText(this,"Unable to load cat model.",
-                    Toast.LENGTH_SHORT).show()
-                null
-            }
-        ModelRenderable.builder()
-            .setSource(this,R.id.cow)
-            .build()
-            .thenAccept{modelRenderable -> cowRenderable=modelRenderable}
-            .exceptionally { throwable ->
-                Toast.makeText(this,"Unable to load cow model.",
-                    Toast.LENGTH_SHORT).show()
-                null
-            }
-
-
-    }
-
-    private fun setupClickListener() {
-        for(i in arrayView.indices)
-        {
-            arrayView[i].setOnClickListener(this)
-        }
-    }
-
-     */
-
     private fun setupModel() {
         ModelRenderable.builder()
             .setSource(this, Uri.parse("models/sphere-gltf-example.glb"))
@@ -160,7 +118,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 null
             }
         ModelRenderable.builder()
-            .setSource(this,Uri.parse("models/pencil.glb"))
+            .setSource(this, Uri.parse("models/pencil.glb"))
             .setIsFilamentGltf(true)
             .build()
             .thenAccept{modelRenderable -> catRenderable=modelRenderable}
@@ -170,7 +128,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 null
             }
         ModelRenderable.builder()
-            .setSource(this,Uri.parse("models/halloween.glb"))
+            .setSource(this, Uri.parse("models/halloween.glb"))
             .setIsFilamentGltf(true)
             .build()
             .thenAccept{modelRenderable -> cowRenderable=modelRenderable}
@@ -206,7 +164,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         super.onResume()
         //
 
-       SessionCameraChecker()
+        SessionCameraChecker()
     }
 
     override fun onPause() {
@@ -290,6 +248,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         }
 
     }
+
+
 
 
 }

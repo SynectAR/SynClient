@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 
 }
 
@@ -12,7 +13,12 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    defaultConfig {
+    dataBinding {
+        enabled = true
+    }
+
+
+        defaultConfig {
         applicationId "com.example.synclient"
         minSdk 29
         targetSdk 31
@@ -43,6 +49,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
     }
 
 }

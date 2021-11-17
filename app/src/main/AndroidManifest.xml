@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SynClient">
         <activity
-            android:name=".ui.ARActivity"
+            android:name=".ARActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
