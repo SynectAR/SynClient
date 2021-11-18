@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 
 class ConnectFragment : Fragment() {
-    private var active: Boolean = false
+    private var isConnected: Boolean = false
     private lateinit var handler: Handler
     private lateinit var bitmap:Bitmap
     private val address= "111.111.111.111"
@@ -44,16 +44,16 @@ class ConnectFragment : Fragment() {
         val resultText = view?.findViewById(R.id.resultWrite) as EditText
         val image = view?.findViewById(R.id.imageBytes) as ImageView
         button.setOnClickListener{
-            if(!active){
+            if(!isConnected){
                 button.text = "Disconnect"
-                active = true
+                isConnected = true
                 Toast.makeText(context,"Подключено",Toast.LENGTH_SHORT).show()
                 CoroutineScope(IO).launch {
-                    client(address,port)
+                    createConnection(address,port)
                 }
             }
             else{
-                active = false;
+                isConnected = false;
                 resultText.setText("")
                 button.text = "Connect"
             }
@@ -69,7 +69,7 @@ class ConnectFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private fun client(address: String, port: Int){
+    private fun createConnection(address: String, port: Int){
         val connect = SocketConnect(address,port)
         bitmap = connect.getBitmap()
         connect.closeSocket()

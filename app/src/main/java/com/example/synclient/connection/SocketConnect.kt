@@ -2,7 +2,6 @@ package com.example.synclient.connection
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.net.Socket
 
@@ -19,14 +18,14 @@ public class SocketConnect(address: String, port: Int) {
     }
 
     private fun getMessageByCustomProtocol(socket: Socket):ByteArray{
-        val `in` = DataInputStream(BufferedInputStream(socket.getInputStream()))
+        val inputStream = DataInputStream(socket.getInputStream())
         val messageMetadata = ByteArray(4)
-        `in`.read(messageMetadata)
+        inputStream.read(messageMetadata)
         val messageSize = convertBytesToInt(messageMetadata)
-        val messageFromServer = ByteArray(messageSize)
-        `in`.read(messageFromServer)
-        `in`.close()
-        return messageFromServer
+        val imageData = ByteArray(messageSize)
+        inputStream.read(imageData)
+        inputStream.close()
+        return imageData
     }
 
     private fun convertToBitmap(bytes: ByteArray): Bitmap {
@@ -34,9 +33,9 @@ public class SocketConnect(address: String, port: Int) {
         val pixels: Int = kotlin.math.sqrt(pictureSize.toDouble()).toInt()
         val resultBitmap = Bitmap.createBitmap(pixels, pixels, Bitmap.Config.ARGB_8888)
         for(j in 0 until pixels)
-        for(i in 0 until pixels){
-            val index = i * pixels + j
-            resultBitmap.setPixel(i,j, Color.rgb(convertByteToInt(bytes,index*4+2),
+            for(i in 0 until pixels){
+                val index = i * pixels + j
+                resultBitmap.setPixel(i,j, Color.rgb(convertByteToInt(bytes,index*4+2),
                     convertByteToInt(bytes,index*4+1),convertByteToInt(bytes,index*4+3)))
         }
         return resultBitmap
