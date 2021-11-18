@@ -30,7 +30,7 @@ class ARCameraActivity : AppCompatActivity(), View.OnClickListener {
 
     internal var selected= 1 //bear text
 
-    lateinit var ArFragment: ArFragment
+    lateinit var arFragment: ArFragment
 
 
 
@@ -40,12 +40,18 @@ class ARCameraActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_ar_camera)
 
 
-        ArFragment= supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as ArFragment
+        arFragment= supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as ArFragment
 
-        ArFragment.setOnTapArPlaneListener{hitResult,plane,motionEvent->
+        arFragment.setOnTapArPlaneListener{ hitResult, plane, motionEvent->
+            var config = arFragment.arSceneView.session?.config
+            if (config != null) {
+                config.focusMode = Config.FocusMode.AUTO
+            }
+            arFragment.arSceneView.session?.configure(config)
+
             val anchor= hitResult.createAnchor()
             val anchorNode= AnchorNode(anchor)
-            anchorNode.setParent(ArFragment.arSceneView.scene)
+            anchorNode.setParent(arFragment.arSceneView.scene)
 
             DisplayWidget(anchorNode,selected)
         }
@@ -62,7 +68,7 @@ class ARCameraActivity : AppCompatActivity(), View.OnClickListener {
         ViewRenderable.builder().setView(this,R.layout.ar_info_display_widget)
             .build()
             .thenAccept { viewRenderable ->
-                val nameView= TransformableNode(ArFragment.transformationSystem)
+                val nameView= TransformableNode(arFragment.transformationSystem)
                 nameView.localPosition = Vector3(0f,0.5f,0f)
                 nameView.setParent(anchorNode)
                 nameView.renderable=viewRenderable
