@@ -2,6 +2,7 @@ package com.example.synclient.connection
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.util.Log
 import java.io.DataInputStream
 import java.net.Socket
 
@@ -17,6 +18,26 @@ public class SocketConnect(address: String, port: Int) {
         return convertToBitmap(bytesArray)
     }
 
+    fun sendMessage(message: String):Boolean{
+        try{
+
+        }
+        catch (exception: Throwable){
+            Log.e("TAG",exception.toString())
+            return false;
+        }
+        return true
+    }
+    fun getMessage(): String? {
+        try{
+
+        }
+        catch (exception: Throwable){
+            Log.e("TAG",exception.toString())
+            return null;
+        }
+        return "todo"
+    }
     private fun getMessageByCustomProtocol(socket: Socket):ByteArray{
         val inputStream = DataInputStream(socket.getInputStream())
         val messageMetadata = ByteArray(4)

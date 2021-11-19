@@ -24,7 +24,7 @@ class ConnectFragment : Fragment() {
     private var isConnected: Boolean = false
     private lateinit var handler: Handler
     private lateinit var bitmap:Bitmap
-    private val address= "111.111.111.111"
+    private val address= "192.168.1.187"
     private var port = 8000
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,29 +41,23 @@ class ConnectFragment : Fragment() {
         super.onStart()
         val button = view?.findViewById(R.id.button_connect) as Button
         val addressText = view?.findViewById(R.id.ip_adress_view) as TextInputEditText
-        val resultText = view?.findViewById(R.id.resultWrite) as EditText
-        val image = view?.findViewById(R.id.imageBytes) as ImageView
         button.setOnClickListener{
             if(!isConnected){
                 button.text = "Disconnect"
                 isConnected = true
                 Toast.makeText(context,"Подключено",Toast.LENGTH_SHORT).show()
                 CoroutineScope(IO).launch {
-                    createConnection(address,port)
                 }
             }
             else{
                 isConnected = false;
-                resultText.setText("")
                 button.text = "Connect"
             }
         }
         handler = object : Handler() {
             override fun handleMessage(msg: Message) {
-                image.setImageBitmap(bitmap);
             }
         }
-
     }
     override fun onDestroyView() {
         super.onDestroyView()
@@ -73,7 +67,6 @@ class ConnectFragment : Fragment() {
         val connect = SocketConnect(address,port)
         bitmap = connect.getBitmap()
         connect.closeSocket()
-        handler.sendEmptyMessage(0)
     }
 
 }
