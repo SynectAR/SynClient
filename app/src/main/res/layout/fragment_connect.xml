@@ -109,15 +109,6 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"/>
 
-                <Button
-                    android:id="@+id/btnGetData"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:text="Get INFO"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="10dp"/>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

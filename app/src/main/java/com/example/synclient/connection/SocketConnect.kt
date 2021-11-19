@@ -18,9 +18,13 @@ public class SocketConnect(address: String, port: Int) {
         return convertToBitmap(bytesArray)
     }
 
-    fun sendMessage(message: String):Boolean{
+    fun getMessageByParam(param: String): String?{
+        sendMessage(param)
+        return getMessage()
+    }
+    private fun sendMessage(message: String):Boolean{
         try{
-
+            socket.outputStream.write(message.toByteArray())
         }
         catch (exception: Throwable){
             Log.e("TAG",exception.toString())
@@ -28,15 +32,14 @@ public class SocketConnect(address: String, port: Int) {
         }
         return true
     }
-    fun getMessage(): String? {
-        try{
-
-        }
-        catch (exception: Throwable){
+    private fun getMessage(): String? {
+        return try{
+            val inputStream = DataInputStream(socket.getInputStream())
+            inputStream.readLine()
+        } catch (exception: Throwable){
             Log.e("TAG",exception.toString())
-            return null;
+            null;
         }
-        return "todo"
     }
     private fun getMessageByCustomProtocol(socket: Socket):ByteArray{
         val inputStream = DataInputStream(socket.getInputStream())
