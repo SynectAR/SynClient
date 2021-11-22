@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.ar.ARCameraActivity">
 
-    <androidx.fragment.app.FragmentContainerView
+    <fragment
         android:id="@+id/scene_form_fragment"
-        android:name="com.google.ar.sceneform.ux.ArFragment"
+        android:name="com.example.synclient.customAR.CustomArFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
