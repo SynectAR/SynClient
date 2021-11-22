@@ -36,6 +36,7 @@ class ARCameraActivity : AppCompatActivity(), View.OnClickListener, Scene.OnUpda
     internal var selected= 1 //bear text
 
     lateinit var arFragment: ArFragment
+    //lateinit var arFragment:CustomARFragment
     var isAdded: Boolean= false
 
 
@@ -47,7 +48,16 @@ class ARCameraActivity : AppCompatActivity(), View.OnClickListener, Scene.OnUpda
 
 
         arFragment= supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as ArFragment
-        arFragment.arSceneView.scene.addOnUpdateListener(this)
+        //arFragment.arSceneView.scene.addOnUpdateListener(this)
+        arFragment.setOnTapArPlaneListener{ hitResult, plane, motionEvent->
+            var config = arFragment.arSceneView.session?.config
+            if (config != null) {
+                config.focusMode = Config.FocusMode.AUTO
+            }
+            arFragment.arSceneView.session?.configure(config)
+            arFragment.arSceneView.scene.addOnUpdateListener(this)
+
+        }
 
 
 //        if(savedInstanceState == null)
