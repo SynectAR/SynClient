@@ -1,9 +1,11 @@
 package com.example.synclient.ui.ar
 
+import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.synclient.R
@@ -26,24 +28,26 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
         setContentView(R.layout.activity_ar_camera)
         arFragment= (supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as CustomArFragment).apply{
             setOnSessionConfigurationListener { session, config ->
-                if (config != null) {
-                    val bitmapQR = BitmapFactory.decodeResource(resources, R.drawable.demo_img2)
-                    val aid = AugmentedImageDatabase(session)
-                    aid.addImage("qrCode", bitmapQR,0.02f)
-                    config.augmentedImageDatabase = aid
-                    config.updateMode=Config.UpdateMode.LATEST_CAMERA_IMAGE
-                }
-                arSceneView.session?.configure(config)
-                isTrue = true
+//                val bitmapQR = BitmapFactory.decodeResource(resources, R.drawable.demo_img2)
+//                val aid = AugmentedImageDatabase(session)
+//                aid.addImage("qrCode", bitmapQR,0.02f)
+//                config.augmentedImageDatabase = aid
+//                config.updateMode=Config.UpdateMode.LATEST_CAMERA_IMAGE
+//                config.planeFindingMode = Config.PlaneFindingMode.DISABLED
+//                config.focusMode = Config.FocusMode.AUTO
             }
             setOnAugmentedImageUpdateListener {
-                createAnchor()
+                var config = arSceneView.session?.config
+                if(config!= null){
+                    config.focusMode = Config.FocusMode.AUTO
+                    config.updateMode=Config.UpdateMode.LATEST_CAMERA_IMAGE
+                    arSceneView.session?.configure(config)
                 }
-
-            setOnTapArPlaneListener{ hitResult, plane, motionEvent->
-                isTrue = true
+                if(isFound)
+                    setOnAugmentedImageUpdateListener(null)
+                else
+                    createAnchor()
             }
-
         }
 
 
@@ -66,7 +70,6 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
                 nameView.parent = anchorNode
                 nameView.renderable=viewRenderable
                 nameView.select()
-
                 val textView=viewRenderable.view as View
                 var text= textView.findViewById<TextView>(R.id.exampleText_id)
                 text.text = "CMT, C1209, 21.3.4/2"
@@ -82,21 +85,22 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
     }
 
     private fun createAnchor(){
-        val frame = arFragment.arSceneView.arFrame
-        val images: Collection<AugmentedImage> = frame!!.getUpdatedTrackables(
-            AugmentedImage::class.java
-        )
-        var anchor: Anchor
-        images.forEach {
-            if(it.trackingState == TrackingState.TRACKING){
-                if(it.name.equals("qrCode")){
-                    isFound = true
-                    anchor = it.createAnchor(it.centerPose)
-                    val anchorNode= AnchorNode(anchor)
-                    anchorNode.parent = arFragment.arSceneView.scene
-                    displayWidget(anchorNode)
+            val frame = arFragment.arSceneView.arFrame
+            val images: Collection<AugmentedImage> = frame!!.getUpdatedTrackables(
+                AugmentedImage::class.java
+            )
+            var anchor: Anchor
+            for(image in images){
+                if(image.trackingState == TrackingState.TRACKING){
+                    if(image.name.equals("qrCode")){
+                        isFound = true
+                        anchor = image.createAnchor(image.centerPose)
+                        val anchorNode= AnchorNode(anchor)
+                        anchorNode.parent = arFragment.arSceneView.scene
+                        displayWidget(anchorNode)
+                        break
+                    }
                 }
             }
-        }
     }
 }
