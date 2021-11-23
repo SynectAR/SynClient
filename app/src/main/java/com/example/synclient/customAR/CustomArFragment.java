@@ -22,7 +22,7 @@ public class CustomArFragment extends ArFragment {
             config.setLightEstimationMode(lightEstimationConfig.getMode());
         }
         config.setDepthMode(Config.DepthMode.DISABLED);
-        config.setPlaneFindingMode(Config.PlaneFindingMode.HORIZONTAL);
+        config.setPlaneFindingMode(Config.PlaneFindingMode.VERTICAL);
         config.setFocusMode(Config.FocusMode.AUTO);
         // Force the non-blocking mode for the session.
         config.setUpdateMode(Config.UpdateMode.LATEST_CAMERA_IMAGE);
