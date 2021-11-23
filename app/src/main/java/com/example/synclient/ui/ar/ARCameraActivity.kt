@@ -3,6 +3,7 @@ package com.example.synclient.ui.ar
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.synclient.R
@@ -62,20 +63,18 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
             .build()
             .thenAccept { viewRenderable ->
                 val nameView= TransformableNode(arFragment.transformationSystem)
-                nameView.localPosition = Vector3(0f,0.1f,0f)
+                nameView.localPosition = Vector3(0f,0f,0f)
                 nameView.scaleController.minScale = 0.01f
                 nameView.scaleController.maxScale = 0.02f
                 nameView.parent = anchorNode
                 nameView.renderable=viewRenderable
                 nameView.select()
 
-                val textView=viewRenderable.view as View
-                var text= textView.findViewById<TextView>(R.id.exampleText_id)
+
+                var arWidget=viewRenderable.view as View
+                arWidget.layoutParams= ViewGroup.LayoutParams(100,100)
+                var text= arWidget.findViewById<TextView>(R.id.vnaInfo_id)
                 text.text = "CMT, C1209, 21.3.4/2"
-                text.setOnClickListener{
-                    text.text =
-                        "Pressed"
-                }
             }
     }
 
