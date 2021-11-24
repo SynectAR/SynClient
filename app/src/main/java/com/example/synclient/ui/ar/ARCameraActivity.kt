@@ -16,6 +16,7 @@ import com.google.ar.core.*
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.Scene
+import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
@@ -29,8 +30,6 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ar_camera)
-
-        //var CircleView1= findViewById<CircleView>(R.id.circleView1)
 
         arFragment= (supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as CustomArFragment).apply{
             setOnSessionConfigurationListener { session, config ->
@@ -70,9 +69,12 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
             .build()
             .thenAccept { viewRenderable ->
                 val nameView= TransformableNode(arFragment.transformationSystem)
-                nameView.localPosition = Vector3(0f,0f,0f)
+               //nameView.localPosition = Vector3(0f,0f,0f)
+                //nameView.localRotation=(Quaternion.axisAngle(Vector3(0f,0f,0f),-90f))
                 nameView.scaleController.minScale = 0.01f
                 nameView.scaleController.maxScale = 0.02f
+                var anchorUp: Vector3 = anchorNode.down
+                nameView.setLookDirection(Vector3.down(),anchorUp)
                 nameView.parent = anchorNode
                 nameView.renderable=viewRenderable
                 nameView.select()
