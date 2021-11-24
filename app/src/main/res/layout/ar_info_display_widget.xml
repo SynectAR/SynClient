@@ -1,110 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="800dp"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/CircleViewText1_id"
-            android:layout_width="500dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_widget_ar_info"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text="Порт1"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="40sp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.91"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.04" />
-
-        <TextView
-            android:id="@+id/CircleViewText2_id"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_widget_ar_info"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text="Порт2"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="40sp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.91"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.04" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <com.example.synclient.arWidget.CircleView
-            android:id="@+id/circleView1"
-            android:layout_width="150dp"
-            android:layout_height="311dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/bg_round"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.example.synclient.arWidget.CircleView
-            android:id="@+id/circleView2"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </LinearLayout>
+    android:id="@+id/container"
+    android:layout_width="1000dp"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_round">
 
     <TextView
-        android:id="@+id/vnaInfo_id"
+        android:id="@+id/port1textView"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="260dp"
+        android:background="@drawable/bg_widget_ar_info"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Порт1"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/port2textView"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="260dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/bg_widget_ar_info"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Порт2"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.synclient.arWidget.CircleView
+        android:id="@+id/port1circleView"
+        android:layout_width="150dp"
+        android:layout_height="300dp"
+        android:layout_marginLeft="160dp"
+        android:layout_marginTop="464dp"
+        android:background="@drawable/bg_round"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.synclient.arWidget.CircleView
+        android:id="@+id/port2circleView"
+        android:layout_width="150dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="464dp"
+        android:layout_marginRight="160dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/vnaInfotextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_widget_ar_info"
         android:gravity="center"
         android:padding="16dp"
+        android:text="Данные об устройстве"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="40sp"
-
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.91"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/vnaActualInfotextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_widget_ar_info"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="CMT, C1209, 21.3.4/2"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vnaInfotextView" />
+
+    <TextView
+        android:id="@+id/port1StatustextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="104dp"
+        android:background="@drawable/bg_widget_ar_info"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Статус первого порта"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/port1circleView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.04" />
+        app:layout_constraintTop_toBottomOf="@+id/port1textView"
+        app:layout_constraintVertical_bias="0.509" />
+
+    <TextView
+        android:id="@+id/port2StatustextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:background="@drawable/bg_widget_ar_info"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Статус второго порта"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/port2circleView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/port2textView"
+        app:layout_constraintVertical_bias="0.509" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
 

@@ -69,8 +69,6 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
             .build()
             .thenAccept { viewRenderable ->
                 val nameView= TransformableNode(arFragment.transformationSystem)
-               //nameView.localPosition = Vector3(0f,0f,0f)
-                //nameView.localRotation=(Quaternion.axisAngle(Vector3(0f,0f,0f),-90f))
                 nameView.scaleController.minScale = 0.01f
                 nameView.scaleController.maxScale = 0.02f
                 var anchorUp: Vector3 = anchorNode.down
@@ -78,13 +76,6 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
                 nameView.parent = anchorNode
                 nameView.renderable=viewRenderable
                 nameView.select()
-
-
-                //var arWidget=viewRenderable.view as View
-                //arWidget.layoutParams= ViewGroup.LayoutParams(100,100)
-               // var text1= arWidget.findViewById<CircleView>(R.id.circleView1)
-                //var text= arWidget.findViewById<TextView>(R.id.vnaInfo_id)
-               // text.text = "CMT, C1209, 21.3.4/2"
             }
     }
 
