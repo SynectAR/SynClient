@@ -3,6 +3,9 @@ package com.example.synclient.ui.ar
 import android.content.res.Configuration
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -18,40 +21,58 @@ import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
     private lateinit var arFragment: ArFragment
     var isTrue = false
     var isFound = false
+    private lateinit var handler: Handler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ar_camera)
         arFragment= (supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as CustomArFragment).apply{
-            setOnSessionConfigurationListener { session, config ->
-//                val bitmapQR = BitmapFactory.decodeResource(resources, R.drawable.demo_img2)
-//                val aid = AugmentedImageDatabase(session)
-//                aid.addImage("qrCode", bitmapQR,0.02f)
-//                config.augmentedImageDatabase = aid
-//                config.updateMode=Config.UpdateMode.LATEST_CAMERA_IMAGE
-//                config.planeFindingMode = Config.PlaneFindingMode.DISABLED
-//                config.focusMode = Config.FocusMode.AUTO
-            }
             setOnAugmentedImageUpdateListener {
-                var config = arSceneView.session?.config
+                if(isFound)
+                    setOnAugmentedImageUpdateListener(null)
+                else{
+                    createAnchor() }
+            }
+            setOnSessionConfigurationListener { session, config ->
+                config.focusMode = Config.FocusMode.AUTO
+            }
+        }
+        var session = Session(arFragment.activity)
+        var config = Config(session)
+        config.focusMode = Config.FocusMode.AUTO
+        session.configure(config)
+        //arFragment.arSceneView.session = session
+
+        handler = object : Handler() {
+            override fun handleMessage(msg: Message) {
+                var config = arFragment.arSceneView.session?.config
                 if(config!= null){
                     config.focusMode = Config.FocusMode.AUTO
                     config.updateMode=Config.UpdateMode.LATEST_CAMERA_IMAGE
-                    arSceneView.session?.configure(config)
+                    arFragment.arSceneView.session?.configure(config)
                 }
-                if(isFound)
-                    setOnAugmentedImageUpdateListener(null)
                 else
-                    createAnchor()
+                    Log.d("TAG","Config_is_null((((((")
             }
         }
 
+        CoroutineScope(Dispatchers.IO).launch {
+            updateConfig()
+        }
+    }
 
-
+    private fun updateConfig() {
+        while(arFragment.arSceneView.session == null){
+            continue
+        }
+        handler.sendEmptyMessage(0)
     }
 
     fun finishActivity(v:View)
@@ -69,6 +90,8 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
                 nameView.scaleController.maxScale = 0.02f
                 nameView.parent = anchorNode
                 nameView.renderable=viewRenderable
+                var anchorUp: Vector3 = anchorNode.up
+                nameView.setLookDirection(Vector3.up(),anchorUp)
                 nameView.select()
                 val textView=viewRenderable.view as View
                 var text= textView.findViewById<TextView>(R.id.exampleText_id)
