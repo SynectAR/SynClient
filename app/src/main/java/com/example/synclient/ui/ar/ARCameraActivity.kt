@@ -27,36 +27,35 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
     private lateinit var arFragment: ArFragment
     var isTrue = false
     var isFound = false
+    var isAdded= false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ar_camera)
-
         arFragment= (supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as CustomArFragment).apply{
             setOnSessionConfigurationListener { session, config ->
-                if (config != null) {
-                    val bitmapQR = BitmapFactory.decodeResource(resources, R.drawable.demo_img2)
-                    val aid = AugmentedImageDatabase(session)
-                    aid.addImage("qrCode", bitmapQR,0.02f)
-                    config.augmentedImageDatabase = aid
-                    config.updateMode=Config.UpdateMode.LATEST_CAMERA_IMAGE
-                }
-                arSceneView.session?.configure(config)
-                isTrue = true
+//                val bitmapQR = BitmapFactory.decodeResource(resources, R.drawable.demo_img2)
+//                val aid = AugmentedImageDatabase(session)
+//                aid.addImage("qrCode", bitmapQR,0.02f)
+//                config.augmentedImageDatabase = aid
+//                config.updateMode=Config.UpdateMode.LATEST_CAMERA_IMAGE
+//                config.planeFindingMode = Config.PlaneFindingMode.DISABLED
+//                config.focusMode = Config.FocusMode.AUTO
             }
             setOnAugmentedImageUpdateListener {
-                createAnchor()
+                if(isFound==false) {
+                    var config = arSceneView.session?.config
+                    if (config != null) {
+                        config.focusMode = Config.FocusMode.AUTO
+                        config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+                        arSceneView.session?.configure(config)
+                    }
+                    if (isFound)
+                        setOnAugmentedImageUpdateListener(null)
+                    else
+                        createAnchor()
+                }
             }
-
-            setOnTapArPlaneListener{ hitResult, plane, motionEvent->
-                isTrue = true
-            }
-
         }
-
-
-
-
-
     }
 
     fun finishActivity(v:View)
@@ -64,19 +63,26 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
         this.finish()
     }
 
-    private fun displayWidget(anchorNode: AnchorNode) {
+    private fun displayWidget(arFragment: ArFragment,anchor: Anchor) {
         ViewRenderable.builder().setView(this,R.layout.ar_info_display_widget)
             .build()
-            .thenAccept { viewRenderable ->
-                val nameView= TransformableNode(arFragment.transformationSystem)
-                nameView.scaleController.minScale = 0.01f
-                nameView.scaleController.maxScale = 0.02f
-                var anchorUp: Vector3 = anchorNode.down
-                nameView.setLookDirection(Vector3.down(),anchorUp)
-                nameView.parent = anchorNode
-                nameView.renderable=viewRenderable
-                nameView.select()
+            .thenAccept { viewRenderable -> addWidgetToScene(arFragment,anchor,viewRenderable)
             }
+    }
+
+    private fun addWidgetToScene(arFragment: ArFragment,anchor: Anchor,viewRenderable: ViewRenderable)
+    {
+        var anchorNode:AnchorNode= AnchorNode(anchor)
+        var node:TransformableNode= TransformableNode(arFragment.transformationSystem)
+        node.scaleController.minScale = 0.01f
+        node.scaleController.maxScale = 0.02f
+        node.worldRotation = Quaternion.axisAngle(Vector3(0f, 0f, 0f), 0f)
+        var anchorUp: Vector3 = anchorNode.down
+        node.setLookDirection(Vector3.down(),anchorUp)
+        node.renderable=viewRenderable
+        node.parent=anchorNode
+        arFragment.arSceneView.scene.addChild(anchorNode)
+        node.select()
     }
 
 
@@ -89,14 +95,13 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
             AugmentedImage::class.java
         )
         var anchor: Anchor
-        images.forEach {
-            if(it.trackingState == TrackingState.TRACKING){
-                if(it.name.equals("qrCode")){
+        for(image in images){
+            if(image.trackingState == TrackingState.TRACKING){
+                if(image.name.equals("qrCode") && isFound==false){
+                    anchor= image.createAnchor(image.centerPose)
+                    displayWidget(arFragment,anchor)
                     isFound = true
-                    anchor = it.createAnchor(it.centerPose)
-                    val anchorNode= AnchorNode(anchor)
-                    anchorNode.parent = arFragment.arSceneView.scene
-                    displayWidget(anchorNode)
+                    break
                 }
             }
         }

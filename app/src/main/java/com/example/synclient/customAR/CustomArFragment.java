@@ -15,17 +15,23 @@ import com.gorisse.thomas.sceneform.light.LightEstimationConfig;
 public class CustomArFragment extends ArFragment {
     @Override
     protected Config onCreateSessionConfig(Session session) {
-        Config config = new Config(session);
+        Config config = session.getConfig();
         LightEstimationConfig lightEstimationConfig = getArSceneView() != null ?
                 ArSceneViewKt.getLightEstimationConfig(getArSceneView()) : null;
         if (lightEstimationConfig != null) {
             config.setLightEstimationMode(lightEstimationConfig.getMode());
         }
-        config.setDepthMode(Config.DepthMode.DISABLED);
-        config.setPlaneFindingMode(Config.PlaneFindingMode.HORIZONTAL);
-        config.setFocusMode(Config.FocusMode.AUTO);
-        // Force the non-blocking mode for the session.
+        // Конфиги для изображения
+        Bitmap bitmapQR = BitmapFactory.decodeResource(getResources(), R.drawable.demo_img2);
+        AugmentedImageDatabase aid = new AugmentedImageDatabase(session);
+        aid.addImage("qrCode", bitmapQR,0.02f);
+        config.setAugmentedImageDatabase(aid);
         config.setUpdateMode(Config.UpdateMode.LATEST_CAMERA_IMAGE);
+        config.setPlaneFindingMode(Config.PlaneFindingMode.DISABLED);
+        config.setFocusMode(Config.FocusMode.AUTO);
+
+
         return config;
     }
+
 }
