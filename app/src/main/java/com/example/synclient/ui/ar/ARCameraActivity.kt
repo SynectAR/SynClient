@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 
 class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
     private lateinit var arFragment: ArFragment
-    var isTrue = false
     var isFound = false
     private lateinit var handler: Handler
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,12 +43,6 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
                 config.focusMode = Config.FocusMode.AUTO
             }
         }
-        var session = Session(arFragment.activity)
-        var config = Config(session)
-        config.focusMode = Config.FocusMode.AUTO
-        session.configure(config)
-        //arFragment.arSceneView.session = session
-
         handler = object : Handler() {
             override fun handleMessage(msg: Message) {
                 var config = arFragment.arSceneView.session?.config
@@ -58,8 +51,6 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
                     config.updateMode=Config.UpdateMode.LATEST_CAMERA_IMAGE
                     arFragment.arSceneView.session?.configure(config)
                 }
-                else
-                    Log.d("TAG","Config_is_null((((((")
             }
         }
 
