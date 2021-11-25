@@ -1,22 +1,18 @@
 package com.example.synclient.ui.ar
 
-import android.content.res.Configuration
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.synclient.R
 import com.example.synclient.customAR.CustomArFragment
-import com.google.ar.core.*
+import com.google.ar.core.Anchor
+import com.google.ar.core.AugmentedImage
+import com.google.ar.core.Config
+import com.google.ar.core.TrackingState
 import com.google.ar.sceneform.AnchorNode
-import com.google.ar.sceneform.FrameTime
-import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
@@ -25,7 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
+class ARCameraActivity : AppCompatActivity() {
     private lateinit var arFragment: ArFragment
     var isFound = false
     private lateinit var handler: Handler
@@ -39,9 +35,6 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
                 else{
                     createAnchor() }
             }
-            setOnSessionConfigurationListener { session, config ->
-                config.focusMode = Config.FocusMode.AUTO
-            }
         }
         handler = object : Handler() {
             override fun handleMessage(msg: Message) {
@@ -53,7 +46,6 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
                 }
             }
         }
-
         CoroutineScope(Dispatchers.IO).launch {
             updateConfig()
         }
@@ -92,10 +84,6 @@ class ARCameraActivity : AppCompatActivity(), Scene.OnUpdateListener {
                         "Pressed"
                 }
             }
-    }
-
-
-    override fun onUpdate(frameTime: FrameTime?) {
     }
 
     private fun createAnchor(){
