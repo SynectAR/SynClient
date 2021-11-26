@@ -13,6 +13,7 @@ import com.google.ar.core.AugmentedImage
 import com.google.ar.core.Config
 import com.google.ar.core.TrackingState
 import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
@@ -24,14 +25,19 @@ import kotlinx.coroutines.launch
 class ARCameraActivity : AppCompatActivity() {
     private lateinit var arFragment: ArFragment
     var isFound = false
+    lateinit var anchor: Anchor
     private lateinit var handler: Handler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ar_camera)
         arFragment= (supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as CustomArFragment).apply{
             setOnAugmentedImageUpdateListener {
-                if(isFound)
-                    setOnAugmentedImageUpdateListener(null)
+                if(isFound){
+                    if(anchor.trackingState == TrackingState.PAUSED){
+                        anchor.detach()
+                        setOnAugmentedImageUpdateListener(null)
+                    }
+                }
                 else{
                     createAnchor() }
             }
@@ -75,13 +81,13 @@ class ARCameraActivity : AppCompatActivity() {
                 nameView.renderable=viewRenderable
                 var anchorUp: Vector3 = anchorNode.up
                 nameView.setLookDirection(Vector3.up(),anchorUp)
+                nameView.worldRotation = Quaternion.axisAngle(Vector3(0f, 0f, 0f), -10f)
                 nameView.select()
                 val textView=viewRenderable.view as View
                 var text= textView.findViewById<TextView>(R.id.exampleText_id)
                 text.text = "CMT, C1209, 21.3.4/2"
                 text.setOnClickListener{
-                    text.text =
-                        "Pressed"
+                    nameView.removeChild(anchorNode)
                 }
             }
     }
@@ -91,7 +97,6 @@ class ARCameraActivity : AppCompatActivity() {
             val images: Collection<AugmentedImage> = frame!!.getUpdatedTrackables(
                 AugmentedImage::class.java
             )
-            var anchor: Anchor
             for(image in images){
                 if(image.trackingState == TrackingState.TRACKING){
                     if(image.name.equals("qrCode")){
