@@ -21,17 +21,13 @@ public class CustomArFragment extends ArFragment {
         if (lightEstimationConfig != null) {
             config.setLightEstimationMode(lightEstimationConfig.getMode());
         }
-        // Конфиги для изображения
         Bitmap bitmapQR = BitmapFactory.decodeResource(getResources(), R.drawable.demo_img2);
         AugmentedImageDatabase aid = new AugmentedImageDatabase(session);
-        aid.addImage("qrCode", bitmapQR,0.015f);
+        aid.addImage("qrCode", bitmapQR, 0.04f);
         config.setAugmentedImageDatabase(aid);
         config.setUpdateMode(Config.UpdateMode.LATEST_CAMERA_IMAGE);
         config.setPlaneFindingMode(Config.PlaneFindingMode.DISABLED);
         config.setFocusMode(Config.FocusMode.AUTO);
-
-
         return config;
     }
-
 }
