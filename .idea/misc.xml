@@ -9,9 +9,11 @@
         <entry key="..\:/KotlinProjects/SynClient/app/src/main/res/layout/activity_ar_camera.xml" value="0.15806159420289856" />
         <entry key="..\:/KotlinProjects/SynClient/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/KotlinProjects/SynClient/app/src/main/res/layout/ar_info_display_widget.xml" value="0.15806159420289856" />
+        <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/activity_ar_camera.xml" value="0.2" />
+        <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/ar_info_display_widget.xml" value="0.1" />
       </map>
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="Android Studio java home" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio java home" project-jdk-type="JavaSDK" />
 </project>

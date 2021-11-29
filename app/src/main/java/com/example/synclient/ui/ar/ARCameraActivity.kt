@@ -1,9 +1,12 @@
 package com.example.synclient.ui.ar
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.view.View
+import android.widget.Button
+import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.synclient.R
 import com.example.synclient.customAR.CustomArFragment
@@ -17,6 +20,7 @@ import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
+import com.mikhaellopez.circleview.CircleView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +28,8 @@ import kotlinx.coroutines.launch
 class ARCameraActivity : AppCompatActivity() {
     private lateinit var arFragment: ArFragment
     var isFound = false
+    lateinit var circle1: RadioButton
+    lateinit var circle2: RadioButton
     lateinit var anchor: Anchor
     private lateinit var handler: Handler
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,10 +90,7 @@ class ARCameraActivity : AppCompatActivity() {
 
         node.scaleController.minScale = 0.01f
         node.scaleController.maxScale = 0.02f
-        //node.worldRotation = Quaternion.axisAngle(Vector3(0f, 0f, 0f), -10f)
-        //node.worldPosition= Vector3(0.05f,0f,0.05f)
-
-        node.worldPosition = Vector3(0f,0f,0f)
+        node.worldPosition = Vector3(0.15f,0f,0.10f)
         node.worldRotation = Quaternion.axisAngle(Vector3(0f, 0f, 0f), -10f)
         var anchorUp: Vector3 = anchorNode.down
         node.setLookDirection(Vector3.down(),anchorUp)
@@ -95,6 +98,23 @@ class ARCameraActivity : AppCompatActivity() {
         node.parent = anchorNode
         arFragment.arSceneView.scene.addChild(anchorNode)
         node.select()
+        val view = viewRenderable.view as View
+        val circle1 = view.findViewById<RadioButton>(R.id.port1circleView)
+        val circle2 = view.findViewById<RadioButton>(R.id.port2circleView)
+    }
+
+    private fun changeButton1(){
+        if(circle1.isChecked)
+            circle1.isChecked = false
+        else
+            circle1.isChecked = true
+    }
+
+    private fun changeButton2(){
+        if(circle2.isChecked)
+            circle2.isChecked = false
+        else
+            circle2.isChecked = true
     }
 
     private fun createAnchor(){

@@ -14,7 +14,7 @@ private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     textAlign = Paint.Align.CENTER
     textSize = 55.0f
     typeface = Typeface.create( "", Typeface.BOLD)
-    color= Color.RED
+    color= Color.BLACK
 }
 
 class CircleView @JvmOverloads constructor(
@@ -23,6 +23,7 @@ class CircleView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ): View(context,attrs,defStyleAttr) {
 
+    private var color = Color.argb(0,255,255,255)
     var radius by Delegates.notNull<Float>()
 
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
@@ -31,11 +32,14 @@ class CircleView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawRGB(255,255,255)
+        canvas.drawColor(color)
         canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), radius, paint)
         canvas.drawText("textValueMine",
             0.0F, 0.0F, paint)
     }
 
+    fun changeColor(alpha: Int, red: Int, green: Int, blue: Int){
+        color = Color.argb(alpha, red, green, blue)
+    }
 
 }
