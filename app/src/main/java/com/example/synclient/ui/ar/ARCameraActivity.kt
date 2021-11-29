@@ -1,11 +1,16 @@
 package com.example.synclient.ui.ar
 
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.synclient.R
+import com.example.synclient.arWidget.CircleView
 import com.example.synclient.customAR.CustomArFragment
 import com.google.ar.core.Anchor
 import com.google.ar.core.AugmentedImage
@@ -14,6 +19,7 @@ import com.google.ar.core.TrackingState
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
+import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
@@ -26,6 +32,8 @@ class ARCameraActivity : AppCompatActivity() {
     var isFound = false
     lateinit var anchor: Anchor
     private lateinit var handler: Handler
+    lateinit var arView:View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ar_camera)
@@ -95,6 +103,8 @@ class ARCameraActivity : AppCompatActivity() {
         node.parent = anchorNode
         arFragment.arSceneView.scene.addChild(anchorNode)
         node.select()
+        arView=viewRenderable.view
+        changeBackgroundStatus(arView.findViewById(R.id.port1circleView))
     }
 
     private fun createAnchor(){
@@ -113,4 +123,14 @@ class ARCameraActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun changeBackgroundStatus(port:CircleView)
+    {
+        port.setBackgroundColor(Color.rgb(100, 100, 50))
+
+    }
+
+
+
+
 }
