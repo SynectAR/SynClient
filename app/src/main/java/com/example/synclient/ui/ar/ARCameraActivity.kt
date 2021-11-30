@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -33,10 +35,20 @@ class ARCameraActivity : AppCompatActivity() {
     lateinit var anchor: Anchor
     private lateinit var handler: Handler
     lateinit var arView:View
+    var portsCoords = Array(3,{Array(3,{0.0f})})
+    val yaxisBase:Float=0.006f //0.01f
+    lateinit var ButtonOpen:Button
+    lateinit var ButtonShort:Button
+    lateinit var ButtonLoad:Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ar_camera)
+        portsCoords[0]= arrayOf(-0.02f,yaxisBase,-0.005f)
+        portsCoords[1]=arrayOf(0.02f,yaxisBase,-0.005f)
+        portsCoords[2]= arrayOf(0f,yaxisBase,0f)
+
         arFragment= (supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as CustomArFragment).apply{
             setOnAugmentedImageUpdateListener {
                 if(isFound){
@@ -65,8 +77,10 @@ class ARCameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateConfig() {
-        while(arFragment.arSceneView.session == null){
+    private fun updateConfig()
+    {
+        while(arFragment.arSceneView.session == null)
+        {
             continue
         }
         handler.sendEmptyMessage(0)
@@ -77,10 +91,27 @@ class ARCameraActivity : AppCompatActivity() {
         this.finish()
     }
 
-    private fun displayWidget(arFragment: ArFragment,anchor: Anchor) {
+    private fun displayWidget(arFragment: ArFragment,anchor: Anchor)
+    {
         ViewRenderable.builder().setView(this,R.layout.ar_info_display_widget)
             .build()
             .thenAccept { viewRenderable -> addWidgetToScene(arFragment,anchor,viewRenderable)
+            }
+    }
+
+    private fun displayPort(arFragment: ArFragment,anchor: Anchor,portNumber:Int)
+    {
+        ViewRenderable.builder().setView(this,R.layout.port_layout)
+            .build()
+            .thenAccept { viewRenderable -> addPortToScene(arFragment,anchor,viewRenderable,portNumber)
+            }
+    }
+
+    private fun displayCalibrationMenu(arFragment: ArFragment,anchor: Anchor)
+    {
+        ViewRenderable.builder().setView(this,R.layout.calibration_layout)
+            .build()
+            .thenAccept { viewRenderable -> addCalibrationMenuToScene(arFragment,anchor,viewRenderable)
             }
     }
 
@@ -95,16 +126,54 @@ class ARCameraActivity : AppCompatActivity() {
         //node.worldRotation = Quaternion.axisAngle(Vector3(0f, 0f, 0f), -10f)
         //node.worldPosition= Vector3(0.05f,0f,0.05f)
 
-        node.worldPosition = Vector3(0f,0f,0f)
-        node.worldRotation = Quaternion.axisAngle(Vector3(0f, 0f, 0f), -10f)
+        //node.worldPosition = Vector3(0f,0f,0f)
         var anchorUp: Vector3 = anchorNode.down
         node.setLookDirection(Vector3.down(),anchorUp)
         node.renderable = viewRenderable
         node.parent = anchorNode
         arFragment.arSceneView.scene.addChild(anchorNode)
         node.select()
-        arView=viewRenderable.view
-        changeBackgroundStatus(arView.findViewById(R.id.port1circleView))
+    }
+
+    private fun addPortToScene(arFragment: ArFragment,anchor: Anchor,viewRenderable: ViewRenderable,portNumber: Int)
+    {
+        var anchorNode:AnchorNode = AnchorNode(anchor)
+
+        var node:TransformableNode = TransformableNode(arFragment.transformationSystem)
+
+        node.scaleController.minScale = 0.01f
+        node.scaleController.maxScale = 0.02f
+
+        node.worldPosition = Vector3(portsCoords[portNumber][0],portsCoords[portNumber][1],portsCoords[portNumber][2])
+        var anchorUp: Vector3 = anchorNode.down
+        node.setLookDirection(Vector3.down(),anchorUp)
+        node.renderable = viewRenderable
+        node.parent = anchorNode
+        arFragment.arSceneView.scene.addChild(anchorNode)
+        node.select()
+        val view:View= viewRenderable.view
+        var PortText= view.findViewById<TextView>(R.id.portNumberText)
+        PortText.text="Порт " + portNumber
+    }
+
+    private fun addCalibrationMenuToScene(arFragment: ArFragment, anchor: Anchor, viewRenderable: ViewRenderable?) {
+        var anchorNode:AnchorNode = AnchorNode(anchor)
+
+        var node:TransformableNode = TransformableNode(arFragment.transformationSystem)
+
+        node.scaleController.minScale = 0.01f
+        node.scaleController.maxScale = 0.02f
+        node.worldPosition = Vector3(-0.008f,yaxisBase,-0.061f)
+        var anchorUp: Vector3 = anchorNode.down
+        node.setLookDirection(Vector3.down(),anchorUp)
+        node.renderable = viewRenderable
+        node.parent = anchorNode
+        arFragment.arSceneView.scene.addChild(anchorNode)
+        node.select()
+        val view:View= viewRenderable!!.view
+        ButtonLoad=view.findViewById(R.id.buttonLoad)
+        ButtonShort=view.findViewById(R.id.buttonShort)
+        ButtonOpen=view.findViewById(R.id.buttonOpen)
     }
 
     private fun createAnchor(){
@@ -118,19 +187,14 @@ class ARCameraActivity : AppCompatActivity() {
                     isFound = true
                     anchor = image.createAnchor(image.centerPose)
                     displayWidget(arFragment,anchor)
+                    displayPort(arFragment,anchor,0)
+                    displayPort(arFragment,anchor,1)
+                    displayCalibrationMenu(arFragment,anchor)
                     break
                 }
             }
         }
     }
-
-    fun changeBackgroundStatus(port:CircleView)
-    {
-        port.setBackgroundColor(Color.rgb(100, 100, 50))
-
-    }
-
-
 
 
 }
