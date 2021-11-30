@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_round">
 
+
+
     <TextView
         android:id="@+id/port1textView"
         android:layout_width="500dp"
