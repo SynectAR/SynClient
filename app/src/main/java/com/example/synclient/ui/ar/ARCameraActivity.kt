@@ -25,9 +25,6 @@ import kotlinx.coroutines.launch
 class ARCameraActivity : AppCompatActivity() {
 
     private lateinit var handler: Handler
-    lateinit var arView:View
-    var portsCoords = Array(3,{Array(3,{0.0f})})
-    val yaxisBase:Float=0.006f //0.01f
     var managerAR:ManagerAR= ManagerAR(this)
 
 
@@ -35,9 +32,6 @@ class ARCameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ar_camera)
-        portsCoords[0]= arrayOf(-0.02f,yaxisBase,-0.005f)
-        portsCoords[1]=arrayOf(0.02f,yaxisBase,-0.005f)
-        portsCoords[2]= arrayOf(0f,yaxisBase,0f)
 
         managerAR.arFragment= (supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as CustomArFragment).apply{
             setOnAugmentedImageUpdateListener {
