@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package vnaPack; //vnarpc
+
+option java_package="com.synclient.grpc";
+
+service VnaLogic { //vnarpc
+    rpc getPortCount (EmptyMessage) returns (PortCount) {}
+    rpc getPortStatus (Port) returns (PortStatus) {}
+    rpc measurePort (MeasureParams) returns (EmptyMessage) {}
+    rpc measureThru (PortsPair) returns (EmptyMessage) {}
+    rpc apply (EmptyMessage) returns (EmptyMessage) {}
+    rpc reset (EmptyMessage) returns (EmptyMessage) {} 
+}
+
+
+message EmptyMessage {}
+
+message Port {
+    int32 port = 1;
+}
+
+//номер порта, тип нагрузки, гендер
+message MeasureParams {
+    int32 port = 1;
+    string type = 2;
+    bool gender = 3;
+}
+
+// статус порта open short load gender 
+message PortStatus {
+    bool open = 1;
+    bool short = 2;
+    bool load = 3;
+    bool gender = 4;
+}
+
+// пара портов для измерения на перемычке
+message PortsPair {
+    int32 firstport = 1;
+    int32 secondport = 2;
+}
+
+message PortCount {
+    int32 portcount = 3;
+}
+
+//protoc vnarpc.proto --cpp_out=.
+//protoc vnarpc.proto --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin`
