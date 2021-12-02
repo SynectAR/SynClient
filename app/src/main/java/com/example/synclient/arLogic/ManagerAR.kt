@@ -15,7 +15,7 @@ class ManagerAR constructor(context: Context) {
     var myContext: Context = context
 
 
-    var portList:List<PortAR> = listOf()
+    var portList:MutableList<PortAR> = mutableListOf()
     var port:PortAR= PortAR()
     var widget:WidgetAR = WidgetAR()
     var menu:CalibrationMenuAR = CalibrationMenuAR()
@@ -40,7 +40,9 @@ class ManagerAR constructor(context: Context) {
                     widget.createWidget(arFragment,anchor,myContext)
                     menu.createMenu(arFragment,anchor,myContext,-0.008f,yaxisBase,-0.061f)
                     port.createPort(arFragment,anchor,0,myContext,portsCoords[0][0],portsCoords[0][1],portsCoords[0][2])
+                    portList.toMutableList().add(port)
                     port.createPort(arFragment,anchor,1,myContext,portsCoords[1][0],portsCoords[1][1],portsCoords[1][2])
+                    portList.toMutableList().add(port)
                     break
                 }
             }

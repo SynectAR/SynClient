@@ -2,7 +2,13 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.protobuf'  apply false
 }
+
+ext["grpcVersion"] = "1.39.0" // need to wait for grpc kotlin to move past this
+ext["grpcKotlinVersion"] = "1.2.0" // CURRENT_GRPC_KOTLIN_VERSION
+ext["protobufVersion"] = "3.18.1"
+ext["coroutinesVersion"] = "1.5.2"
 
 android {
     compileSdk 31
@@ -53,14 +59,46 @@ android {
         viewBinding true
     }
 
+
+
+}
+kapt {
+    correctErrorTypes true
 }
 
+
+/*
+protobuf{
+    protoc{artefact='com.google.protobuf:protoc:3.19.1'}
+    plugins{
+        javalite{artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0"}
+        grpc{artifact = 'io.grpc:protoc-gen-grpc-java:1.20.0'}
+    }
+    generateProtoTasks{
+        all().each{task ->
+            task.plugins{
+                javalite{}
+                grpc{
+                    option 'lite'
+                }
+            }
+        }
+    }
+
+}
+
+ */
+
+
+
 dependencies {
+    implementation project(":app")
+
 
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     testImplementation 'junit:junit:4.+'
@@ -70,13 +108,78 @@ dependencies {
     implementation 'com.google.ar:core:1.28.0'
     implementation 'de.javagl:obj:0.3.0'
     implementation("com.gorisse.thomas.sceneform:sceneform:1.20.1")
+    implementation 'com.google.protobuf:protobuf-java:3.19.1'
+    implementation 'com.google.protobuf:protobuf-kotlin:3.19.1'
+    //implementation "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
+
+    implementation 'io.grpc:grpc-okhttp:1.39.0'
+    implementation 'io.grpc:grpc-protobuf-lite:1.39.0'
+    implementation 'io.grpc:grpc-stub:1.36.0'
+    implementation 'io.grpc:grpc-protobuf:1.39.0'
+
+    implementation 'io.grpc:grpc-netty-shaded:1.20.0'
+    implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
+    implementation 'jakarta.annotation:jakarta.annotation-api:1.3.5'
+
     // Provides ArFragment, and other UX resources.
     //implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.15.0'
 
 }
 
 
-//sceneform.asset('sampledata/models/bear.fbx',
-//        'default',
-//        'sampledata/models/bear.sfa',
-//        'src/main/res/raw/bear')
+protobuf {
+    protoc { artifact = 'com.google.protobuf:protoc:3.19.1' }
+    plugins {
+        javalite{artifact= 'com.google.protobuf:protoc-gen-javalite:3.0.0'}
+        grpc { artifact = 'io.grpc:protoc-gen-grpc-java:1.39.0'
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            javalite{}
+            grpc {
+                option 'lite' }
+
+        }
+    }
+}
+
+/*
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${rootProject.ext["protobufVersion"]}"
+    }
+    plugins {
+        id("java") {
+            artifact = "io.grpc:protoc-gen-grpc-java:${rootProject.ext["grpcVersion"]}"
+        }
+        id("grpc") {
+            artifact = "io.grpc:protoc-gen-grpc-java:${rootProject.ext["grpcVersion"]}"
+        }
+        id("grpckt") {
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:${rootProject.ext["grpcKotlinVersion"]}:jdk7@jar"
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            it.plugins {
+                id("java") {
+                    option("lite")
+                }
+                id("grpc") {
+                    option("lite")
+                }
+                id("grpckt") {
+                    option("lite")
+                }
+            }
+            it.builtins {
+                id("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
+ */
