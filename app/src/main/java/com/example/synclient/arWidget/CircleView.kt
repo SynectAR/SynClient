@@ -1,27 +1,28 @@
 package com.example.synclient.arWidget
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import java.lang.Integer.min
-import kotlin.math.cos
-import kotlin.math.sin
 import kotlin.properties.Delegates
 
 private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     style = Paint.Style.FILL
     textAlign = Paint.Align.CENTER
     textSize = 55.0f
-    typeface = Typeface.create( "", Typeface.BOLD)
-    color= Color.RED
+    typeface = Typeface.create("", Typeface.BOLD)
+    color = Color.RED
 }
 
 class CircleView @JvmOverloads constructor(
-    context:Context,
-    attrs: AttributeSet? =null,
+    context: Context,
+    attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-): View(context,attrs,defStyleAttr) {
+) : View(context, attrs, defStyleAttr) {
 
     var radius by Delegates.notNull<Float>()
 
@@ -31,10 +32,12 @@ class CircleView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawRGB(255,255,255)
+        canvas.drawRGB(255, 255, 255)
         canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), radius, paint)
-        canvas.drawText("textValueMine",
-            0.0F, 0.0F, paint)
+        canvas.drawText(
+            "textValueMine",
+            0.0F, 0.0F, paint
+        )
     }
 
 

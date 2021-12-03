@@ -1,7 +1,6 @@
 package com.example.arcorelab.common.helpers
 
 
-
 import android.content.Context
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics

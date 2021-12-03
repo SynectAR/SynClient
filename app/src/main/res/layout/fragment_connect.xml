@@ -17,6 +17,7 @@
             android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="5dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -25,8 +26,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
                     android:paddingStart="15dp"
+                    android:paddingTop="20dp"
                     android:paddingEnd="15dp"
                     android:paddingBottom="5dp">
 
@@ -34,80 +35,80 @@
                         android:id="@+id/ip_adress_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Введите ip адрес:"
-                        android:text="127.0.0.1"
                         android:digits="0123456789."
-                        android:inputType="numberDecimal"/>
+                        android:hint="Введите ip адрес:"
+                        android:inputType="numberDecimal"
+                        android:text="127.0.0.1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/button_connect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Connect"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:text="Connect" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/gray"
-                    android:layout_marginTop="15dp"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"/>
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/gray" />
 
                 <TextView
                     android:id="@+id/tvManufacturer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:text="Производитель: "
+                    android:layout_marginTop="10dp"
                     android:paddingStart="15dp"
                     android:paddingTop="10dp"
-                    android:layout_marginTop="10dp"
-                    android:paddingBottom="10dp"/>
+                    android:paddingBottom="10dp"
+                    android:text="Производитель: "
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvModel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:text="Модель: "
                     android:paddingStart="15dp"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp"/>
+                    android:paddingBottom="10dp"
+                    android:text="Модель: "
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
 
                 <TextView
                     android:id="@+id/tvSerialNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
                     android:paddingStart="15dp"
-                    android:text="Серийный номер: "
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp"/>
+                    android:paddingBottom="10dp"
+                    android:text="Серийный номер: "
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvSoftwareVersion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
                     android:paddingStart="15dp"
-                    android:text="Версия приложения: "
                     android:paddingTop="10dp"
-                    android:paddingBottom="7dp"/>
+                    android:paddingBottom="7dp"
+                    android:text="Версия приложения: "
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/gray"
-                    android:layout_marginTop="13dp"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"/>
+                    android:layout_marginTop="13dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/gray" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
