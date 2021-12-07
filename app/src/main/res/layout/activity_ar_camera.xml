@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/scene_form_fragment"
-        android:name="com.example.synclient.customAR.CustomArFragment"
+        android:name="com.example.synclient.arLogic.CustomArFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

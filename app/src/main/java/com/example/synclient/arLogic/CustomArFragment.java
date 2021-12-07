@@ -1,4 +1,4 @@
-package com.example.synclient.customAR;
+package com.example.synclient.arLogic;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +11,7 @@ import com.google.ar.core.Session;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.gorisse.thomas.sceneform.ArSceneViewKt;
 import com.gorisse.thomas.sceneform.light.LightEstimationConfig;
+
 
 public class CustomArFragment extends ArFragment {
     @Override

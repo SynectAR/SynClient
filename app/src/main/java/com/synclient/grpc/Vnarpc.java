@@ -133,8 +133,7 @@ public final class Vnarpc {
       }
       com.synclient.grpc.Vnarpc.EmptyMessage other = (com.synclient.grpc.Vnarpc.EmptyMessage) obj;
 
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return unknownFields.equals(other.unknownFields);
     }
 
     @java.lang.Override
@@ -582,8 +581,7 @@ public final class Vnarpc {
 
       if (getPort()
           != other.getPort()) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return unknownFields.equals(other.unknownFields);
     }
 
     @java.lang.Override
@@ -1170,8 +1168,7 @@ public final class Vnarpc {
           .equals(other.getType())) return false;
       if (getGender()
           != other.getGender()) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return unknownFields.equals(other.unknownFields);
     }
 
     @java.lang.Override
@@ -1884,8 +1881,7 @@ public final class Vnarpc {
           != other.getLoad()) return false;
       if (getGender()
           != other.getGender()) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return unknownFields.equals(other.unknownFields);
     }
 
     @java.lang.Override
@@ -2532,8 +2528,7 @@ public final class Vnarpc {
           != other.getFirstport()) return false;
       if (getSecondport()
           != other.getSecondport()) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return unknownFields.equals(other.unknownFields);
     }
 
     @java.lang.Override
@@ -3063,8 +3058,7 @@ public final class Vnarpc {
 
       if (getPortcount()
           != other.getPortcount()) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return unknownFields.equals(other.unknownFields);
     }
 
     @java.lang.Override
@@ -3436,7 +3430,7 @@ public final class Vnarpc {
       getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
+  private static final com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
     java.lang.String[] descriptorData = {
