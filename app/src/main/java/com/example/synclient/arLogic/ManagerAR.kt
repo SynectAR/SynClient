@@ -1,10 +1,13 @@
 package com.example.synclient.arLogic
 
 import android.content.Context
+import com.example.synclient.R
+import com.example.synclient.ui.ar.ARCameraActivity
 import com.google.ar.core.Anchor
 import com.google.ar.core.AugmentedImage
 import com.google.ar.core.TrackingState
 import com.google.ar.sceneform.ux.ArFragment
+
 
 /**
  * Класс ManagerAR
@@ -13,7 +16,7 @@ import com.google.ar.sceneform.ux.ArFragment
  * @param context Конекст основной активити.
  * @constructor Создает экземпляр класса с передаваемым в него контекстом.
  */
-class ManagerAR constructor(context: Context) {
+class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
     //Созданием пустого массива координат, хранящихся в типе float.
     var portsCoords = Array(3) { Array(3) { 0.0f } }
 
@@ -25,13 +28,14 @@ class ManagerAR constructor(context: Context) {
     lateinit var anchor: Anchor
     lateinit var arFragment: ArFragment
     var myContext: Context = context
+    var activity: ARCameraActivity = activity
 
 
     //Лист, содержащий в себе все PortAR обьекты.
-    var portList: MutableList<PortAR> = mutableListOf()
-    var port: PortAR = PortAR()
-    var widget: WidgetAR = WidgetAR()
-    var menu: CalibrationMenuAR = CalibrationMenuAR()
+    var portList: MutableList<PortViewBuilder> = mutableListOf()
+    var port: PortViewBuilder = PortViewBuilder()
+    var widget: DeviceInfoViewBuilder = DeviceInfoViewBuilder()
+    var menu: CalibrationMenuViewBuilder = CalibrationMenuViewBuilder()
 
 
     /**
@@ -56,30 +60,40 @@ class ManagerAR constructor(context: Context) {
                     anchor = image.createAnchor(image.centerPose)
                     widget.createWidget(arFragment, anchor, myContext)
                     menu.createMenu(arFragment, anchor, myContext, -0.008f, yaxisBase, -0.061f)
-                    port.createPort(
-                        arFragment,
-                        anchor,
-                        0,
-                        myContext,
-                        portsCoords[0][0],
-                        portsCoords[0][1],
-                        portsCoords[0][2]
-                    )
-                    portList.toMutableList().add(port)
-                    port.createPort(
-                        arFragment,
-                        anchor,
-                        1,
-                        myContext,
-                        portsCoords[1][0],
-                        portsCoords[1][1],
-                        portsCoords[1][2]
-                    )
-                    portList.toMutableList().add(port)
+                    portsCoords.forEachIndexed { index, element ->
+                        port.createPort(
+                            arFragment,
+                            anchor,
+                            index + 1,
+                            myContext,
+                            element[0],
+                            element[1],
+                            element[3]
+                        )
+                        portList.add(port)
+                    }
                     break
                 }
             }
         }
     }
+
+    fun setAugmentedImagesOnUpdateListener() {
+        arFragment =
+            (activity.supportFragmentManager.findFragmentById(R.id.scene_form_fragment)
+                    as CustomArFragment).apply {
+                setOnAugmentedImageUpdateListener {
+                    if (isFound) {
+                        if (anchor.trackingState == TrackingState.PAUSED) {
+                            anchor.detach()
+                            setOnAugmentedImageUpdateListener(null)
+                        }
+                    } else {
+                        createAnchor()
+                    }
+                }
+            }
+    }
+
 
 }

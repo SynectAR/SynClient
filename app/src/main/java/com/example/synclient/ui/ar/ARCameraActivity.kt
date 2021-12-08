@@ -23,7 +23,7 @@ class ARCameraActivity : AppCompatActivity() {
     private lateinit var handler: Handler
 
     //Инициализация менеджера для работы с виджетами.
-    var managerAR: ManagerAR = ManagerAR(this)
+    var managerAR: ManagerAR = ManagerAR(this, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,20 +31,7 @@ class ARCameraActivity : AppCompatActivity() {
 
         // Создание CustomArFragment и инициализация работы с
         // распознованием картинок через AugmentedImages.
-        managerAR.arFragment =
-            (supportFragmentManager.findFragmentById(R.id.scene_form_fragment)
-                    as CustomArFragment).apply {
-                setOnAugmentedImageUpdateListener {
-                    if (managerAR.isFound) {
-                        if (managerAR.anchor.trackingState == TrackingState.PAUSED) {
-                            managerAR.anchor.detach()
-                            setOnAugmentedImageUpdateListener(null)
-                        }
-                    } else {
-                        managerAR.createAnchor()
-                    }
-                }
-            }
+        managerAR.setAugmentedImagesOnUpdateListener()
 
         handler = @SuppressLint("HandlerLeak")
         object : Handler() {

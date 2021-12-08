@@ -2,7 +2,6 @@ package com.example.synclient.arLogic
 
 import android.content.Context
 import android.view.View
-import android.widget.TextView
 import com.example.synclient.R
 import com.google.ar.core.Anchor
 import com.google.ar.sceneform.AnchorNode
@@ -12,60 +11,57 @@ import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 
 /**
- * Класс PortAR
+ * Класс CalibrationMenuViewBuilder
  *
- * Класс для создания и отображения обьекта порта устройства.
+ * Класс для создания и отображения обьекта меню помощи в калибровке.
  */
-class PortAR {
+class CalibrationMenuViewBuilder {
     /**
-     * Метод для создания и отображения порта устройства.
+     * Метод для создания и отображения  меню помощи в калибровке.
      *
-     * Метод создает обьект viewRenderable с заранее заданным port_layout.
+     * Метод создает обьект viewRenderable с заранее заданным calibration_layout.
      *
      * @param arFragment Экземпляр arFragment из ARCore.
      * @param anchor Экземпляр Anchor из ARCore.
-     * @param portNumber Номер порта.
      * @param context Контекст активити работы с камерой.
      * @param x Координата оси x.
      * @param y Координата оси y.
      * @param z Координата оси z.
      *
      */
-    fun createPort(
+    fun createMenu(
         arFragment: ArFragment,
         anchor: Anchor,
-        portNumber: Int,
         context: Context,
         x: Float,
         y: Float,
         z: Float
     ) {
-        ViewRenderable.builder().setView(context, R.layout.port_layout)
+        ViewRenderable.builder().setView(context, R.layout.calibration_layout)
             .build()
             .thenAccept { viewRenderable ->
-                displayPort(arFragment, anchor, viewRenderable, portNumber, x, y, z)
+                displayMenu(arFragment, anchor, viewRenderable, x, y, z)
             }
+
     }
 
     /**
-     * Метод для отображения и сдвига обьекта порта устройства.
+     * Метод для отображения и сдвига обьекта меню помощи в калибровке.
      *
      * Метод принимает viewRenderable и передвигает виджет по отношению к anchor.
      *
      * @param arFragment Экземпляр arFragment из ARCore.
      * @param anchor Экземпляр Anchor из ARCore.
      * @param viewRenderable Экземпляр ViewRenderable для отображения виджета из ARCore.
-     * @param portNumber Номер порта.
      * @param x Координата оси x.
      * @param y Координата оси y.
      * @param z Координата оси z.
      *
      */
-    private fun displayPort(
+    private fun displayMenu(
         arFragment: ArFragment,
         anchor: Anchor,
-        viewRenderable: ViewRenderable,
-        portNumber: Int,
+        viewRenderable: ViewRenderable?,
         x: Float,
         y: Float,
         z: Float
@@ -76,7 +72,6 @@ class PortAR {
 
         node.scaleController.minScale = 0.01f
         node.scaleController.maxScale = 0.02f
-
         //Корректирует расположение виджета в зависимости от найденного anchor.
         node.worldPosition = Vector3(x, y, z)
         //Переворачивает виджет для корректного отображения на вертикальной поверхности.
@@ -85,9 +80,5 @@ class PortAR {
         node.parent = anchorNode
         arFragment.arSceneView.scene.addChild(anchorNode)
         node.select()
-        //Находишь необходимый TextView для отоброжения номера порта.
-        val view: View = viewRenderable.view
-        var PortText = view.findViewById<TextView>(R.id.portNumberText)
-        PortText.text = "Порт " + portNumber
     }
 }

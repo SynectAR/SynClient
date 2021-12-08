@@ -10,11 +10,11 @@ import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 
 /**
- * Класс WidgetAR
+ * Класс DeviceInfoViewBuilder
  *
  * Класс для создания и отображения основного виджета с информацией об устройстве.
  */
-class WidgetAR {
+class DeviceInfoViewBuilder {
     /**
      * Метод для создания и отображения основного виджета.
      *
