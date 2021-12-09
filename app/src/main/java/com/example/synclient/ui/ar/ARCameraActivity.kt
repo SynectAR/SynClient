@@ -50,9 +50,7 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun updateConfig() {
-        while (managerAR.arFragment.arSceneView.session == null) {
-            continue
-        }
+        while (managerAR.arFragment.arSceneView.session == null) continue
         handler.sendEmptyMessage(0)
     }
 
