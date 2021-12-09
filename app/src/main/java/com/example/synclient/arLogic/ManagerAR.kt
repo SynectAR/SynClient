@@ -68,7 +68,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
                             myContext,
                             element[0],
                             element[1],
-                            element[3]
+                            element[2]
                         )
                         portList.add(port)
                     }

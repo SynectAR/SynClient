@@ -1,11 +1,10 @@
 syntax = "proto3";
 
-package com.example.synclient;
-option java_multiple_files=true;
+package vnarpc; //vnarpc
 
+option java_multiple_files = true;
 
-
-service VnaLogic { //vnarpc
+service vnarpc { //vnarpc
     rpc getPortCount (EmptyMessage) returns (PortCount) {}
     rpc getPortStatus (Port) returns (PortStatus) {}
     rpc measurePort (MeasureParams) returns (EmptyMessage) {}
