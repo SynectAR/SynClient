@@ -5,7 +5,7 @@ package vnarpc; //vnarpc
 option java_multiple_files = true;
 
 service vnarpc { //vnarpc
-    rpc getPortCount (EmptyMessage) returns (PortCount) {}
+    rpc getPortCount (PortRequest) returns (PortCount) {}
     rpc getPortStatus (Port) returns (PortStatus) {}
     rpc measurePort (MeasureParams) returns (EmptyMessage) {}
     rpc measureThru (PortsPair) returns (EmptyMessage) {}
@@ -41,8 +41,12 @@ message PortsPair {
     int32 secondport = 2;
 }
 
+message PortRequest{
+  int32 portname=3;
+}
+
 message PortCount {
-    int32 portcount = 3;
+    int32 portcountdisp = 3;
 }
 
 //protoc vnarpc.proto --cpp_out=.
