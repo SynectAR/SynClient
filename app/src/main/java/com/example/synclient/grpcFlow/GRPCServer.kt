@@ -16,7 +16,8 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
 class GRPCServer(private val port: Int){
-val server: Server = ServerBuilder
+
+    val server: Server = io.grpc.netty.NettyServerBuilder
     .forPort(port)
     .addService(GRPCService())
     .build()
