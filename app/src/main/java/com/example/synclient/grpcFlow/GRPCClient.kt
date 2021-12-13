@@ -1,7 +1,11 @@
 package com.example.synclient.grpcFlow
 
+import io.grpc.LoadBalancerRegistry
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
+import io.grpc.grpclb.GrpclbLoadBalancerProvider
+import io.grpc.internal.PickFirstLoadBalancerProvider
+import vnarpc.HelloRequest
 import vnarpc.PortCount
 import vnarpc.PortRequest
 
@@ -14,10 +18,18 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
     //val channel = ManagedChannelBuilder.forAddress("localhost",50051).usePlaintext().build()
     private val stub: vnarpcCoroutineStub = vnarpcCoroutineStub(channel)
 
-    suspend fun portCount(count: Int) {
+    suspend fun greet(name: String) {
+        val request = HelloRequest.newBuilder().setName(name).build()
+        val response = stub.sayHello(request)
+        println("Received: ${response.message}")
+    }
+
+    suspend fun portCount(count: Int)  {
+        //var portRequest: PortRequest? = PortRequest.newBuilder().setPortname(count).build()
+        //var response: PortCount = stub.getPortCount(portRequest!!)
+
         //val request = PortRequest {this.portname = count}
         //val answer= stub.getPortCount(request)
-
     }
 
     suspend fun portStatus() {}
@@ -51,13 +63,17 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
  * greets "world" otherwise.
  */
 suspend fun main(args: Array<String>) {
+    LoadBalancerRegistry.getDefaultRegistry().register(GrpclbLoadBalancerProvider())
     val port = System.getenv("PORT")?.toInt() ?: 50051
 
-    val channel = ManagedChannelBuilder.forAddress("localhost", port).usePlaintext().build()
+    val channel = ManagedChannelBuilder
+        .forAddress("localhost", port)
+        .usePlaintext()
+        .build()
 
     val client = GRPCClient(channel)
 
-    val user = args.singleOrNull() ?: 0
-    //client.greet(user)
-    client.portCount(user as Int)
+    //val user = args.singleOrNull() ?: 0
+    val user = args.singleOrNull() ?: "world"
+    client.greet(user)
 }
