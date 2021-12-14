@@ -11,7 +11,7 @@ service vnarpc { //vnarpc
     rpc measurePort (MeasureParams) returns (EmptyMessage) {}
     rpc measureThru (PortsPair) returns (EmptyMessage) {}
     rpc apply (EmptyMessage) returns (EmptyMessage) {}
-    rpc reset (EmptyMessage) returns (EmptyMessage) {} 
+    rpc reset (EmptyMessage) returns (EmptyMessage) {}
 }
 
 
@@ -28,7 +28,7 @@ message MeasureParams {
     bool gender = 3;
 }
 
-// статус порта open short load gender 
+// статус порта open short load gender
 message PortStatus {
     bool open = 1;
     bool short = 2;

@@ -75,8 +75,6 @@ public class GRPCService : vnarpcGrpcKt.vnarpcCoroutineImplBase() {
         return super.reset(request)
     }
 
-
-
     /*
 override suspend fun getPortCount(request: PortRequest)= PortCount  {
     portcountdisp = "Port Count: ${request.portname}"

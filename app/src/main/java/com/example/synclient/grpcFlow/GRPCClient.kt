@@ -3,11 +3,7 @@ package com.example.synclient.grpcFlow
 import io.grpc.LoadBalancerRegistry
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
-import io.grpc.grpclb.GrpclbLoadBalancerProvider
-import io.grpc.internal.PickFirstLoadBalancerProvider
-import vnarpc.HelloRequest
-import vnarpc.PortCount
-import vnarpc.PortRequest
+import vnarpc.*
 
 import vnarpc.vnarpcGrpcKt.vnarpcCoroutineStub
 import java.io.Closeable
@@ -18,9 +14,12 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
     //val channel = ManagedChannelBuilder.forAddress("localhost",50051).usePlaintext().build()
     private val stub: vnarpcCoroutineStub = vnarpcCoroutineStub(channel)
 
-    suspend fun greet(name: String) {
+    suspend fun  sayHello(name: String) {
+        println("Зашел в sayHello")
         val request = HelloRequest.newBuilder().setName(name).build()
-        val response = stub.sayHello(request)
+        println("Прошел Request")
+        val response = stub.sayHello(request) //TODO: Понять почему падает на данном этапе
+        println("Прошел Response")
         println("Received: ${response.message}")
     }
 
@@ -40,7 +39,13 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
 
     suspend fun apply() {}
 
-    suspend fun reset() {}
+    suspend fun reset() {
+        val request = EmptyMessage.newBuilder().build()
+        println("Прошел Request")
+        val response = stub.reset(request) //TODO: Понять почему падает на данном этапе
+        println("Прошел Response")
+        println("Received: ")
+    }
 
 
 /*
@@ -63,17 +68,23 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
  * greets "world" otherwise.
  */
 suspend fun main(args: Array<String>) {
-    LoadBalancerRegistry.getDefaultRegistry().register(GrpclbLoadBalancerProvider())
+    println("Зашел в MAIN")
     val port = System.getenv("PORT")?.toInt() ?: 50051
+    println("Создал порт")
 
     val channel = ManagedChannelBuilder
         .forAddress("localhost", port)
         .usePlaintext()
         .build()
 
+    println("Создал channel")
     val client = GRPCClient(channel)
+    println("Создал client")
 
     //val user = args.singleOrNull() ?: 0
     val user = args.singleOrNull() ?: "world"
-    client.greet(user)
+    client.reset()
+    //client.sayHello("TestName")
+    println("Поздоровался ли?")
+    channel.shutdown()
 }
