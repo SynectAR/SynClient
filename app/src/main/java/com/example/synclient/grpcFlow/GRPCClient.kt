@@ -83,7 +83,7 @@ suspend fun main(args: Array<String>) {
 
     //val user = args.singleOrNull() ?: 0
     val user = args.singleOrNull() ?: "world"
-    client.reset()
+    client.sayHello(user)
     //client.sayHello("TestName")
     println("Поздоровался ли?")
     channel.shutdown()

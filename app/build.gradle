@@ -91,37 +91,12 @@ dependencies {
 
     //implementation("com.google.protobuf:protobuf-kotlin:3.19.1")
     implementation("io.grpc:grpc-kotlin-stub:1.2.0") //НУЖЕН 100 %
-
-    // https://mvnrepository.com/artifact/io.grpc/grpc-netty
-    //implementation "io.grpc:grpc-netty:1.42.1"
-    // https://mvnrepository.com/artifact/io.grpc/grpc-netty-shaded
-    //implementation "io.grpc:grpc-netty-shaded:1.42.1"
-
-
-    // https://mvnrepository.com/artifact/io.grpc/grpc-netty
-   // implementation 'io.grpc:grpc-netty:1.42.1'
-
-
-    // https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-shade-plugin
-    //implementation("org.apache.maven.plugins:maven-shade-plugin:3.2.4")
-    //implementation("com.github.jengelman.gradle.plugins:shadow:1.2.4")
-
-
-
-
-
-// https://mvnrepository.com/artifact/io.netty/netty-all
-    //implementation 'io.netty:netty-all:4.0.0.CR1'
-// https://mvnrepository.com/artifact/io.grpc/grpc-context
-    //implementation 'io.grpc:grpc-context:1.42.1'
-// https://mvnrepository.com/artifact/io.grpc/grpc-protobuf-lite
-    //implementation 'io.grpc:grpc-protobuf-lite:1.42.1'
-    // https://mvnrepository.com/artifact/com.google.api.grpc/proto-google-common-protos
-    //implementation("com.google.api.grpc:proto-google-common-protos:2.7.0")
-    // https://mvnrepository.com/artifact/io.perfmark/perfmark-api
-    //runtimeOnly("io.perfmark:perfmark-api:0.23.0")
     implementation "io.grpc:grpc-okhttp:1.42.1"
 
+// https://mvnrepository.com/artifact/io.grpc/grpc-netty-shaded
+    implementation group: 'io.grpc', name: 'grpc-netty-shaded', version: '1.42.1'
+    // https://mvnrepository.com/artifact/io.perfmark/perfmark-api
+    implementation("io.perfmark:perfmark-api:0.23.0")
 
 
 
