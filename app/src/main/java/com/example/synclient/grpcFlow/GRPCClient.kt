@@ -14,13 +14,11 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
     //val channel = ManagedChannelBuilder.forAddress("localhost",50051).usePlaintext().build()
     private val stub: vnarpcCoroutineStub = vnarpcCoroutineStub(channel)
 
-    suspend fun  sayHello(name: String) {
-        println("Зашел в sayHello")
+    suspend fun  sayHello(name: String): String {
         val request = HelloRequest.newBuilder().setName(name).build()
-        println("Прошел Request")
         val response = stub.sayHello(request) //TODO: Понять почему падает на данном этапе
-        println("Прошел Response")
         println("Received: ${response.message}")
+        return response.message
     }
 
     suspend fun portCount(count: Int)  {
