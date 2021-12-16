@@ -16,6 +16,14 @@ import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.widget.Toast
+import io.grpc.ClientCall
+import org.bouncycastle.its.asn1.EndEntityType
+
+import org.bouncycastle.its.asn1.EndEntityType.app
+
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,11 +46,13 @@ class MainActivity : AppCompatActivity() {
     public fun buttonGRPCClicked(v: View)
     {
         var textRe: String = "Не получил."
-        CoroutineScope(Dispatchers.IO).launch {
-            textRe= sayHelloFromClient()
-        }
+        var  responseText: String = "test"
+        val client= createChannelForClient()
+            CoroutineScope(Dispatchers.IO).launch {
+                responseText= client.sayHello("KEKW")
+            }
         val view= findViewById<Button>(R.id.buttonGRPC)
-        view?.text=textRe
+        view?.text=responseText
     }
 
     suspend fun sayHelloFromClient(): String
@@ -57,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         val port = System.getenv("PORT")?.toInt() ?: 50051
 
         val channel = ManagedChannelBuilder
-            .forAddress("127.0.0.1", port)
+            .forAddress("10.0.2.2", port)
             .usePlaintext()
             .build()
         val client = GRPCClient(channel)

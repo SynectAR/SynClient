@@ -18,7 +18,8 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         val request = HelloRequest.newBuilder().setName(name).build()
         val response = stub.sayHello(request) //TODO: Понять почему падает на данном этапе
         println("Received: ${response.message}")
-        return response.message
+        var text= response.message
+        return text
     }
 
     suspend fun portCount(count: Int)  {
@@ -66,18 +67,13 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
  * greets "world" otherwise.
  */
 suspend fun main(args: Array<String>) {
-    println("Зашел в MAIN")
     val port = System.getenv("PORT")?.toInt() ?: 50051
-    println("Создал порт")
-
     val channel = ManagedChannelBuilder
         .forAddress("localhost", port)
         .usePlaintext()
         .build()
 
-    println("Создал channel")
     val client = GRPCClient(channel)
-    println("Создал client")
 
     //val user = args.singleOrNull() ?: 0
     val user = args.singleOrNull() ?: "world"
