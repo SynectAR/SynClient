@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/portView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
@@ -35,12 +36,13 @@
             android:textSize="20sp" />
 
     <RadioButton
-        android:layout_width="38dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="70dp"
+        android:id="@+id/portChecked"
+        android:layout_width="45dp"
+        android:layout_height="144dp"
+        android:layout_marginStart="111dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="4dp"
-        android:scaleX="2"
-        android:scaleY="2" />
+        android:scaleX="7"
+        android:scaleY="7" />
 
 </LinearLayout>

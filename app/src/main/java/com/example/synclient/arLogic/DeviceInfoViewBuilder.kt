@@ -53,8 +53,8 @@ class DeviceInfoViewBuilder {
 
         var node = TransformableNode(arFragment.transformationSystem)
 
-        node.scaleController.minScale = 0.01f
-        node.scaleController.maxScale = 0.02f
+        node.scaleController.minScale = 0.1f
+        node.scaleController.maxScale = 0.2f
         //Переворачивает виджет для корректного отображения на вертикальной поверхности.
         node.setLookDirection(Vector3.down(), anchorNode.down)
         node.renderable = viewRenderable

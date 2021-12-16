@@ -2,10 +2,12 @@ package com.example.synclient.arLogic
 
 import android.content.Context
 import android.view.View
+import android.widget.RadioButton
 import android.widget.TextView
 import com.example.synclient.R
 import com.google.ar.core.Anchor
 import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
@@ -36,14 +38,13 @@ class PortViewBuilder {
         anchor: Anchor,
         portNumber: Int,
         context: Context,
-        x: Float,
-        y: Float,
-        z: Float
+        vector: Vector3,
+        quaternion: Quaternion
     ) {
         ViewRenderable.builder().setView(context, R.layout.port_layout)
             .build()
             .thenAccept { viewRenderable ->
-                displayPort(arFragment, anchor, viewRenderable, portNumber, x, y, z)
+                displayPort(arFragment, anchor, viewRenderable, portNumber, vector, quaternion)
             }
     }
 
@@ -66,28 +67,36 @@ class PortViewBuilder {
         anchor: Anchor,
         viewRenderable: ViewRenderable,
         portNumber: Int,
-        x: Float,
-        y: Float,
-        z: Float
+        vector: Vector3,
+        quaternion: Quaternion
     ) {
         var anchorNode = AnchorNode(anchor)
-
         var node = TransformableNode(arFragment.transformationSystem)
 
-        node.scaleController.minScale = 0.01f
-        node.scaleController.maxScale = 0.02f
 
+        node.scaleController.minScale = 0.025f
+        node.scaleController.maxScale = 0.03f
         //Корректирует расположение виджета в зависимости от найденного anchor.
-        node.worldPosition = Vector3(x, y, z)
-        //Переворачивает виджет для корректного отображения на вертикальной поверхности.
-        node.setLookDirection(Vector3.down(), anchorNode.down)
-        node.renderable = viewRenderable
+
+        node.worldPosition = vector
+        node.worldRotation = quaternion
+
+
+        //node.worldScale = Vector3(1f,1f,1f)
+        //node.parent = anchorNode
+
+
+        //node.worldScale = Vector3(222f,222f,222f)
         node.parent = anchorNode
+        node.renderable = viewRenderable
         arFragment.arSceneView.scene.addChild(anchorNode)
-        node.select()
         //Находишь необходимый TextView для отоброжения номера порта.
         val view: View = viewRenderable.view
+        val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
         var PortText = view.findViewById<TextView>(R.id.portNumberText)
         PortText.text = "Порт " + portNumber
+        view.setOnClickListener {
+            portRadio.isChecked = !portRadio.isChecked
+        }
     }
 }

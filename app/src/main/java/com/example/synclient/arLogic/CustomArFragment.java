@@ -24,7 +24,7 @@ public class CustomArFragment extends ArFragment {
         }
         Bitmap bitmapQR = BitmapFactory.decodeResource(getResources(), R.drawable.demo_img2);
         AugmentedImageDatabase aid = new AugmentedImageDatabase(session);
-        aid.addImage("qrCode", bitmapQR, 0.04f);
+        aid.addImage("qrCode", bitmapQR, 0.015f);
         config.setAugmentedImageDatabase(aid);
         config.setUpdateMode(Config.UpdateMode.LATEST_CAMERA_IMAGE);
         config.setPlaneFindingMode(Config.PlaneFindingMode.DISABLED);

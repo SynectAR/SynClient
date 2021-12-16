@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.ar.ARCameraActivity">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hello"
+        tools:ignore="MissingConstraints" />
+
     <fragment
         android:id="@+id/scene_form_fragment"
         android:name="com.example.synclient.arLogic.CustomArFragment"
@@ -23,16 +29,6 @@
         app:layout_constraintVertical_bias="0.0">
 
     </HorizontalScrollView>
-
-    <Button
-        android:id="@+id/buttonReturn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="finishActivity"
-        android:text="Вернуться"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

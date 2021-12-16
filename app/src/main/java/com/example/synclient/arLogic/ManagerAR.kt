@@ -6,7 +6,10 @@ import com.example.synclient.ui.ar.ARCameraActivity
 import com.google.ar.core.Anchor
 import com.google.ar.core.AugmentedImage
 import com.google.ar.core.TrackingState
+import com.google.ar.sceneform.math.Quaternion
+import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.ux.ArFragment
+import kotlin.collections.MutableList as MutableList1
 
 
 /**
@@ -18,21 +21,21 @@ import com.google.ar.sceneform.ux.ArFragment
  */
 class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
     //Созданием пустого массива координат, хранящихся в типе float.
-    var portsCoords = Array(3) { Array(3) { 0.0f } }
+    var portsTransport = Array(3) { Array(3) { 0.0f } }
 
     //Переменная, содержащая стандартный отступ для всех виджетов от найденной поверхности.
-    val yaxisBase: Float = 0.006f //0.01f
+    private val yaxisBase: Float = 0.006f //0.01f
 
     //Переменная, использующая для подтверждения нахождения изображения.
     var isFound = false
     lateinit var anchor: Anchor
     lateinit var arFragment: ArFragment
     var myContext: Context = context
-    var activity: ARCameraActivity = activity
+    private var activity: ARCameraActivity = activity
 
 
     //Лист, содержащий в себе все PortAR обьекты.
-    var portList: MutableList<PortViewBuilder> = mutableListOf()
+    var portList: MutableList1<PortViewBuilder> = mutableListOf()
     var port: PortViewBuilder = PortViewBuilder()
     var widget: DeviceInfoViewBuilder = DeviceInfoViewBuilder()
     var menu: CalibrationMenuViewBuilder = CalibrationMenuViewBuilder()
@@ -42,12 +45,8 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
      * Метод для поиска изображения и создания anchor в ее центре.
      * Также отвечает за создание виджетов в AR.
      */
-    fun createAnchor() {
+    private fun createAnchor(listOfVectors: MutableList1<Vector3>, listOfQuaternion: MutableList1<Quaternion>) {
         val frame = arFragment.arSceneView.arFrame
-        portsCoords[0] = arrayOf(-0.02f, yaxisBase, -0.005f)
-        portsCoords[1] = arrayOf(0.02f, yaxisBase, -0.005f)
-        portsCoords[2] = arrayOf(0f, yaxisBase, 0f)
-
         val images: Collection<AugmentedImage> = frame!!.getUpdatedTrackables(
             AugmentedImage::class.java
         )
@@ -56,19 +55,18 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
                 && image.trackingMethod == AugmentedImage.TrackingMethod.FULL_TRACKING
             ) {
                 if (image.name.equals("qrCode")) {
-                    isFound = true
                     anchor = image.createAnchor(image.centerPose)
+                    isFound = true
                     widget.createWidget(arFragment, anchor, myContext)
-                    menu.createMenu(arFragment, anchor, myContext, -0.008f, yaxisBase, -0.061f)
-                    portsCoords.forEachIndexed { index, element ->
+                    menu.createMenu(arFragment, anchor, myContext, -0.13567f, yaxisBase, -0.010f)
+                    listOfVectors.forEachIndexed { index, vector ->
                         port.createPort(
                             arFragment,
                             anchor,
                             index + 1,
                             myContext,
-                            element[0],
-                            element[1],
-                            element[3]
+                            vector,
+                            listOfQuaternion[index]
                         )
                         portList.add(port)
                     }
@@ -76,9 +74,10 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
                 }
             }
         }
+
     }
 
-    fun setAugmentedImagesOnUpdateListener() {
+    fun setAugmentedImagesOnUpdateListener(listOfVectors: MutableList1<Vector3>, listOfQuaternion: MutableList1<Quaternion>) {
         arFragment =
             (activity.supportFragmentManager.findFragmentById(R.id.scene_form_fragment)
                     as CustomArFragment).apply {
@@ -89,7 +88,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
                             setOnAugmentedImageUpdateListener(null)
                         }
                     } else {
-                        createAnchor()
+                        createAnchor(listOfVectors, listOfQuaternion)
                     }
                 }
             }

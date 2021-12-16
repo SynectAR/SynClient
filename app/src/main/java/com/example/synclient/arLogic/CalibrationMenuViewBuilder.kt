@@ -5,6 +5,7 @@ import android.view.View
 import com.example.synclient.R
 import com.google.ar.core.Anchor
 import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
@@ -67,15 +68,14 @@ class CalibrationMenuViewBuilder {
         z: Float
     ) {
         var anchorNode = AnchorNode(anchor)
-
         var node = TransformableNode(arFragment.transformationSystem)
 
-        node.scaleController.minScale = 0.01f
-        node.scaleController.maxScale = 0.02f
+        node.scaleController.minScale = 0.05f
+        node.scaleController.maxScale = 0.051f
         //Корректирует расположение виджета в зависимости от найденного anchor.
-        node.worldPosition = Vector3(x, y, z)
+        node.worldPosition = Vector3(0.2f, 0f, -0.080f)
+        node.worldRotation = Quaternion.axisAngle(Vector3(-90f, 0f, 0f), 1f)
         //Переворачивает виджет для корректного отображения на вертикальной поверхности.
-        node.setLookDirection(Vector3.down(), anchorNode.down)
         node.renderable = viewRenderable
         node.parent = anchorNode
         arFragment.arSceneView.scene.addChild(anchorNode)
