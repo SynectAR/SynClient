@@ -1,60 +1,69 @@
 package com.example.synclient.grpcFlow
 
-import io.grpc.LoadBalancerRegistry
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import vnarpc.*
 
-import vnarpc.vnarpcGrpcKt.vnarpcCoroutineStub
+import vnarpc.VnaRpcGrpcKt.VnaRpcCoroutineStub
 import java.io.Closeable
 import java.util.concurrent.TimeUnit
 
-//GRPCClient(private val channel: ManagedChannel)
 public class GRPCClient(private val channel: ManagedChannel) : Closeable {
-    //val channel = ManagedChannelBuilder.forAddress("localhost",50051).usePlaintext().build()
-    private val stub: vnarpcCoroutineStub = vnarpcCoroutineStub(channel)
+    private val stub: VnaRpcCoroutineStub = VnaRpcCoroutineStub(channel)
 
-    suspend fun  sayHello(name: String): String {
+    suspend fun sayHello(name: String): String {
         val request = HelloRequest.newBuilder().setName(name).build()
-        val response = stub.sayHello(request) //TODO: Понять почему падает на данном этапе
+        val response = stub.sayHello(request)
         println("Received: ${response.message}")
-        var text= response.message
-        return text
+        return response.message
     }
 
-    suspend fun portCount(count: Int)  {
-        //var portRequest: PortRequest? = PortRequest.newBuilder().setPortname(count).build()
-        //var response: PortCount = stub.getPortCount(portRequest!!)
-
-        //val request = PortRequest {this.portname = count}
-        //val answer= stub.getPortCount(request)
+    suspend fun portCount(): Int {
+        val request = EmptyMessage.newBuilder().build()
+        val response = stub.getPortCount(request)
+        println("Received: ${response.portcount}")
+        return response.portcount
     }
 
-    suspend fun portStatus() {}
+    suspend fun portStatus(port: Int): Boolean {
+        val request = Port.newBuilder().build()
+        val response = stub.getPortStatus(request)
+        if (response.open) return response.open
+        if (response.short) return response.short
+        if (response.load) return response.load
+        else return false
+    }
 
-    suspend fun measurePort() {}
+    suspend fun measurePort(port: Int, type: String) {
+        val request = MeasureParams.newBuilder()
+            .setPort(port)
+            .setType(type)
+            .setGender(true)
+            .build()
+        val response = stub.measurePort(request)
+        println("Received: ${response}")
+    }
 
-    suspend fun measureThru() {}
+    suspend fun measureThru(firstPort: Int, secondPort: Int) {
+        val request = PortsPair.newBuilder()
+            .setFirstport(firstPort)
+            .setSecondport(secondPort)
+            .build()
+        val response = stub.measureThru(request)
+        println("Received: ${response}")
+    }
 
-    suspend fun apply() {}
+    suspend fun apply() {
+        val request = EmptyMessage.newBuilder().build()
+        val response = stub.reset(request)
+        println("Received: ${response} ")
+    }
 
     suspend fun reset() {
         val request = EmptyMessage.newBuilder().build()
-        println("Прошел Request")
-        val response = stub.reset(request) //TODO: Понять почему падает на данном этапе
-        println("Прошел Response")
-        println("Received: ")
+        val response = stub.reset(request)
+        println("Received: ${response} ")
     }
-
-
-/*
-    suspend fun greet(name: String) {
-        val request = helloRequest { this.name = name }
-        val response = stub.sayHello(request)
-        println("Received: ${response.message}")
-    }
-
- */
 
     override fun close() {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS)

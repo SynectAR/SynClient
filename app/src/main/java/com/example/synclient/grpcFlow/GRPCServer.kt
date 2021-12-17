@@ -1,19 +1,8 @@
 package com.example.synclient.grpcFlow
 
-import com.google.common.base.Stopwatch
-import com.google.common.base.Ticker
-import com.google.protobuf.util.Durations
 import io.grpc.Server
-import io.grpc.ServerBuilder
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flow
 import vnarpc.*
-import java.util.Collections
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.TimeUnit
+
 
 class GRPCServer(private val port: Int){
 
@@ -43,14 +32,14 @@ fun blockUntilShutdown() {
 }
 
 
-public class GRPCService : vnarpcGrpcKt.vnarpcCoroutineImplBase() {
+public class GRPCService : VnaRpcGrpcKt.VnaRpcCoroutineImplBase() {
 
     override suspend fun sayHello(request: HelloRequest): HelloReply{
         return HelloReply.newBuilder().setMessage("Hello ${request.name}").build()
     }
 
-    override suspend fun getPortCount(request: PortRequest) : PortCount {
-        val message ="Port Count is ${request.portname}"
+    override suspend fun getPortCount(request: EmptyMessage) : PortCount {
+        val message ="Port Count is ${request}"
         return super.getPortCount(request)
     }
 
@@ -74,12 +63,6 @@ public class GRPCService : vnarpcGrpcKt.vnarpcCoroutineImplBase() {
         return super.reset(request)
     }
 
-    /*
-override suspend fun getPortCount(request: PortRequest)= PortCount  {
-    portcountdisp = "Port Count: ${request.portname}"
-}
-
- */
 }
 }
 
