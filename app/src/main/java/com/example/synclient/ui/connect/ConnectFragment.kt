@@ -23,7 +23,7 @@ class ConnectFragment : Fragment() {
     private lateinit var handler: Handler
     private lateinit var bitmap: Bitmap
     private lateinit var deviceInfo: String
-    private val address= "192.168.1.85"
+    private val address = "192.168.1.85"
     private var port = 8000
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,9 +33,6 @@ class ConnectFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_connect, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
     override fun onStart() {
         super.onStart()
         val button = view?.findViewById(R.id.button_connect) as Button
@@ -44,17 +41,16 @@ class ConnectFragment : Fragment() {
         val tvModel = view?.findViewById(R.id.tvModel) as TextView
         val tvSerialNumber = view?.findViewById(R.id.tvSerialNumber) as TextView
         val tvSoftwareVersion = view?.findViewById(R.id.tvSoftwareVersion) as TextView
-        button.setOnClickListener{
-            if(!isConnected){
+        button.setOnClickListener {
+            if (!isConnected) {
                 button.text = "Disconnect"
                 isConnected = true
-                Toast.makeText(context,"Подключено",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Подключено", Toast.LENGTH_SHORT).show()
                 CoroutineScope(IO).launch {
                     getDeviceInfo("getInfo")
                 }
-            }
-            else{
-                isConnected = false;
+            } else {
+                isConnected = false
                 button.text = "Connect"
             }
         }
@@ -68,25 +64,22 @@ class ConnectFragment : Fragment() {
             }
         }
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 
-    private fun createConnection(address: String, port: Int){
-        val connect = SocketConnect(address,port)
+    private fun createConnection(address: String, port: Int) {
+        val connect = SocketConnect(address, port)
         bitmap = connect.getBitmap()
         connect.closeSocket()
     }
-    private fun getDeviceInfo(param:String){
-        val connect = SocketConnect(address,port)
+
+    private fun getDeviceInfo(param: String) {
+        val connect = SocketConnect(address, port)
         val message = connect.getMessageByParam(param)
         connect.closeSocket()
-        if(message != null){
+        if (message != null) {
             deviceInfo = message.toString()
             handler.sendEmptyMessage(0)
-        }
-        else
-            Log.e("TAG","Server_message_problem")
+        } else
+            Log.e("TAG", "Server_message_problem")
     }
 
 }

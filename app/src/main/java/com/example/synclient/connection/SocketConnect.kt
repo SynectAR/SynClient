@@ -6,42 +6,45 @@ import android.util.Log
 import java.io.DataInputStream
 import java.net.Socket
 
-public class SocketConnect(address: String, port: Int) {
-    private val socket: Socket = Socket(address,port)
+class SocketConnect(address: String, port: Int) {
+    private val socket: Socket = Socket(address, port)
 
-    fun closeSocket():Boolean{
+    fun closeSocket(): Boolean {
         socket.close()
         return true
     }
-    fun getBitmap(): Bitmap{
+
+    fun getBitmap(): Bitmap {
         var bytesArray = getMessageByCustomProtocol(socket)
         return convertToBitmap(bytesArray)
     }
 
-    fun getMessageByParam(param: String): String?{
+    fun getMessageByParam(param: String): String? {
         sendMessage(param)
         return getMessage()
     }
-    private fun sendMessage(message: String):Boolean{
-        try{
+
+    private fun sendMessage(message: String): Boolean {
+        try {
             socket.outputStream.write(message.toByteArray())
-        }
-        catch (exception: Throwable){
-            Log.e("TAG",exception.toString())
-            return false;
+        } catch (exception: Throwable) {
+            Log.e("TAG", exception.toString())
+            return false
         }
         return true
     }
+
     private fun getMessage(): String? {
-        return try{
+        return try {
             val inputStream = DataInputStream(socket.getInputStream())
             inputStream.readLine()
-        } catch (exception: Throwable){
-            Log.e("TAG",exception.toString())
-            null;
+        } catch (exception: Throwable) {
+            Log.e("TAG", exception.toString())
+            null
         }
     }
-    private fun getMessageByCustomProtocol(socket: Socket):ByteArray{
+
+    private fun getMessageByCustomProtocol(socket: Socket): ByteArray {
         val inputStream = DataInputStream(socket.getInputStream())
         val messageMetadata = ByteArray(4)
         inputStream.read(messageMetadata)
@@ -56,12 +59,17 @@ public class SocketConnect(address: String, port: Int) {
         val pictureSize = bytes.size / 4
         val pixels: Int = kotlin.math.sqrt(pictureSize.toDouble()).toInt()
         val resultBitmap = Bitmap.createBitmap(pixels, pixels, Bitmap.Config.ARGB_8888)
-        for(j in 0 until pixels)
-            for(i in 0 until pixels){
+        for (j in 0 until pixels)
+            for (i in 0 until pixels) {
                 val index = i * pixels + j
-                resultBitmap.setPixel(i,j, Color.rgb(convertByteToInt(bytes,index*4+2),
-                    convertByteToInt(bytes,index*4+1),convertByteToInt(bytes,index*4+3)))
-        }
+                resultBitmap.setPixel(
+                    i, j, Color.rgb(
+                        convertByteToInt(bytes, index * 4 + 2),
+                        convertByteToInt(bytes, index * 4 + 1),
+                        convertByteToInt(bytes, index * 4 + 3)
+                    )
+                )
+            }
         return resultBitmap
     }
 
@@ -73,7 +81,7 @@ public class SocketConnect(address: String, port: Int) {
     }
 
     private fun convertByteToInt(bytes: ByteArray, shift: Int): Int {
-        return (bytes[0+shift].toInt() and 0xff)
+        return (bytes[0 + shift].toInt() and 0xff)
     }
 
 }

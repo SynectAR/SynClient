@@ -1,60 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="1000dp"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_round">
+    android:layout_height="700dp">
 
-    <TextView
-        android:id="@+id/port1textView"
-        android:layout_width="500dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="260dp"
-        android:background="@drawable/bg_widget_ar_info"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Порт1"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="40sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/port2textView"
-        android:layout_width="500dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="260dp"
-        android:layout_marginEnd="4dp"
-        android:background="@drawable/bg_widget_ar_info"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Порт2"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.example.synclient.arWidget.CircleView
-        android:id="@+id/port1circleView"
-        android:layout_width="150dp"
-        android:layout_height="300dp"
-        android:layout_marginLeft="160dp"
-        android:layout_marginTop="464dp"
-        android:background="@drawable/bg_round"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.example.synclient.arWidget.CircleView
-        android:id="@+id/port2circleView"
-        android:layout_width="150dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="464dp"
-        android:layout_marginRight="160dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/vnaInfotextView"
@@ -83,40 +34,6 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/vnaInfotextView" />
-
-    <TextView
-        android:id="@+id/port1StatustextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:background="@drawable/bg_widget_ar_info"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Статус первого порта"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/port1circleView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/port1textView"
-        app:layout_constraintVertical_bias="0.509" />
-
-    <TextView
-        android:id="@+id/port2StatustextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
-        android:background="@drawable/bg_widget_ar_info"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Статус второго порта"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/port2circleView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/port2textView"
-        app:layout_constraintVertical_bias="0.509" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
