@@ -34,9 +34,6 @@ fun blockUntilShutdown() {
 
 public class GRPCService : VnaRpcGrpcKt.VnaRpcCoroutineImplBase() {
 
-    override suspend fun sayHello(request: HelloRequest): HelloReply{
-        return HelloReply.newBuilder().setMessage("Hello ${request.name}").build()
-    }
 
     override suspend fun getPortCount(request: EmptyMessage) : PortCount {
         val message ="Port Count is ${request}"

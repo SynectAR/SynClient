@@ -5,7 +5,6 @@ package vnarpc; //vnarpc
 option java_multiple_files = true;
 
 service VnaRpc {
-    rpc SayHello (HelloRequest) returns (HelloReply) {}
     rpc getPortCount (EmptyMessage) returns (PortCount) {}
     rpc getPortStatus (Port) returns (PortStatus) {}
     rpc measurePort (MeasureParams) returns (EmptyMessage) {}
@@ -46,11 +45,4 @@ message PortCount {
     int32 portcount = 3;
 }
 
-message HelloRequest {
-    string name = 1;
-}
 
-// The response message containing the greetings
-message HelloReply {
-    string message = 1;
-}

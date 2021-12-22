@@ -11,13 +11,6 @@ import java.util.concurrent.TimeUnit
 public class GRPCClient(private val channel: ManagedChannel) : Closeable {
     private val stub: VnaRpcCoroutineStub = VnaRpcCoroutineStub(channel)
 
-    suspend fun sayHello(name: String): String {
-        val request = HelloRequest.newBuilder().setName(name).build()
-        val response = stub.sayHello(request)
-        println("Received: ${response.message}")
-        return response.message
-    }
-
     suspend fun portCount(): Int {
         val request = EmptyMessage.newBuilder().build()
         val response = stub.getPortCount(request)
@@ -25,13 +18,11 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         return response.portcount
     }
 
-    suspend fun portStatus(port: Int): Boolean {
-        val request = Port.newBuilder().build()
+    suspend fun portStatus(port: Int): Array<Boolean> {
+        val request = Port.newBuilder().setPort(port).build()
         val response = stub.getPortStatus(request)
-        if (response.open) return response.open
-        if (response.short) return response.short
-        if (response.load) return response.load
-        else return false
+        var responseArray= arrayOf(response.open,response.short,response.load)
+        return responseArray
     }
 
     suspend fun measurePort(port: Int, type: String) {
@@ -86,8 +77,7 @@ suspend fun main(args: Array<String>) {
 
     //val user = args.singleOrNull() ?: 0
     val user = args.singleOrNull() ?: "world"
-    client.sayHello(user)
-    //client.sayHello("TestName")
+
     println("Поздоровался ли?")
     channel.shutdown()
 }

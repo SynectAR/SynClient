@@ -7,14 +7,6 @@ import kotlinx.coroutines.runBlocking
 object CalibrationHelper {
     val clientStub = GRPCConnectionHelper.setupConnection()
 
-    suspend fun sayHello(name: String): String? {
-        var receivedText: String? = null
-        runBlocking {
-            val responseText = async { clientStub.sayHello(name) }
-            receivedText = responseText.await()
-        }
-        return receivedText
-    }
 
     suspend fun getPortCount(): Int? {
         var receivedCount: Int? = null
@@ -25,8 +17,8 @@ object CalibrationHelper {
         return receivedCount
     }
 
-    suspend fun getPortStatus(port: Int): Boolean? {
-        var receivedStatus: Boolean? = null
+    suspend fun getPortStatus(port: Int): Array<Boolean>? {
+        var receivedStatus: Array<Boolean>? = null
         runBlocking {
             val responseStatus = async { clientStub.portStatus(port) }
             receivedStatus = responseStatus.await()
