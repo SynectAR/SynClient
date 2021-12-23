@@ -22,7 +22,8 @@ import kotlin.collections.MutableList as MutableList1
 class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
     //Созданием пустого массива координат, хранящихся в типе float.
     var portsTransport = Array(3) { Array(3) { 0.0f } }
-
+    var menuVector = Vector3(0.2f, 0f, -0.080f)
+    val menuQuaternion: Quaternion = Quaternion.axisAngle(Vector3(-90f, 0f, 0f), 1f)
     //Переменная, содержащая стандартный отступ для всех виджетов от найденной поверхности.
     private val yaxisBase: Float = 0.006f //0.01f
 
@@ -37,8 +38,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
 
     //Лист, содержащий в себе все PortAR обьекты.
     var portList = mutableListOf<PortViewBuilder>()
-    var widget: DeviceInfoViewBuilder = DeviceInfoViewBuilder()
-    var menu: CalibrationMenuViewBuilder = CalibrationMenuViewBuilder()
+    var layoutViewList = mutableListOf<LayoutViewBuilder>()
 
 
     /**
@@ -60,8 +60,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
                 if (image.name.equals("qrCode")) {
                     anchor = image.createAnchor(image.centerPose)
                     isFound = true
-                    widget.createWidget(arFragment, anchor, myContext)
-                    menu.createMenu(arFragment, anchor, myContext, -0.13567f, yaxisBase, -0.010f)
+                    showLayout(R.layout.menu_ar)
                     listOfVectors.forEachIndexed { index, vector ->
                         var port: PortViewBuilder = PortViewBuilder()
                         port.createPort(
@@ -108,5 +107,10 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
         }
     }
 
+    fun showLayout(layoutType: Int){
+        var layoutView: LayoutViewBuilder = LayoutViewBuilder()
+        layoutView.createView(arFragment, anchor, myContext, layoutType, menuVector, menuQuaternion)
+        layoutViewList.add(layoutView)
+    }
 
 }

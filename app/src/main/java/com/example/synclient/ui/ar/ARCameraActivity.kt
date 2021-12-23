@@ -2,67 +2,28 @@ package com.example.synclient.ui.ar
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.widget.LinearLayout
+import android.util.Log
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.synclient.R
-import com.example.synclient.adapter.ChannelAdapter
+import com.example.synclient.arLogic.LayoutViewBuilder
 import com.example.synclient.arLogic.ManagerAR
-import com.example.synclient.entities.ItemChannel
 import com.google.ar.core.Config
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.collections.ArrayList
+import kotlinx.coroutines.*
 
 
 /**
  * Класс, обрабатывающий взаимодействие и работу с камерой телефона в AR пространстве.
  */
 class ARCameraActivity : AppCompatActivity() {
-    var listOfChannelItems = ArrayList<ItemChannel>()
     private lateinit var handler: Handler
     var managerAR: ManagerAR = ManagerAR(this, this)
 
-    private var adapter = object : ChannelAdapter() {
-        override fun onClickBuilder(layout: LinearLayout, index: Int) {
-            layout.setOnClickListener {
-                if (managerAR.isCreated) {
-                    when (index) {
-                        0 -> managerAR.changePortsColor(Color.RED)
-                        1 -> managerAR.changePortsColor(Color.GREEN)
-                        2 -> managerAR.changePortsColor(Color.BLUE)
-                        3 -> managerAR.changePortsColor(Color.BLACK)
-                        4 -> managerAR.portList.forEachIndexed { index, portViewBuilder ->
-                            if (index % 2 == 0)
-                                portViewBuilder.changePortColor(Color.GREEN)
-                            else
-                                portViewBuilder.changePortColor(Color.RED)
-                        }
-                        5 -> managerAR.portList.forEachIndexed { index, portViewBuilder ->
-                            val rnd = Random()
-                            portViewBuilder.changePortColor(
-                                Color.argb(
-                                    255,
-                                    rnd.nextInt(256),
-                                    rnd.nextInt(256),
-                                    rnd.nextInt(256)
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     override fun onAttachedToWindow() {
         this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
@@ -86,56 +47,90 @@ class ARCameraActivity : AppCompatActivity() {
             listOfQuaternion.add(Quaternion.axisAngle(Vector3(-60f, 0f, 0f), 1f))
         }
 
-        uploadRV()
         managerAR.setAugmentedImagesOnUpdateListener(listOfVectors, listOfQuaternion)
 
         handler = @SuppressLint("HandlerLeak")
         object : Handler() {
             override fun handleMessage(msg: Message) {
-                var config = managerAR.arFragment.arSceneView.session?.config
-                if (config != null) {
-                    config.focusMode = Config.FocusMode.AUTO
-                    config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
-                    managerAR.arFragment.arSceneView.session?.configure(config)
+                when (msg.what){
+                    0 -> updateConfig()
+                    1 -> menuBind()
+                    2 -> infoBind()
+                    3 -> calibrationBind()
                 }
             }
         }
+
         CoroutineScope(Dispatchers.IO).launch {
-            updateConfig()
+            waitForConfig()
+            waitForLayout(1)
         }
     }
 
-    private fun updateConfig() {
-        while (managerAR.arFragment.arSceneView.session == null) {
-            continue
-        }
+    private fun waitForConfig() {
+        while (managerAR.arFragment.arSceneView.session == null);
         handler.sendEmptyMessage(0)
     }
-
-    fun uploadRV() {
-        listOfChannelItems.clear()
-        listOfChannelItems.add(ItemChannel("Ch1", true))
-        listOfChannelItems.add(ItemChannel("Ch2", true))
-        listOfChannelItems.add(ItemChannel("Ch3", true))
-        listOfChannelItems.add(ItemChannel("Ch4", false))
-        listOfChannelItems.add(ItemChannel("Ch5", false))
-        listOfChannelItems.add(ItemChannel("Ch6", false))
-        listOfChannelItems.add(ItemChannel("Ch7", true))
-        listOfChannelItems.add(ItemChannel("Ch8", false))
-        listOfChannelItems.add(ItemChannel("Ch9", false))
-        listOfChannelItems.add(ItemChannel("Ch10", true))
-        listOfChannelItems.add(ItemChannel("Ch11", true))
-        listOfChannelItems.add(ItemChannel("Ch12", false))
-        listOfChannelItems.add(ItemChannel("Ch13", false))
-        listOfChannelItems.add(ItemChannel("Ch14", true))
-        listOfChannelItems.add(ItemChannel("Ch15", true))
-
-        adapter.setData(listOfChannelItems)
-        val channelRV: RecyclerView = findViewById<RecyclerView>(R.id.channelRV)
-        channelRV.layoutManager = LinearLayoutManager(
-            this.baseContext,
-            LinearLayoutManager.VERTICAL, false
-        )
-        channelRV.adapter = adapter
+    private fun waitForLayout(layoutKind: Int) {
+        while(managerAR.layoutViewList.size -1 < 0);
+        val layout: LayoutViewBuilder= managerAR.layoutViewList[managerAR.layoutViewList.size -1]
+        while(layout.view == null);
+        handler.sendEmptyMessage(layoutKind)
     }
+    private fun updateConfig(){
+        var config = managerAR.arFragment.arSceneView.session?.config
+        if (config != null) {
+            config.focusMode = Config.FocusMode.AUTO
+            config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+            managerAR.arFragment.arSceneView.session?.configure(config)
+        }
+    }
+    private fun menuBind(){
+        val view = managerAR.layoutViewList[managerAR.layoutViewList.size-1].view
+        val buttonAbout = view?.findViewById<Button>(R.id.buttonAbout)
+        val calibrationButton = view?.findViewById<Button>(R.id.buttonCalibration)
+        buttonAbout?.setOnClickListener {
+            val list = managerAR.layoutViewList
+            list[list.size-1].destroyView()
+            managerAR.showLayout(R.layout.about_channel_ar)
+            CoroutineScope(Dispatchers.IO).launch {
+                waitForLayout(2)
+            }
+        }
+        calibrationButton?.setOnClickListener {
+            val list = managerAR.layoutViewList
+            list[list.size-1].destroyView()
+            managerAR.showLayout(R.layout.calibration_menu_ar)
+            CoroutineScope(Dispatchers.IO).launch {
+                waitForLayout(3)
+            }
+        }
+    }
+
+    private fun infoBind(){
+        val view = managerAR.layoutViewList[managerAR.layoutViewList.size-1].view
+        val buttonReturn = view?.findViewById<Button>(R.id.buttonInfoReturn)
+        buttonReturn?.setOnClickListener {
+            val list = managerAR.layoutViewList
+            list[list.size-1].destroyView()
+            managerAR.showLayout(R.layout.menu_ar)
+            CoroutineScope(Dispatchers.IO).launch {
+                waitForLayout(1)
+            }
+        }
+    }
+
+    private fun calibrationBind(){
+        val view = managerAR.layoutViewList[managerAR.layoutViewList.size-1].view
+        val buttonReturn = view?.findViewById<Button>(R.id.buttonReturn)
+        buttonReturn?.setOnClickListener {
+            val list = managerAR.layoutViewList
+            list[list.size-1].destroyView()
+            managerAR.showLayout(R.layout.menu_ar)
+            CoroutineScope(Dispatchers.IO).launch {
+                waitForLayout(1)
+            }
+        }
+    }
+
 }

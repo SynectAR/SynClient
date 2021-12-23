@@ -1,11 +1,16 @@
 package com.example.synclient.arLogic
 
 import android.content.Context
+import android.util.Log
+import android.view.View
+import android.widget.Button
 import com.example.synclient.R
 import com.google.ar.core.Anchor
 import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
+import com.google.ar.sceneform.rendering.Renderable
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
@@ -15,7 +20,12 @@ import com.google.ar.sceneform.ux.TransformableNode
  *
  * Класс для создания и отображения обьекта меню помощи в калибровке.
  */
-class CalibrationMenuViewBuilder {
+class LayoutViewBuilder {
+    var view:View? = null
+    private lateinit var anchorNode: AnchorNode
+    lateinit var node: TransformableNode
+    lateinit var scene: Scene
+    var isCreated = false
     /**
      * Метод для создания и отображения  меню помощи в калибровке.
      *
@@ -29,18 +39,18 @@ class CalibrationMenuViewBuilder {
      * @param z Координата оси z.
      *
      */
-    fun createMenu(
+    fun createView(
         arFragment: ArFragment,
         anchor: Anchor,
         context: Context,
-        x: Float,
-        y: Float,
-        z: Float
+        layout: Int,
+        vector: Vector3,
+        quaternion: Quaternion
     ) {
-        ViewRenderable.builder().setView(context, R.layout.calibration_layout)
+        ViewRenderable.builder().setView(context, layout)
             .build()
             .thenAccept { viewRenderable ->
-                displayMenu(arFragment, anchor, viewRenderable, x, y, z)
+                displayMenu(arFragment, anchor, viewRenderable, vector, quaternion)
             }
 
     }
@@ -61,23 +71,29 @@ class CalibrationMenuViewBuilder {
     private fun displayMenu(
         arFragment: ArFragment,
         anchor: Anchor,
-        viewRenderable: ViewRenderable?,
-        x: Float,
-        y: Float,
-        z: Float
+        viewRenderable: ViewRenderable,
+        vector: Vector3,
+        quaternion: Quaternion
     ) {
-        var anchorNode = AnchorNode(anchor)
-        var node = TransformableNode(arFragment.transformationSystem)
-
+        anchorNode = AnchorNode(anchor)
+        node = TransformableNode(arFragment.transformationSystem)
+        scene =  arFragment.arSceneView.scene
         node.scaleController.minScale = 0.05f
         node.scaleController.maxScale = 0.051f
         //Корректирует расположение виджета в зависимости от найденного anchor.
-        node.worldPosition = Vector3(0.2f, 0f, -0.080f)
-        node.worldRotation = Quaternion.axisAngle(Vector3(-90f, 0f, 0f), 1f)
-        //Переворачивает виджет для корректного отображения на вертикальной поверхности.
-        node.renderable = viewRenderable
+
+        node.worldPosition = vector
+        node.worldRotation = quaternion
         node.parent = anchorNode
-        arFragment.arSceneView.scene.addChild(anchorNode)
+        node.renderable = viewRenderable
+        scene.addChild(anchorNode)
         node.select()
+        view = viewRenderable.view
+        isCreated = true
+    }
+
+    fun destroyView(){
+       scene.removeChild(anchorNode)
+       node.parent = null
     }
 }

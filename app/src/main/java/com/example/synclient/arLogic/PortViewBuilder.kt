@@ -91,7 +91,7 @@ class PortViewBuilder {
         node.parent = anchorNode
         node.renderable = viewRenderable
         arFragment.arSceneView.scene.addChild(anchorNode)
-
+        node.select()
         //Находишь необходимый TextView для отоброжения номера порта.
         view = viewRenderable.view
         val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
@@ -99,14 +99,6 @@ class PortViewBuilder {
         portText.text = "Port $portNumber"
         val viewPort = view.findViewById<View>(R.id.portView)
         portRadio.setOnClickListener {
-            if (!isChecked) {
-                ViewRenderable.builder().setView(context, R.layout.port_info)
-                    .build()
-                    .thenAccept {
-                        displayPortInfo(arFragment, anchor, it, vector, quaternion)
-                    }
-            } else
-                view.destroyDrawingCache()
             isChecked = !isChecked
             portRadio.isChecked = isChecked
         }
@@ -135,7 +127,7 @@ class PortViewBuilder {
 
     }
 
-    fun displayPortInfo(
+    private fun displayPortInfo(
         arFragment: ArFragment,
         anchor: Anchor,
         viewRenderable: ViewRenderable,
