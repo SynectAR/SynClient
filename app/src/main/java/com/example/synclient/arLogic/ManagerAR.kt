@@ -28,6 +28,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
 
     //Переменная, использующая для подтверждения нахождения изображения.
     var isFound = false
+    var isCreated = false
     lateinit var anchor: Anchor
     lateinit var arFragment: ArFragment
     var myContext: Context = context
@@ -35,8 +36,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
 
 
     //Лист, содержащий в себе все PortAR обьекты.
-    var portList: MutableList1<PortViewBuilder> = mutableListOf()
-    var port: PortViewBuilder = PortViewBuilder()
+    var portList = mutableListOf<PortViewBuilder>()
     var widget: DeviceInfoViewBuilder = DeviceInfoViewBuilder()
     var menu: CalibrationMenuViewBuilder = CalibrationMenuViewBuilder()
 
@@ -45,7 +45,10 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
      * Метод для поиска изображения и создания anchor в ее центре.
      * Также отвечает за создание виджетов в AR.
      */
-    private fun createAnchor(listOfVectors: MutableList1<Vector3>, listOfQuaternion: MutableList1<Quaternion>) {
+    private fun createAnchor(
+        listOfVectors: MutableList1<Vector3>,
+        listOfQuaternion: MutableList1<Quaternion>
+    ) {
         val frame = arFragment.arSceneView.arFrame
         val images: Collection<AugmentedImage> = frame!!.getUpdatedTrackables(
             AugmentedImage::class.java
@@ -60,6 +63,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
                     widget.createWidget(arFragment, anchor, myContext)
                     menu.createMenu(arFragment, anchor, myContext, -0.13567f, yaxisBase, -0.010f)
                     listOfVectors.forEachIndexed { index, vector ->
+                        var port: PortViewBuilder = PortViewBuilder()
                         port.createPort(
                             arFragment,
                             anchor,
@@ -70,6 +74,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
                         )
                         portList.add(port)
                     }
+                    isCreated = true
                     break
                 }
             }
@@ -77,7 +82,10 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
 
     }
 
-    fun setAugmentedImagesOnUpdateListener(listOfVectors: MutableList1<Vector3>, listOfQuaternion: MutableList1<Quaternion>) {
+    fun setAugmentedImagesOnUpdateListener(
+        listOfVectors: MutableList1<Vector3>,
+        listOfQuaternion: MutableList1<Quaternion>
+    ) {
         arFragment =
             (activity.supportFragmentManager.findFragmentById(R.id.scene_form_fragment)
                     as CustomArFragment).apply {
@@ -92,6 +100,12 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
                     }
                 }
             }
+    }
+
+    fun changePortsColor(color: Int) {
+        portList.forEach {
+            it.changePortColor(color)
+        }
     }
 
 

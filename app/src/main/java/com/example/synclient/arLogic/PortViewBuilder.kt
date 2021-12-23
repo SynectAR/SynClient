@@ -1,6 +1,8 @@
 package com.example.synclient.arLogic
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
@@ -13,12 +15,18 @@ import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 
+
 /**
  * Класс PortViewBuilder
  *
  * Класс для создания и отображения обьекта порта устройства.
  */
 class PortViewBuilder {
+    lateinit var view: View
+    lateinit var context: Context
+    lateinit var infoView: View
+    var isChecked = false
+
     /**
      * Метод для создания и отображения порта устройства.
      *
@@ -41,10 +49,11 @@ class PortViewBuilder {
         vector: Vector3,
         quaternion: Quaternion
     ) {
+        this.context = context
         ViewRenderable.builder().setView(context, R.layout.port_layout)
             .build()
-            .thenAccept { viewRenderable ->
-                displayPort(arFragment, anchor, viewRenderable, portNumber, vector, quaternion)
+            .thenAccept {
+                displayPort(arFragment, anchor, it, portNumber, vector, quaternion)
             }
     }
 
@@ -73,30 +82,92 @@ class PortViewBuilder {
         var anchorNode = AnchorNode(anchor)
         var node = TransformableNode(arFragment.transformationSystem)
 
-
         node.scaleController.minScale = 0.025f
         node.scaleController.maxScale = 0.03f
-        //Корректирует расположение виджета в зависимости от найденного anchor.
 
+        //Корректирует расположение виджета в зависимости от найденного anchor.
         node.worldPosition = vector
         node.worldRotation = quaternion
-
-
-        //node.worldScale = Vector3(1f,1f,1f)
-        //node.parent = anchorNode
-
-
-        //node.worldScale = Vector3(222f,222f,222f)
         node.parent = anchorNode
         node.renderable = viewRenderable
         arFragment.arSceneView.scene.addChild(anchorNode)
+
         //Находишь необходимый TextView для отоброжения номера порта.
-        val view: View = viewRenderable.view
+        view = viewRenderable.view
         val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
-        var PortText = view.findViewById<TextView>(R.id.portNumberText)
-        PortText.text = "Порт " + portNumber
-        view.setOnClickListener {
-            portRadio.isChecked = !portRadio.isChecked
+        var portText = view.findViewById<TextView>(R.id.portNumberText)
+        portText.text = "Port $portNumber"
+        val viewPort = view.findViewById<View>(R.id.portView)
+        portRadio.setOnClickListener {
+            if (!isChecked) {
+                ViewRenderable.builder().setView(context, R.layout.port_info)
+                    .build()
+                    .thenAccept {
+                        displayPortInfo(arFragment, anchor, it, vector, quaternion)
+                    }
+            } else
+                view.destroyDrawingCache()
+            isChecked = !isChecked
+            portRadio.isChecked = isChecked
         }
+    }
+
+    fun changePortColor(color: Int) {
+        val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
+        val colorStateList = ColorStateList(
+            arrayOf(
+                intArrayOf(-android.R.attr.state_enabled),
+                intArrayOf(android.R.attr.state_enabled)
+            ), intArrayOf(
+                Color.RED,  // disabled
+                color // enabled
+            )
+        )
+        portRadio.buttonTintList = colorStateList
+    }
+
+    fun changePortText(text: String) {
+        var portText = view.findViewById<TextView>(R.id.portNumberText)
+        portText.text = text
+    }
+
+    fun showPortInfo(text: String) {
+
+    }
+
+    fun displayPortInfo(
+        arFragment: ArFragment,
+        anchor: Anchor,
+        viewRenderable: ViewRenderable,
+        vector: Vector3,
+        quaternion: Quaternion
+    ) {
+        var anchorNode = AnchorNode(anchor)
+        var node = TransformableNode(arFragment.transformationSystem)
+
+        node.scaleController.minScale = 0.025f
+        node.scaleController.maxScale = 0.03f
+        vector.y += 0.01f
+        node.worldPosition = vector
+        node.worldRotation = quaternion
+        node.parent = anchorNode
+        node.renderable = viewRenderable
+        arFragment.arSceneView.scene.addChild(anchorNode)
+
+        infoView = viewRenderable.view
+        val infoEditText = infoView.findViewById<TextView>(R.id.portInfoEditText)
+        infoEditText.setText(
+            "1. Вкл выкл\n" +
+                    "2. Стартовая и конечная\n" +
+                    "3. Кол-во точек\n" +
+                    "4. Тип стимула\n" +
+                    "5. Частота пол. Фильтра\n" +
+                    "6. Мощность \n" +
+                    "7. Калиброван или нет"
+        )
+        infoView.setOnClickListener {
+            node.parent = null
+        }
+
     }
 }

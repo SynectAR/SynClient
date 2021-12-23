@@ -1,39 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/portView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/portNumberText"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginStart="25dp"
-            android:background="@drawable/bg_widget_ar_info"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
-         <TextView
-             android:id="@+id/portStatusText"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="4dp"
-            android:background="@drawable/bg_widget_ar_info"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text="Статус Порта"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/portView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="1dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/portNumberText"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/bg_widget_ar_info"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="30sp" />
 
     <RadioButton
         android:id="@+id/portChecked"

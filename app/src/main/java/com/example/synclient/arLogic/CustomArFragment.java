@@ -2,7 +2,6 @@ package com.example.synclient.arLogic;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.example.synclient.R;
 import com.google.ar.core.AugmentedImageDatabase;

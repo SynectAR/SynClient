@@ -1,20 +1,6 @@
 package com.example.synclient.connection
 
 import android.content.Context
-import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.KeyEvent
-import android.widget.Button
-import android.widget.EditText
-import io.grpc.ManagedChannel
-import io.grpc.ManagedChannelBuilder
-import android.widget.TextView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asExecutor
-import kotlinx.coroutines.runBlocking
-import java.net.URL
-import java.util.logging.Logger
 
 class GRPCConnect constructor(context: Context) {
     /*

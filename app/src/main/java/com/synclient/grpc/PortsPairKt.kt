@@ -5,58 +5,64 @@ package com.synclient.grpc
 
 @kotlin.jvm.JvmSynthetic
 inline fun portsPair(block: com.synclient.grpc.PortsPairKt.Dsl.() -> kotlin.Unit): com.synclient.grpc.Vnarpc.PortsPair =
-  com.synclient.grpc.PortsPairKt.Dsl._create(com.synclient.grpc.Vnarpc.PortsPair.newBuilder()).apply { block() }._build()
+    com.synclient.grpc.PortsPairKt.Dsl._create(com.synclient.grpc.Vnarpc.PortsPair.newBuilder())
+        .apply { block() }._build()
+
 object PortsPairKt {
-  @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
-  @com.google.protobuf.kotlin.ProtoDslMarker
-  class Dsl private constructor(
-    private val _builder: com.synclient.grpc.Vnarpc.PortsPair.Builder
-  ) {
-    companion object {
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.PublishedApi
-      internal fun _create(builder: com.synclient.grpc.Vnarpc.PortsPair.Builder): Dsl = Dsl(builder)
-    }
+    @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+    @com.google.protobuf.kotlin.ProtoDslMarker
+    class Dsl private constructor(
+        private val _builder: com.synclient.grpc.Vnarpc.PortsPair.Builder
+    ) {
+        companion object {
+            @kotlin.jvm.JvmSynthetic
+            @kotlin.PublishedApi
+            internal fun _create(builder: com.synclient.grpc.Vnarpc.PortsPair.Builder): Dsl =
+                Dsl(builder)
+        }
 
-    @kotlin.jvm.JvmSynthetic
-    @kotlin.PublishedApi
-    internal fun _build(): com.synclient.grpc.Vnarpc.PortsPair = _builder.build()
+        @kotlin.jvm.JvmSynthetic
+        @kotlin.PublishedApi
+        internal fun _build(): com.synclient.grpc.Vnarpc.PortsPair = _builder.build()
 
-    /**
-     * <code>int32 firstport = 1;</code>
-     */
-    var firstport: kotlin.Int
-      @JvmName("getFirstport")
-      get() = _builder.firstport
-      @JvmName("setFirstport")
-      set(value) {
-          _builder.firstport = value
-      }
-    /**
-     * <code>int32 firstport = 1;</code>
-     */
-    fun clearFirstport() {
-      _builder.clearFirstport()
-    }
+        /**
+         * <code>int32 firstport = 1;</code>
+         */
+        var firstport: kotlin.Int
+            @JvmName("getFirstport")
+            get() = _builder.firstport
+            @JvmName("setFirstport")
+            set(value) {
+                _builder.firstport = value
+            }
 
-    /**
-     * <code>int32 secondport = 2;</code>
-     */
-    var secondport: kotlin.Int
-      @JvmName("getSecondport")
-      get() = _builder.secondport
-      @JvmName("setSecondport")
-      set(value) {
-          _builder.secondport = value
-      }
-    /**
-     * <code>int32 secondport = 2;</code>
-     */
-    fun clearSecondport() {
-      _builder.clearSecondport()
+        /**
+         * <code>int32 firstport = 1;</code>
+         */
+        fun clearFirstport() {
+            _builder.clearFirstport()
+        }
+
+        /**
+         * <code>int32 secondport = 2;</code>
+         */
+        var secondport: kotlin.Int
+            @JvmName("getSecondport")
+            get() = _builder.secondport
+            @JvmName("setSecondport")
+            set(value) {
+                _builder.secondport = value
+            }
+
+        /**
+         * <code>int32 secondport = 2;</code>
+         */
+        fun clearSecondport() {
+            _builder.clearSecondport()
+        }
     }
-  }
 }
+
 @kotlin.jvm.JvmSynthetic
 inline fun com.synclient.grpc.Vnarpc.PortsPair.copy(block: com.synclient.grpc.PortsPairKt.Dsl.() -> kotlin.Unit): com.synclient.grpc.Vnarpc.PortsPair =
-  com.synclient.grpc.PortsPairKt.Dsl._create(this.toBuilder()).apply { block() }._build()
+    com.synclient.grpc.PortsPairKt.Dsl._create(this.toBuilder()).apply { block() }._build()

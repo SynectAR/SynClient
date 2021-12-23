@@ -5,41 +5,46 @@ package com.synclient.grpc
 
 @kotlin.jvm.JvmSynthetic
 inline fun portCount(block: com.synclient.grpc.PortCountKt.Dsl.() -> kotlin.Unit): com.synclient.grpc.Vnarpc.PortCount =
-  com.synclient.grpc.PortCountKt.Dsl._create(com.synclient.grpc.Vnarpc.PortCount.newBuilder()).apply { block() }._build()
+    com.synclient.grpc.PortCountKt.Dsl._create(com.synclient.grpc.Vnarpc.PortCount.newBuilder())
+        .apply { block() }._build()
+
 object PortCountKt {
-  @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
-  @com.google.protobuf.kotlin.ProtoDslMarker
-  class Dsl private constructor(
-    private val _builder: com.synclient.grpc.Vnarpc.PortCount.Builder
-  ) {
-    companion object {
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.PublishedApi
-      internal fun _create(builder: com.synclient.grpc.Vnarpc.PortCount.Builder): Dsl = Dsl(builder)
-    }
+    @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+    @com.google.protobuf.kotlin.ProtoDslMarker
+    class Dsl private constructor(
+        private val _builder: com.synclient.grpc.Vnarpc.PortCount.Builder
+    ) {
+        companion object {
+            @kotlin.jvm.JvmSynthetic
+            @kotlin.PublishedApi
+            internal fun _create(builder: com.synclient.grpc.Vnarpc.PortCount.Builder): Dsl =
+                Dsl(builder)
+        }
 
-    @kotlin.jvm.JvmSynthetic
-    @kotlin.PublishedApi
-    internal fun _build(): com.synclient.grpc.Vnarpc.PortCount = _builder.build()
+        @kotlin.jvm.JvmSynthetic
+        @kotlin.PublishedApi
+        internal fun _build(): com.synclient.grpc.Vnarpc.PortCount = _builder.build()
 
-    /**
-     * <code>int32 portcount = 3;</code>
-     */
-    var portcount: kotlin.Int
-      @JvmName("getPortcount")
-      get() = _builder.portcount
-      @JvmName("setPortcount")
-      set(value) {
-          _builder.portcount = value
-      }
-    /**
-     * <code>int32 portcount = 3;</code>
-     */
-    fun clearPortcount() {
-      _builder.clearPortcount()
+        /**
+         * <code>int32 portcount = 3;</code>
+         */
+        var portcount: kotlin.Int
+            @JvmName("getPortcount")
+            get() = _builder.portcount
+            @JvmName("setPortcount")
+            set(value) {
+                _builder.portcount = value
+            }
+
+        /**
+         * <code>int32 portcount = 3;</code>
+         */
+        fun clearPortcount() {
+            _builder.clearPortcount()
+        }
     }
-  }
 }
+
 @kotlin.jvm.JvmSynthetic
 inline fun com.synclient.grpc.Vnarpc.PortCount.copy(block: com.synclient.grpc.PortCountKt.Dsl.() -> kotlin.Unit): com.synclient.grpc.Vnarpc.PortCount =
-  com.synclient.grpc.PortCountKt.Dsl._create(this.toBuilder()).apply { block() }._build()
+    com.synclient.grpc.PortCountKt.Dsl._create(this.toBuilder()).apply { block() }._build()

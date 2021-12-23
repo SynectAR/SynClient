@@ -5,75 +5,82 @@ package com.synclient.grpc
 
 @kotlin.jvm.JvmSynthetic
 inline fun measureParams(block: com.synclient.grpc.MeasureParamsKt.Dsl.() -> kotlin.Unit): com.synclient.grpc.Vnarpc.MeasureParams =
-  com.synclient.grpc.MeasureParamsKt.Dsl._create(com.synclient.grpc.Vnarpc.MeasureParams.newBuilder()).apply { block() }._build()
+    com.synclient.grpc.MeasureParamsKt.Dsl._create(com.synclient.grpc.Vnarpc.MeasureParams.newBuilder())
+        .apply { block() }._build()
+
 object MeasureParamsKt {
-  @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
-  @com.google.protobuf.kotlin.ProtoDslMarker
-  class Dsl private constructor(
-    private val _builder: com.synclient.grpc.Vnarpc.MeasureParams.Builder
-  ) {
-    companion object {
-      @kotlin.jvm.JvmSynthetic
-      @kotlin.PublishedApi
-      internal fun _create(builder: com.synclient.grpc.Vnarpc.MeasureParams.Builder): Dsl = Dsl(builder)
-    }
+    @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+    @com.google.protobuf.kotlin.ProtoDslMarker
+    class Dsl private constructor(
+        private val _builder: com.synclient.grpc.Vnarpc.MeasureParams.Builder
+    ) {
+        companion object {
+            @kotlin.jvm.JvmSynthetic
+            @kotlin.PublishedApi
+            internal fun _create(builder: com.synclient.grpc.Vnarpc.MeasureParams.Builder): Dsl =
+                Dsl(builder)
+        }
 
-    @kotlin.jvm.JvmSynthetic
-    @kotlin.PublishedApi
-    internal fun _build(): com.synclient.grpc.Vnarpc.MeasureParams = _builder.build()
+        @kotlin.jvm.JvmSynthetic
+        @kotlin.PublishedApi
+        internal fun _build(): com.synclient.grpc.Vnarpc.MeasureParams = _builder.build()
 
-    /**
-     * <code>int32 port = 1;</code>
-     */
-    var port: kotlin.Int
-      @JvmName("getPort")
-      get() = _builder.port
-      @JvmName("setPort")
-      set(value) {
-          _builder.port = value
-      }
-    /**
-     * <code>int32 port = 1;</code>
-     */
-    fun clearPort() {
-      _builder.clearPort()
-    }
+        /**
+         * <code>int32 port = 1;</code>
+         */
+        var port: kotlin.Int
+            @JvmName("getPort")
+            get() = _builder.port
+            @JvmName("setPort")
+            set(value) {
+                _builder.port = value
+            }
 
-    /**
-     * <code>string type = 2;</code>
-     */
-    var type: kotlin.String
-      @JvmName("getType")
-      get() = _builder.type
-      @JvmName("setType")
-      set(value) {
-          _builder.type = value
-      }
-    /**
-     * <code>string type = 2;</code>
-     */
-    fun clearType() {
-      _builder.clearType()
-    }
+        /**
+         * <code>int32 port = 1;</code>
+         */
+        fun clearPort() {
+            _builder.clearPort()
+        }
 
-    /**
-     * <code>bool gender = 3;</code>
-     */
-    var gender: kotlin.Boolean
-      @JvmName("getGender")
-      get() = _builder.gender
-      @JvmName("setGender")
-      set(value) {
-          _builder.gender = value
-      }
-    /**
-     * <code>bool gender = 3;</code>
-     */
-    fun clearGender() {
-      _builder.clearGender()
+        /**
+         * <code>string type = 2;</code>
+         */
+        var type: kotlin.String
+            @JvmName("getType")
+            get() = _builder.type
+            @JvmName("setType")
+            set(value) {
+                _builder.type = value
+            }
+
+        /**
+         * <code>string type = 2;</code>
+         */
+        fun clearType() {
+            _builder.clearType()
+        }
+
+        /**
+         * <code>bool gender = 3;</code>
+         */
+        var gender: kotlin.Boolean
+            @JvmName("getGender")
+            get() = _builder.gender
+            @JvmName("setGender")
+            set(value) {
+                _builder.gender = value
+            }
+
+        /**
+         * <code>bool gender = 3;</code>
+         */
+        fun clearGender() {
+            _builder.clearGender()
+        }
     }
-  }
 }
+
 @kotlin.jvm.JvmSynthetic
 inline fun com.synclient.grpc.Vnarpc.MeasureParams.copy(block: com.synclient.grpc.MeasureParamsKt.Dsl.() -> kotlin.Unit): com.synclient.grpc.Vnarpc.MeasureParams =
-  com.synclient.grpc.MeasureParamsKt.Dsl._create(this.toBuilder()).apply { block() }._build()
+    com.synclient.grpc.MeasureParamsKt.Dsl._create(this.toBuilder()).apply { block() }._build()

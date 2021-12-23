@@ -1,7 +1,6 @@
 package com.example.synclient.arLogic
 
 import android.content.Context
-import android.view.View
 import com.example.synclient.R
 import com.google.ar.core.Anchor
 import com.google.ar.sceneform.AnchorNode
