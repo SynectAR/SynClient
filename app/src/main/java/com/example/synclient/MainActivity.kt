@@ -35,13 +35,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     public fun buttonGRPCClicked(v: View) {
-
+        /*
         val view = findViewById<Button>(R.id.buttonGRPC)
         var buttonText: String? = "Не получил"
         runBlocking { buttonText = CalibrationHelper.getPortCount().toString() }
         runBlocking { buttonText = CalibrationHelper.getPortStatus(1).toString() }
         view.text = buttonText
 
+         */
+        val calibrationActivityIntent = Intent(this, CalibrationActivity::class.java)
+        //firstActivityIntent.putExtra(FirstActivity.TRANSFER_COUNT, GlobalAmount)
+        startActivity(calibrationActivityIntent)
     }
 
 }
