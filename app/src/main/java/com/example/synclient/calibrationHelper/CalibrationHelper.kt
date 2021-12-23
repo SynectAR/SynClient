@@ -2,14 +2,20 @@ package com.example.synclient.calibrationHelper
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import vnarpc.SweepType
 
 
 object CalibrationHelper {
     val clientStub = GRPCConnectionHelper.setupConnection()
 
-    suspend fun getConnectionStatus()
+    suspend fun getConnectionStatus() :String?
     {
-
+        var receivedStatus : String? = null
+        runBlocking {
+            val responseStatus = async { clientStub.isConnected() }
+            receivedStatus=responseStatus.await()
+        }
+        return receivedStatus
     }
 
     suspend fun getPortCount(): Int? {
@@ -59,4 +65,65 @@ object CalibrationHelper {
             //receivedStatus= responseStatus.await()
         }
     }
+
+    suspend fun getReadyStatus(): Boolean?
+    {
+        var responseState:Boolean? = null
+        runBlocking {
+            val receivedState= async { clientStub.isReady() }
+            responseState=receivedState.await()
+        }
+        return responseState
+    }
+
+    suspend fun  getSweepType() : String?
+    {
+        var responseType: String? = null
+        runBlocking {
+            val receivedType= async { clientStub.sweepType() }
+            responseType=receivedType.await()
+        }
+        return responseType
+    }
+
+    suspend fun getPointsCount() : Int?
+    {
+        var responseCount : Int? = null
+        runBlocking {
+            val receivedCount= async { clientStub.pointsCount() }
+            responseCount=receivedCount.await()
+        }
+        return responseCount
+    }
+
+    suspend fun getTriggerMode() : String?
+    {
+        var responseMode : String? = null
+        runBlocking {
+            val receivedMode= async{ clientStub.triggerMode()}
+            responseMode=receivedMode.await()
+        }
+        return responseMode
+    }
+
+    suspend fun getSpan(sweepType : SweepType) : Array<Double>?
+    {
+        var responseMinMax: Array<Double>? = null
+        runBlocking {
+            val receivedMinMax= async { clientStub.span(SweepType.sweep_type.linear) }
+            responseMinMax= receivedMinMax.await()
+        }
+        return responseMinMax
+    }
+
+    suspend fun  getRfOut() : Boolean?
+    {
+        var responseRF: Boolean? = null
+        runBlocking {
+            val receivedRF= async { clientStub.rfOut() }
+            responseRF=receivedRF.await()
+        }
+        return responseRF
+    }
+
 }

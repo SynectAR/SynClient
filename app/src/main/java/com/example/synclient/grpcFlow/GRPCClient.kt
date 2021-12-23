@@ -14,8 +14,8 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
     suspend fun isConnected(): String {
         val request = EmptyMessage.newBuilder().build()
         val response = stub.isConnected(request)
-        var responseString= response.connectionState.toString()
-        return responseString
+        var responseStatus= response.connectionState.toString()
+        return responseStatus
     }
 
     suspend fun portCount(): Int {

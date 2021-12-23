@@ -171,7 +171,7 @@ class ARCameraActivity : AppCompatActivity() {
     {
         managerAR.portList.forEachIndexed { index, portViewBuilder ->
             if (portViewBuilder.isChecked)
-                selectedPort = index
+                selectedPort = index+1
         }
     }
 
