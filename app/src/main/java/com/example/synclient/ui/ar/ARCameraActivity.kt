@@ -181,7 +181,8 @@ class ARCameraActivity : AppCompatActivity() {
         }
         buttonThru?.setOnClickListener {
             findCheckedPort()
-            runBlocking { CalibrationHelper.getPortMeasureThru(selectedPort, selectedPort + 1) }
+            val index = listCalibration.indexOf(listCalibration.indexOf(selectedPort-1))
+            runBlocking { CalibrationHelper.getPortMeasureThru(selectedPort, (listCalibration[index+1] +1)) }
             runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
         }
     }
