@@ -1,8 +1,8 @@
 plugins {
+    id 'com.google.protobuf' version "0.8.18"
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'com.google.protobuf' apply false
 }
 
 
@@ -16,6 +16,10 @@ android {
 
     dataBinding {
         enabled = true
+    }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
     }
 
 
@@ -48,9 +52,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    configurations {
-        implementation.exclude module: 'protobuf-lite'
-    }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -77,175 +79,52 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation 'com.google.ar:core:1.28.0'
+
     implementation 'de.javagl:obj:0.3.0'
-    implementation("com.gorisse.thomas.sceneform:sceneform:1.20.1")
-    implementation 'com.google.protobuf:protobuf-java:3.19.1'
-    implementation 'com.google.protobuf:protobuf-kotlin:3.19.1'
-    implementation 'io.grpc:grpc-okhttp:1.42.1'
-    implementation 'io.grpc:grpc-stub:1.42.1'
-    implementation 'com.google.protobuf:protobuf-java-util:3.19.1'
-    implementation 'io.grpc:grpc-netty-shaded:1.42.1'
-    implementation("io.grpc:grpc-kotlin-stub:1.2.0")
+    implementation "com.gorisse.thomas.sceneform:sceneform:1.20.1"
+    //implementation group: 'com.google.protobuf', name: 'protobuf-java', version: '3.19.1'
+    implementation group: 'io.grpc', name: 'grpc-all', version: '1.42.1'
+    //implementation group: 'io.grpc', name: 'grpc-services', version: '1.42.1'
+    implementation group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.19.1' //НУЖЕН 100 %
+    //implementation group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
 
-    /*
-    ext["grpcVersion"] = "1.39.0" // need to wait for grpc kotlin to move past this
-    ext["grpcKotlinVersion"] = "1.2.0" // CURRENT_GRPC_KOTLIN_VERSION
-    ext["protobufVersion"] = "3.18.1"
-    ext["coroutinesVersion"] = "1.5.2"
 
-    api("io.grpc:grpc-protobuf:${["grpcVersion"]}")
-    api("com.google.protobuf:protobuf-java-util:${["protobufVersion"]}")
-    api("com.google.protobuf:protobuf-kotlin:${["protobufVersion"]}")
-    api("io.grpc:grpc-kotlin-stub:${["grpcKotlinVersion"]}")
+    //implementation("com.google.protobuf:protobuf-kotlin:3.19.1")
+    implementation("io.grpc:grpc-kotlin-stub:1.2.0") //НУЖЕН 100 %
+    implementation "io.grpc:grpc-okhttp:1.42.1"
 
-     */
+// https://mvnrepository.com/artifact/io.grpc/grpc-netty-shaded
+    implementation group: 'io.grpc', name: 'grpc-netty-shaded', version: '1.42.1'
+    // https://mvnrepository.com/artifact/io.perfmark/perfmark-api
+    implementation("io.perfmark:perfmark-api:0.23.0")
+
+
+
+
+
+
 
 }
-/*
+
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.19.1"
+        artifact ='com.google.protobuf:protoc:3.19.1'
     }
     plugins {
-        id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.42.1"
+        grpc{
+            artifact='io.grpc:protoc-gen-grpc-java:1.42.1'
         }
-        id("grpckt") {
-            artifact = "io.grpc:protoc-gen-grpc-kotlin:1.42.1:jdk7@jar"
-        }
-    }
-    generateProtoTasks {
-        all().forEach {
-            it.plugins {
-                id("grpc")
-                id("grpckt")
-            }
-            it.builtins {
-                id("kotlin")
-            }
+        grpckt{
+            artifact='io.grpc:protoc-gen-grpc-kotlin:1.2.0:jdk7@jar'
         }
     }
+    generateProtoTasks
+            {
+                all()*.plugins{
+                    grpc{}
+                    java{}
+                    grpckt{}
+                }
+            }
 }
 
- */
-
-/*
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.12.0"
-    }
-    plugins {
-        grpc {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.30.0"
-        }
-    }
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                remove javanano
-                java {
-                    option 'lite'
-                }
-            }
-
-            task.plugins {
-                grpc {
-                    // Options added to --grpc_out
-                    option 'lite'
-                }
-            }
-        }
-    }
-}
-
- */
-/*
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:1.39.1"
-    }
-    plugins {
-        id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.39.0"
-        }
-        id("grpckt") {
-            artifact = "io.grpc:protoc-gen-grpc-kotlin:1.39.0"
-        }
-    }
-    generateProtoTasks {
-        all().forEach {
-            it.plugins {
-                id("grpc")
-                id("grpckt")
-            }
-            it.builtins {
-                id("kotlin")
-            }
-        }
-    }
-}
-
- */
-
-
-/*
-protobuf {
-    protoc { artifact = 'com.google.protobuf:protoc:1.39.0' }
-    plugins {
-        grpc { artifact = 'io.grpc:protoc-gen-grpc-java:1.39.0'
-        }
-    }
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                java { option 'lite' }
-            }
-            task.plugins {
-                grpc {
-                    option 'lite' }
-            }
-        }
-    }
-}
-
- */
-
-/*
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:${rootProject.ext["protobufVersion"]}"
-    }
-    plugins {
-        id("java") {
-            artifact = "io.grpc:protoc-gen-grpc-java:${rootProject.ext["grpcVersion"]}"
-        }
-        id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:${rootProject.ext["grpcVersion"]}"
-        }
-        id("grpckt") {
-            artifact = "io.grpc:protoc-gen-grpc-kotlin:${rootProject.ext["grpcKotlinVersion"]}:jdk7@jar"
-        }
-    }
-    generateProtoTasks {
-        all().forEach {
-            it.plugins {
-                id("java") {
-                    option("lite")
-                }
-                id("grpc") {
-                    option("lite")
-                }
-                id("grpckt") {
-                    option("lite")
-                }
-            }
-            it.builtins {
-                id("kotlin") {
-                    option("lite")
-                }
-            }
-        }
-    }
-}
-
- */
