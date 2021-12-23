@@ -104,6 +104,10 @@ class PortViewBuilder {
         }
     }
 
+    fun changePortStatus(){
+        val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
+        portRadio.callOnClick()
+    }
     fun changePortColor(color: Int) {
         val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
         val colorStateList = ColorStateList(

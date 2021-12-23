@@ -2,12 +2,14 @@ package com.example.synclient.ui.ar
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.synclient.R
@@ -25,6 +27,7 @@ import kotlinx.coroutines.*
  */
 class ARCameraActivity : AppCompatActivity() {
     private lateinit var handler: Handler
+    var listCalibration:MutableList<Int> = mutableListOf<Int>()
     var managerAR: ManagerAR = ManagerAR(this, this)
     var selectedPort: Int = -1
     var portArray: Array<Boolean> = arrayOf(false, false, false)
@@ -106,6 +109,18 @@ class ARCameraActivity : AppCompatActivity() {
             }
         }
         calibrationButton?.setOnClickListener {
+            val portList = managerAR.portList
+            listCalibration.clear()
+            portList.forEachIndexed { index, portViewBuilder ->
+                if(portViewBuilder.isChecked){
+                    portViewBuilder.changePortStatus()
+                    //portViewBuilder.changePortColor(Color.rgb(255,255,255))
+                    listCalibration.add(index)
+                }
+                else{
+                    portViewBuilder.view.visibility = View.INVISIBLE
+                }
+            }
             val list = managerAR.layoutViewList
             list[list.size - 1].destroyView()
             managerAR.showLayout(R.layout.calibration_menu_ar)
@@ -136,6 +151,10 @@ class ARCameraActivity : AppCompatActivity() {
         val buttonLoad = view?.findViewById<Button>(R.id.buttonLoad)
         val buttonThru = view?.findViewById<Button>(R.id.buttonThru)
         buttonReturn?.setOnClickListener {
+            val portList = managerAR.portList
+            portList.forEach {
+                 it.view.visibility = View.VISIBLE
+            }
             val list = managerAR.layoutViewList
             list[list.size - 1].destroyView()
             managerAR.showLayout(R.layout.menu_ar)
