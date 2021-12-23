@@ -11,6 +11,13 @@ import java.util.concurrent.TimeUnit
 public class GRPCClient(private val channel: ManagedChannel) : Closeable {
     private val stub: VnaRpcCoroutineStub = VnaRpcCoroutineStub(channel)
 
+    suspend fun isConnected(): String {
+        val request = EmptyMessage.newBuilder().build()
+        val response = stub.isConnected(request)
+        var responseString= response.connectionState.toString()
+        return responseString
+    }
+
     suspend fun portCount(): Int {
         val request = EmptyMessage.newBuilder().build()
         val response = stub.getPortCount(request)
@@ -54,6 +61,48 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         val request = EmptyMessage.newBuilder().build()
         val response = stub.reset(request)
         println("Received: ${response} ")
+    }
+
+    suspend fun isReady(): Boolean{
+        val request = EmptyMessage.newBuilder().build()
+        val response = stub.isReady(request)
+        var responseState= response.state
+        return responseState
+    }
+    // Возможо не правильный тип возврата данных
+    suspend fun sweepType() : String {
+        val request = EmptyMessage.newBuilder().build()
+        val response= stub.sweepType(request)
+        var responseType= response.type.toString()
+        return responseType
+    }
+
+    suspend fun pointsCount(): Int{
+        val request = EmptyMessage.newBuilder().build()
+        val response = stub.pointsCount(request)
+        var responseCount= response.count
+        return responseCount
+    }
+
+    suspend fun triggerMode(): String{
+        val request = EmptyMessage.newBuilder().build()
+        val response= stub.triggerMode(request)
+        var responseMode= response.triggermode.toString()
+        return responseMode
+    }
+
+    suspend fun span(sweepType :SweepType.sweep_type) : Array<Double>{
+        val request = SweepType.newBuilder().setType(sweepType).build()
+        val response = stub.span(request)
+        var responseMinMax= arrayOf(response.min,response.max)
+        return responseMinMax
+    }
+
+    suspend fun rfOut(): Boolean{
+        val request = EmptyMessage.newBuilder().build()
+        val response= stub.rfOut(request)
+        var responseRF= response.state
+        return  responseRF
     }
 
     override fun close() {

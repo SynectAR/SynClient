@@ -7,6 +7,10 @@ import kotlinx.coroutines.runBlocking
 object CalibrationHelper {
     val clientStub = GRPCConnectionHelper.setupConnection()
 
+    suspend fun getConnectionStatus()
+    {
+
+    }
 
     suspend fun getPortCount(): Int? {
         var receivedCount: Int? = null

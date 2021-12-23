@@ -162,6 +162,8 @@ class ARCameraActivity : AppCompatActivity() {
         }
         buttonThru?.setOnClickListener {
             findCheckedPort()
+            runBlocking { CalibrationHelper.getPortMeasureThru(selectedPort, selectedPort + 1) }
+            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
         }
     }
 

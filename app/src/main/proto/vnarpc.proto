@@ -5,16 +5,61 @@ package vnarpc; //vnarpc
 option java_multiple_files = true;
 
 service VnaRpc {
+    rpc isConnected (EmptyMessage) returns (ConnectionState) {}
+
     rpc getPortCount (EmptyMessage) returns (PortCount) {}
     rpc getPortStatus (Port) returns (PortStatus) {}
     rpc measurePort (MeasureParams) returns (EmptyMessage) {}
     rpc measureThru (PortsPair) returns (EmptyMessage) {}
     rpc apply (EmptyMessage) returns (EmptyMessage) {}
     rpc reset (EmptyMessage) returns (EmptyMessage) {}
+
+    rpc isReady (EmptyMessage) returns (State) {} // вкл выкл для устройства
+    rpc sweepType (EmptyMessage) returns (SweepType) {} // режим измерения
+    rpc pointsCount (EmptyMessage) returns (Points) {} // количество точек
+    rpc triggerMode (EmptyMessage) returns (TriggerMode) {} // тригер
+    // span если измерение по мощности то по мощности иначе частота
+    rpc span (SweepType) returns (Span) {}
+    // rfout
+    rpc rfOut (EmptyMessage) returns (State) {}
+    // откалиброван или нет
+
 }
 
+message Span {
+    double min = 1;
+    double max = 2;
+}
 
-message EmptyMessage {}
+message TriggerMode {
+    enum mode {
+        continuous = 0;
+        hold = 1;
+    }
+    mode triggermode = 1;
+}
+
+message Points {
+    int32 count = 1;
+}
+
+message ConnectionState {
+    string connectionState = 1;
+}
+
+message SweepType {
+    enum sweep_type {
+        linear = 0;
+        logarithmic = 1;
+        power = 2;
+        segment = 3;
+    }
+    sweep_type type = 1;
+}
+
+message State {
+    bool state = 1;
+}
 
 message Port {
     int32 port = 1;
@@ -45,4 +90,4 @@ message PortCount {
     int32 portcount = 3;
 }
 
-
+message EmptyMessage {}
