@@ -9,6 +9,7 @@ import android.os.Message
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.synclient.R
 import com.example.synclient.arLogic.ManagerAR
@@ -78,7 +79,7 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun waitForLayout(layoutKind: Int) {
-        while (managerAR.layoutView.view == null){
+        while (managerAR.layoutView.view == null) {
             Thread.sleep(5)
         }
         handler.sendEmptyMessage(layoutKind)
@@ -111,7 +112,7 @@ class ARCameraActivity : AppCompatActivity() {
             listCalibration.clear()
             portList.forEachIndexed { index, portViewBuilder ->
                 if (portViewBuilder.isChecked) {
-                    portViewBuilder.changePortColor(Color.rgb(200,0,0))
+                    portViewBuilder.changePortColor(Color.rgb(200, 0, 0))
                     portViewBuilder.changePortStatus()
                     listCalibration.add(index)
                 } else {
@@ -145,6 +146,8 @@ class ARCameraActivity : AppCompatActivity() {
         val buttonShort = view?.findViewById<Button>(R.id.buttonShort)
         val buttonLoad = view?.findViewById<Button>(R.id.buttonLoad)
         val buttonThru = view?.findViewById<Button>(R.id.buttonThru)
+        val buttonApply = view?.findViewById<Button>(R.id.buttonApply)
+        val buttonReset = view?.findViewById<Button>(R.id.buttonReset)
         buttonReturn?.setOnClickListener {
             val portList = managerAR.portList
             portList.forEach {
@@ -180,6 +183,27 @@ class ARCameraActivity : AppCompatActivity() {
             runBlocking { CalibrationHelper.getPortMeasureThru(selectedPort, nextPort) }
             runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
         }
+        buttonApply?.setOnClickListener {
+            run loop@{
+                listCalibration.forEachIndexed { index, i ->
+                    runBlocking { portArray = CalibrationHelper.getPortStatus(index)!! }
+                    if (portArray[0] == false || portArray[1] == false || portArray[2] == false) {
+                        Toast.makeText(
+                            this, "Не все порты были откалиброваны. Apply Не применился!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@loop
+                    }
+                    Toast.makeText(
+                        this, "Все порты откалиброваны! Apply применился!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+        buttonReset?.setOnClickListener {
+            runBlocking { CalibrationHelper.getReset() }
+        }
     }
 
     fun findCheckedPort() {
@@ -191,12 +215,6 @@ class ARCameraActivity : AppCompatActivity() {
 
     fun statusOnClick(v: View) {
         runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
-        var view = findViewById<TextView>(R.id.textViewOPEN)
-        view.text = portArray[0].toString()
-        view = findViewById(R.id.textViewSHORT)
-        view.text = portArray[1].toString()
-        view = findViewById(R.id.textViewLOAD)
-        view.text = portArray[2].toString()
     }
 
 }
