@@ -147,8 +147,8 @@ class ARCameraActivity : AppCompatActivity() {
         val buttonLoad = view?.findViewById<Button>(R.id.buttonLoad)
         val buttonThru = view?.findViewById<Button>(R.id.buttonThru)
         val buttonApply = view?.findViewById<Button>(R.id.buttonApply)
-        val buttonReset = view?.findViewById<Button>(R.id.buttonReset)
         buttonReturn?.setOnClickListener {
+            runBlocking { CalibrationHelper.getReset() }
             val portList = managerAR.portList
             portList.forEach {
                 it.view.visibility = View.VISIBLE
@@ -200,9 +200,6 @@ class ARCameraActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-        }
-        buttonReset?.setOnClickListener {
-            runBlocking { CalibrationHelper.getReset() }
         }
     }
 
