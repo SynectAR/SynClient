@@ -1,6 +1,7 @@
 package com.example.synclient.arLogic
 
 import android.content.Context
+import android.graphics.Color
 import com.example.synclient.R
 import com.example.synclient.ui.ar.ARCameraActivity
 import com.google.ar.core.Anchor
@@ -113,4 +114,10 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
         }
     }
 
+    fun refreshPorts(){
+        portList.forEach {
+            it.changePortStatus()
+            it.changePortStatus()
+        }
+    }
 }

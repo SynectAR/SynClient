@@ -2,6 +2,7 @@ package com.example.synclient.ui.ar
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -94,6 +95,8 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun menuBind() {
+        managerAR.changePortsColor(Color.WHITE)
+        managerAR.refreshPorts()
         val view = managerAR.layoutView.view
         val buttonAbout = view?.findViewById<Button>(R.id.buttonAbout)
         val calibrationButton = view?.findViewById<Button>(R.id.buttonCalibration)
@@ -109,8 +112,8 @@ class ARCameraActivity : AppCompatActivity() {
             listCalibration.clear()
             portList.forEachIndexed { index, portViewBuilder ->
                 if (portViewBuilder.isChecked) {
+                    portViewBuilder.changePortColor(Color.rgb(200,0,0))
                     portViewBuilder.changePortStatus()
-                    //portViewBuilder.changePortColor(Color.rgb(255,255,255))
                     listCalibration.add(index)
                 } else {
                     portViewBuilder.view.visibility = View.INVISIBLE

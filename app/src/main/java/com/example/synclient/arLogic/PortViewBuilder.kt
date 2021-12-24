@@ -106,7 +106,8 @@ class PortViewBuilder {
 
     fun changePortStatus(){
         val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
-        portRadio.callOnClick()
+        isChecked = !isChecked
+        portRadio.isChecked = isChecked
     }
     fun changePortColor(color: Int) {
         val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
@@ -115,7 +116,7 @@ class PortViewBuilder {
                 intArrayOf(-android.R.attr.state_enabled),
                 intArrayOf(android.R.attr.state_enabled)
             ), intArrayOf(
-                Color.RED,  // disabled
+                Color.GRAY,  // disabled
                 color // enabled
             )
         )
