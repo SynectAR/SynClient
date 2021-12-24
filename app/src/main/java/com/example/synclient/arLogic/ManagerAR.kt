@@ -38,7 +38,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
 
     //Лист, содержащий в себе все PortAR обьекты.
     var portList = mutableListOf<PortViewBuilder>()
-    var layoutViewList = mutableListOf<LayoutViewBuilder>()
+    var layoutView:LayoutViewBuilder = LayoutViewBuilder()
 
 
     /**
@@ -108,9 +108,9 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
     }
 
     fun showLayout(layoutType: Int){
-        var layoutView: LayoutViewBuilder = LayoutViewBuilder()
-        layoutView.createView(arFragment, anchor, myContext, layoutType, menuVector, menuQuaternion)
-        layoutViewList.add(layoutView)
+        layoutView = LayoutViewBuilder().apply {
+            createView(arFragment, anchor, myContext, layoutType, menuVector, menuQuaternion)
+        }
     }
 
 }

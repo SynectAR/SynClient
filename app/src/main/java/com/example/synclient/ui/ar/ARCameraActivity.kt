@@ -2,14 +2,11 @@ package com.example.synclient.ui.ar
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.synclient.R
@@ -81,9 +78,7 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun waitForLayout(layoutKind: Int) {
-        while (managerAR.layoutViewList.size - 1 < 0);
-        val layout: LayoutViewBuilder = managerAR.layoutViewList[managerAR.layoutViewList.size - 1]
-        while (layout.view == null);
+        while (managerAR.layoutView.view == null);
         handler.sendEmptyMessage(layoutKind)
     }
 
@@ -97,12 +92,11 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun menuBind() {
-        val view = managerAR.layoutViewList[managerAR.layoutViewList.size - 1].view
+        val view = managerAR.layoutView.view
         val buttonAbout = view?.findViewById<Button>(R.id.buttonAbout)
         val calibrationButton = view?.findViewById<Button>(R.id.buttonCalibration)
         buttonAbout?.setOnClickListener {
-            val list = managerAR.layoutViewList
-            list[list.size - 1].destroyView()
+            managerAR.layoutView.destroyView()
             managerAR.showLayout(R.layout.about_channel_ar)
             CoroutineScope(Dispatchers.IO).launch {
                 waitForLayout(2)
@@ -121,8 +115,7 @@ class ARCameraActivity : AppCompatActivity() {
                     portViewBuilder.view.visibility = View.INVISIBLE
                 }
             }
-            val list = managerAR.layoutViewList
-            list[list.size - 1].destroyView()
+            managerAR.layoutView.destroyView()
             managerAR.showLayout(R.layout.calibration_menu_ar)
             CoroutineScope(Dispatchers.IO).launch {
                 waitForLayout(3)
@@ -131,11 +124,10 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun infoBind() {
-        val view = managerAR.layoutViewList[managerAR.layoutViewList.size - 1].view
+        val view = managerAR.layoutView.view
         val buttonReturn = view?.findViewById<Button>(R.id.buttonInfoReturn)
         buttonReturn?.setOnClickListener {
-            val list = managerAR.layoutViewList
-            list[list.size - 1].destroyView()
+            managerAR.layoutView.destroyView()
             managerAR.showLayout(R.layout.menu_ar)
             CoroutineScope(Dispatchers.IO).launch {
                 waitForLayout(1)
@@ -144,7 +136,7 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun calibrationBind() {
-        val view = managerAR.layoutViewList[managerAR.layoutViewList.size - 1].view
+        val view = managerAR.layoutView.view
         val buttonReturn = view?.findViewById<Button>(R.id.buttonReturn)
         val buttonOpen = view?.findViewById<Button>(R.id.buttonOpen)
         val buttonShort = view?.findViewById<Button>(R.id.buttonShort)
@@ -155,8 +147,7 @@ class ARCameraActivity : AppCompatActivity() {
             portList.forEach {
                  it.view.visibility = View.VISIBLE
             }
-            val list = managerAR.layoutViewList
-            list[list.size - 1].destroyView()
+            managerAR.layoutView.destroyView()
             managerAR.showLayout(R.layout.menu_ar)
             CoroutineScope(Dispatchers.IO).launch {
                 waitForLayout(1)
@@ -187,7 +178,7 @@ class ARCameraActivity : AppCompatActivity() {
         }
     }
 
-    public fun findCheckedPort()
+    fun findCheckedPort()
     {
         managerAR.portList.forEachIndexed { index, portViewBuilder ->
             if (portViewBuilder.isChecked)
@@ -195,7 +186,7 @@ class ARCameraActivity : AppCompatActivity() {
         }
     }
 
-    public fun statusOnClick(v: View) {
+    fun statusOnClick(v: View) {
         runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
         var view = findViewById<TextView>(R.id.textViewOPEN)
         view.text = portArray[0].toString()

@@ -52,7 +52,7 @@ class LayoutViewBuilder {
             .thenAccept { viewRenderable ->
                 displayMenu(arFragment, anchor, viewRenderable, vector, quaternion)
             }
-
+        isCreated = true
     }
 
     /**
@@ -89,7 +89,6 @@ class LayoutViewBuilder {
         scene.addChild(anchorNode)
         node.select()
         view = viewRenderable.view
-        isCreated = true
     }
 
     fun destroyView(){
