@@ -16,10 +16,7 @@ import com.example.synclient.calibrationHelper.CalibrationHelper
 import com.google.ar.core.Config
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 
 /**
@@ -81,7 +78,9 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun waitForLayout(layoutKind: Int) {
-        while (managerAR.layoutView.view == null);
+        while (managerAR.layoutView.view == null){
+            Thread.sleep(5)
+        }
         handler.sendEmptyMessage(layoutKind)
     }
 
