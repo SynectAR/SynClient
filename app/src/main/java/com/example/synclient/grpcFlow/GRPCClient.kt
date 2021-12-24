@@ -53,7 +53,7 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
 
     suspend fun apply() {
         val request = EmptyMessage.newBuilder().build()
-        val response = stub.reset(request)
+        val response = stub.apply(request)
         println("Received: ${response} ")
     }
 

@@ -109,6 +109,15 @@ class PortViewBuilder {
         isChecked = !isChecked
         portRadio.isChecked = isChecked
     }
+    fun statustTo(status: Boolean){
+        val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
+        isChecked = status
+        portRadio.isChecked = isChecked
+    }
+    fun changeActive(isEnabled: Boolean){
+        val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
+        portRadio.isEnabled = isEnabled
+    }
     fun changePortColor(color: Int) {
         val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
         val colorStateList = ColorStateList(

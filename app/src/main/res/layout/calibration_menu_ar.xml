@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="0dp"
+        android:background="@color/white"
         android:layout_marginEnd="10dp"
         android:text="Open" />
     <Button
@@ -36,6 +37,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="10dp"
+        android:background="@color/white"
         android:text="Short" />
     <Button
         android:id="@+id/buttonLoad"
@@ -43,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="0dp"
+        android:background="@color/white"
         android:layout_marginEnd="10dp"
         android:text="Load" />
 
@@ -52,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="0dp"
+        android:background="@color/white"
         android:layout_marginEnd="10dp"
         android:text="Thru" />
 
