@@ -130,6 +130,7 @@ class ARCameraActivity : AppCompatActivity() {
     private fun infoBind() {
         val view = managerAR.layoutView.view
         val buttonReturn = view?.findViewById<Button>(R.id.buttonInfoReturn)
+        val infoText = view?.findViewById<TextView>(R.id.aboutText)
         buttonReturn?.setOnClickListener {
             managerAR.layoutView.destroyView()
             managerAR.showLayout(R.layout.menu_ar)
@@ -137,6 +138,19 @@ class ARCameraActivity : AppCompatActivity() {
                 waitForLayout(1)
             }
         }
+        var receivedText: String? = null
+        runBlocking {
+            receivedText = "Кол-во Портов: " + CalibrationHelper.getPortCount().toString() + "\n"
+        }
+        runBlocking {
+            receivedText += "Ready Status: " + CalibrationHelper.getReadyStatus() + "\n"
+        }
+        runBlocking { receivedText += "SweepType: " + CalibrationHelper.getSweepType() + "\n" }
+        runBlocking { receivedText += "PointsCount: " + CalibrationHelper.getPointsCount() + "\n" }
+        runBlocking { receivedText += "TriggerMode: " + CalibrationHelper.getTriggerMode() + "\n" }
+        runBlocking { receivedText += "Span: NOT IMPLEMENTED" + "\n" }
+        runBlocking { receivedText += "RfOut: " + CalibrationHelper.getRfOut() + "\n" }
+        infoText?.setText(receivedText)
     }
 
     private fun calibrationBind() {
