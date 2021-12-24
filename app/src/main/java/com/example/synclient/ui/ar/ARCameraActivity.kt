@@ -10,13 +10,15 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.synclient.R
-import com.example.synclient.arLogic.LayoutViewBuilder
 import com.example.synclient.arLogic.ManagerAR
 import com.example.synclient.calibrationHelper.CalibrationHelper
 import com.google.ar.core.Config
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -24,7 +26,7 @@ import kotlinx.coroutines.*
  */
 class ARCameraActivity : AppCompatActivity() {
     private lateinit var handler: Handler
-    var listCalibration:MutableList<Int> = mutableListOf<Int>()
+    var listCalibration: MutableList<Int> = mutableListOf<Int>()
     var managerAR: ManagerAR = ManagerAR(this, this)
     var selectedPort: Int = -1
     var portArray: Array<Boolean> = arrayOf(false, false, false)
@@ -106,12 +108,11 @@ class ARCameraActivity : AppCompatActivity() {
             val portList = managerAR.portList
             listCalibration.clear()
             portList.forEachIndexed { index, portViewBuilder ->
-                if(portViewBuilder.isChecked){
+                if (portViewBuilder.isChecked) {
                     portViewBuilder.changePortStatus()
                     //portViewBuilder.changePortColor(Color.rgb(255,255,255))
                     listCalibration.add(index)
-                }
-                else{
+                } else {
                     portViewBuilder.view.visibility = View.INVISIBLE
                 }
             }
@@ -145,7 +146,7 @@ class ARCameraActivity : AppCompatActivity() {
         buttonReturn?.setOnClickListener {
             val portList = managerAR.portList
             portList.forEach {
-                 it.view.visibility = View.VISIBLE
+                it.view.visibility = View.VISIBLE
             }
             managerAR.layoutView.destroyView()
             managerAR.showLayout(R.layout.menu_ar)
@@ -172,17 +173,21 @@ class ARCameraActivity : AppCompatActivity() {
         }
         buttonThru?.setOnClickListener {
             findCheckedPort()
-            val index = listCalibration.indexOf(listCalibration.indexOf(selectedPort-1))
-            runBlocking { CalibrationHelper.getPortMeasureThru(selectedPort, (listCalibration[index+1] +1)) }
+            val index = listCalibration.indexOf(listCalibration.indexOf(selectedPort - 1))
+            runBlocking {
+                CalibrationHelper.getPortMeasureThru(
+                    selectedPort,
+                    (listCalibration[index + 1] + 1)
+                )
+            }
             runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
         }
     }
 
-    fun findCheckedPort()
-    {
+    fun findCheckedPort() {
         managerAR.portList.forEachIndexed { index, portViewBuilder ->
             if (portViewBuilder.isChecked)
-                selectedPort = index+1
+                selectedPort = index + 1
         }
     }
 
