@@ -1,29 +1,41 @@
 syntax = "proto3";
 
-package vnarpc; //vnarpc
+package vnarpc;
 
 option java_multiple_files = true;
 
 service VnaRpc {
     rpc isConnected (EmptyMessage) returns (ConnectionState) {}
-
+    
     rpc getPortCount (EmptyMessage) returns (PortCount) {}
     rpc getPortStatus (Port) returns (PortStatus) {}
     rpc measurePort (MeasureParams) returns (EmptyMessage) {}
     rpc measureThru (PortsPair) returns (EmptyMessage) {}
     rpc apply (EmptyMessage) returns (EmptyMessage) {}
     rpc reset (EmptyMessage) returns (EmptyMessage) {}
-
-    rpc isReady (EmptyMessage) returns (State) {} // вкл выкл для устройства
-    rpc sweepType (EmptyMessage) returns (SweepType) {} // режим измерения
+    
+    rpc isReady (EmptyMessage) returns (State) {} // вкл выкл для устройства 
+    rpc sweepType (EmptyMessage) returns (SweepType) {} // режим измерения  
     rpc pointsCount (EmptyMessage) returns (Points) {} // количество точек
-    rpc triggerMode (EmptyMessage) returns (TriggerMode) {} // тригер
-    // span если измерение по мощности то по мощности иначе частота
-    rpc span (SweepType) returns (Span) {}
-    // rfout
-    rpc rfOut (EmptyMessage) returns (State) {}
-    // откалиброван или нет
+    rpc triggerMode (EmptyMessage) returns (TriggerMode) {} // триггер
+    // span если измерение по мощности то по мощности иначе частота 
+    rpc span (SweepType) returns (Span) {} 
+    // rfout 
+    rpc rfOut (EmptyMessage) returns (State) {} 
+    // откалиброван или нет 
+    rpc calibrationType (EmptyMessage) returns (CalibrationType) {}
+    // список используемых портов в канале
+    rpc portList (EmptyMessage) returns (ActivePorts) {}
+    // выбор портов для солт2
+    rpc choosePortsSolt2 (PortsPair) returns (EmptyMessage) {}
+}
 
+message ActivePorts {
+    repeated int32 ports = 1;
+}
+
+message CalibrationType {
+    string type = 1;
 }
 
 message Span {
@@ -43,18 +55,18 @@ message Points {
     int32 count = 1;
 }
 
-message ConnectionState {
+message ConnectionState { 
     string connectionState = 1;
 }
 
 message SweepType {
-    enum sweep_type {
-        linear = 0;
-        logarithmic = 1;
-        power = 2;
-        segment = 3;
-    }
-    sweep_type type = 1;
+	enum sweep_type {
+		linear = 0;
+		logarithmic = 1;
+		power = 2;
+		segment = 3;
+	}
+	sweep_type type = 1;
 }
 
 message State {
@@ -72,7 +84,7 @@ message MeasureParams {
     bool gender = 3;
 }
 
-// статус порта open short load gender
+// статус порта open short load gender 
 message PortStatus {
     bool open = 1;
     bool short = 2;

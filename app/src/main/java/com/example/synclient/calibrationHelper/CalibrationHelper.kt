@@ -126,4 +126,29 @@ object CalibrationHelper {
         return responseRF
     }
 
+    suspend fun getCalibrationType() : String?
+    {
+        var responseType : String? = null
+        runBlocking {
+            val receivedType = async { clientStub.calibrationType() }
+            responseType = receivedType.await()
+        }
+        return responseType
+    }
+    suspend fun getPortList() : MutableList<Int>?
+    {
+        var responseList : MutableList<Int>? = null
+        runBlocking {
+            val receivedList= async { clientStub.portList()}
+            responseList= receivedList.await()
+        }
+        return responseList
+    }
+    suspend fun getChoosePortsSolt2(firstPort: Int,secondPort: Int)
+    {
+        runBlocking {
+            val responseSolt2 = async { clientStub.choosePortsSolt2(firstPort,secondPort) }
+        }
+    }
+
 }
