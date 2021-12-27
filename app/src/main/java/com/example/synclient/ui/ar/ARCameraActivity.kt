@@ -33,11 +33,15 @@ import vnarpc.SweepType
  */
 class ARCameraActivity : AppCompatActivity() {
     var itemsChannel = ArrayList<ItemChannel>()
-    private var adapter = ChannelAdapter().apply {
+    private var adapter = object: ChannelAdapter() {
+        override fun onClickBuilder(view: View, index: Int){
+            currentChannelNumber = index
+            onChannelChanged()
+        }
     }
 
     private lateinit var handler: Handler
-    var channelNumber = 1
+    var currentChannelNumber = 1
     var channelsCount = 1
     var mapOfPortsStatuses: MutableMap<Int, PortCalibrationStatus> =
         mutableMapOf<Int, PortCalibrationStatus>()
@@ -370,15 +374,6 @@ class ARCameraActivity : AppCompatActivity() {
         channelRV.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
         channelRV.adapter = adapter
-
-        Log.e("TAG",adapter.mapOfChannelsView.toString())
-        adapter.mapOfChannelsView.forEach{
-            var key = it.key
-            it.value.setOnClickListener {
-                Log.e("TAG",key.toString())
-            }
-        }
-
     }
 
 // Спрятать или показать список (false/true)
@@ -390,10 +385,9 @@ class ARCameraActivity : AppCompatActivity() {
             channelRV.visibility = View.VISIBLE
     }
 
-    private fun onChannelChanged(layout: LinearLayout, index: Int) {
-        channelNumber = index
+    private fun onChannelChanged() {
         val channelNumberView = this.findViewById<TextView>(R.id.channelNumber)
-        channelNumberView.text = "Channel $channelNumber"
+        channelNumberView.text = "Channel $currentChannelNumber"
     }
 
 }

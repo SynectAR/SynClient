@@ -17,8 +17,6 @@ import com.example.synclient.entities.PortCalibrationStatus
 
 open class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ItemChannelAdapter>() {
     var dataList = ArrayList<ItemChannel>()
-    var mapOfChannelsView: MutableMap<Int, View> =
-        mutableMapOf<Int, View>()
     lateinit var context: Context
     fun setData(data: List<ItemChannel>) {
         dataList = data as ArrayList<ItemChannel>
@@ -35,19 +33,19 @@ open class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ItemChannelAdapt
 
     override fun onBindViewHolder(holder: ItemChannelAdapter, position: Int) {
         holder.itemView.findViewById<TextView>(R.id.channel_name).text = dataList[position].name
-        onClickBuilder(holder.itemView.findViewById<LinearLayout>(R.id.layoutItem), position)
-        mapOfChannelsView[position] = holder.itemView
-        functionrnd(4)
+        holder.itemView.setOnClickListener {
+            onClickBuilder(it, position)
+        }
     }
 
     override fun getItemCount(): Int {
         return dataList.size
     }
 
-    open fun onClickBuilder(layout: LinearLayout, index: Int) {}
+    open fun onClickBuilder(view: View, index: Int) {}
 
 
-    open fun functionrnd(int: Int){
+    fun functionrnd(int: Int){
         Log.e("TAG",int.toString())
     }
 }
