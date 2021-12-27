@@ -111,18 +111,7 @@ class ARCameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateConfig2() {
-        var config = managerAR.arFragment.arSceneView.session?.config
-        if (config != null) {
-            config.augmentedImageDatabase = null
-            config.focusMode = Config.FocusMode.AUTO
-            config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
-            managerAR.arFragment.arSceneView.session?.configure(config)
-        }
-    }
-
     private fun menuBind() {
-        updateConfig2()
         uploadRV()
         hideRV(false)
         changeChannelPorts()
