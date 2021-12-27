@@ -152,7 +152,7 @@ class ARCameraActivity : AppCompatActivity() {
         runBlocking { receivedMode= CalibrationHelper.getSweepType() }
         var receivedSpan: Array<Double>?
         runBlocking { receivedSpan = CalibrationHelper.getSpan(receivedMode)}
-        runBlocking { receivedText += "Span: "+ "min: "+ receivedSpan!![0] +" max: "+ receivedSpan!![1] + "\n" }
+        runBlocking { receivedText += "Span: "+ "min: "+ receivedSpan!![0] +" max: "+ receivedSpan!![1] +" result: "+ (receivedSpan!![1] - receivedSpan!![0]) + "\n" }
         runBlocking { receivedText += "RfOut: " + CalibrationHelper.getRfOut() + "\n" }
         info?.text = receivedText
     }
