@@ -31,10 +31,9 @@
             android:id="@+id/channelNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:layout_gravity="right"
             android:text="Channel 1"
-            android:textSize="20dp"
-            android:layout_marginStart="720dp"/>
+            android:textSize="20dp"/>
 
     </LinearLayout>
 

@@ -6,15 +6,17 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.RadioButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.synclient.R
+import com.example.synclient.adapter.ChannelAdapter
 import com.example.synclient.arLogic.ManagerAR
 import com.example.synclient.calibrationHelper.CalibrationHelper
+import com.example.synclient.entities.ItemChannel
 import com.example.synclient.entities.PortCalibrationStatus
 import com.google.ar.core.Config
 import com.google.ar.sceneform.math.Quaternion
@@ -30,6 +32,10 @@ import vnarpc.SweepType
  * Класс, обрабатывающий взаимодействие и работу с камерой телефона в AR пространстве.
  */
 class ARCameraActivity : AppCompatActivity() {
+    var itemsChannel = ArrayList<ItemChannel>()
+    private var adapter = ChannelAdapter().apply {
+    }
+
     private lateinit var handler: Handler
     var channelNumber = 1
     var channelsCount = 1
@@ -105,7 +111,20 @@ class ARCameraActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateConfig2() {
+        var config = managerAR.arFragment.arSceneView.session?.config
+        if (config != null) {
+            config.augmentedImageDatabase = null
+            config.focusMode = Config.FocusMode.AUTO
+            config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+            managerAR.arFragment.arSceneView.session?.configure(config)
+        }
+    }
+
     private fun menuBind() {
+        updateConfig2()
+        uploadRV()
+        hideRV(false)
         changeChannelPorts()
         val view = managerAR.layoutView.view
         val buttonAbout = view?.findViewById<Button>(R.id.buttonAbout)
@@ -127,6 +146,7 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun infoBind() {
+        hideRV(true)
         val view = managerAR.layoutView.view
         val buttonReturn = view?.findViewById<Button>(R.id.buttonInfoReturn)
         val info = view?.findViewById<TextView>(R.id.aboutText)
@@ -158,6 +178,7 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun calibrationBind() {
+        hideRV(true)
         fillPortStatus()
         // Делаем так чтобы только 1 порт был активен и тут же обновляем UI
         val portList = managerAR.portList
@@ -301,6 +322,7 @@ class ARCameraActivity : AppCompatActivity() {
         val portStatus = mapOfPortsStatuses[checked]
         val view = managerAR.layoutView.view
 
+
         val buttonOpen = view?.findViewById<Button>(R.id.buttonOpen)
         val buttonShort = view?.findViewById<Button>(R.id.buttonShort)
         val buttonLoad = view?.findViewById<Button>(R.id.buttonLoad)
@@ -347,4 +369,42 @@ class ARCameraActivity : AppCompatActivity() {
     fun getChannelCount(): Int {
         return 4
     }
+
+    // Заполняет список каналов элементами
+    fun uploadRV(){
+        itemsChannel.clear()
+        getChannelCount()
+        for (i in 0..channelsCount)
+            itemsChannel.add(ItemChannel(id = i,name = "Ch $i",isActive = false))
+        adapter.setData(itemsChannel)
+        val channelRV = this.findViewById<RecyclerView>(R.id.channelRV)
+        channelRV.layoutManager = LinearLayoutManager(this,
+            LinearLayoutManager.VERTICAL,false)
+        channelRV.adapter = adapter
+
+        Log.e("TAG",adapter.mapOfChannelsView.toString())
+        adapter.mapOfChannelsView.forEach{
+            var key = it.key
+            it.value.setOnClickListener {
+                Log.e("TAG",key.toString())
+            }
+        }
+
+    }
+
+// Спрятать или показать список (false/true)
+    fun hideRV(hide: Boolean){
+        val channelRV = this.findViewById<RecyclerView>(R.id.channelRV)
+        if(hide)
+            channelRV.visibility = View.GONE
+        else
+            channelRV.visibility = View.VISIBLE
+    }
+
+    private fun onChannelChanged(layout: LinearLayout, index: Int) {
+        channelNumber = index
+        val channelNumberView = this.findViewById<TextView>(R.id.channelNumber)
+        channelNumberView.text = "Channel $channelNumber"
+    }
+
 }

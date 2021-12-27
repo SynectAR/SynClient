@@ -6,6 +6,7 @@ import com.example.synclient.R
 import com.example.synclient.ui.ar.ARCameraActivity
 import com.google.ar.core.Anchor
 import com.google.ar.core.AugmentedImage
+import com.google.ar.core.Config
 import com.google.ar.core.TrackingState
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
@@ -119,5 +120,11 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
             it.changePortStatus()
             it.changePortStatus()
         }
+    }
+    fun getSessionConfigurated(): Config{
+        var session = arFragment.arSceneView.session
+        var config = Config(session)
+        config.augmentedImageDatabase = null
+        return config
     }
 }
