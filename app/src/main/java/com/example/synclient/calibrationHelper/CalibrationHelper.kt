@@ -76,9 +76,9 @@ object CalibrationHelper {
         return responseState
     }
 
-    suspend fun  getSweepType() : String?
+    suspend fun  getSweepType() : SweepType.sweep_type
     {
-        var responseType: String? = null
+        var responseType: SweepType.sweep_type
         runBlocking {
             val receivedType= async { clientStub.sweepType() }
             responseType=receivedType.await()
@@ -106,11 +106,11 @@ object CalibrationHelper {
         return responseMode
     }
 
-    suspend fun getSpan(sweepType : SweepType) : Array<Double>?
+    suspend fun getSpan(sweepType : SweepType.sweep_type) : Array<Double>?
     {
         var responseMinMax: Array<Double>? = null
         runBlocking {
-            val receivedMinMax= async { clientStub.span(SweepType.sweep_type.linear) }
+            val receivedMinMax= async { clientStub.span(sweepType) }
             responseMinMax= receivedMinMax.await()
         }
         return responseMinMax

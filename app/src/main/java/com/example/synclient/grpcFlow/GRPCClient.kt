@@ -70,10 +70,10 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         return responseState
     }
     // Возможо не правильный тип возврата данных
-    suspend fun sweepType() : String {
+    suspend fun sweepType() : SweepType.sweep_type {
         val request = EmptyMessage.newBuilder().build()
         val response= stub.sweepType(request)
-        var responseType= response.type.toString()
+        var responseType= response.type
         return responseType
     }
 

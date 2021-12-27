@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import vnarpc.SweepType
 
 
 /**
@@ -147,10 +148,13 @@ class ARCameraActivity : AppCompatActivity() {
         runBlocking { receivedText += "SweepType: " + CalibrationHelper.getSweepType() + "\n" }
         runBlocking { receivedText += "PointsCount: " + CalibrationHelper.getPointsCount() + "\n" }
         runBlocking { receivedText += "TriggerMode: " + CalibrationHelper.getTriggerMode() + "\n" }
-        runBlocking { receivedText += "Span: NOT IMPLEMENTED" + "\n" }
+        var receivedMode : SweepType.sweep_type
+        runBlocking { receivedMode= CalibrationHelper.getSweepType() }
+        var receivedSpan: Array<Double>?
+        runBlocking { receivedSpan = CalibrationHelper.getSpan(receivedMode)}
+        runBlocking { receivedText += "Span: "+ "min: "+ receivedSpan!![0] +" max: "+ receivedSpan!![1] + "\n" }
         runBlocking { receivedText += "RfOut: " + CalibrationHelper.getRfOut() + "\n" }
         info?.text = receivedText
-
     }
 
     private fun calibrationBind() {
@@ -172,7 +176,6 @@ class ARCameraActivity : AppCompatActivity() {
                 updateMenuUI()
             }
         }
-
 
         // Заполняем UI функционалом
         val view = managerAR.layoutView.view
