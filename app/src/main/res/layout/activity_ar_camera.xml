@@ -16,7 +16,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@+id/scene_form_fragment">
+        app:layout_constraintBottom_toTopOf="@+id/scene_form_fragment"
+        tools:layout_editor_absoluteX="0dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/channelRV"
@@ -25,6 +26,15 @@
             android:layout_marginStart="0dp"
             android:paddingStart="0dp"
             tools:listitem="@layout/item_channel" />
+
+        <TextView
+            android:id="@+id/channelNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="Channel 1"
+            android:textSize="20dp"
+            android:layout_marginStart="720dp"/>
 
     </LinearLayout>
 

@@ -13,10 +13,12 @@
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/drawable/bg_widget_ar_info.xml" value="0.21822916666666667" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/drawable/circle.xml" value="0.14166666666666666" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/about_channel_ar.xml" value="0.264" />
-        <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/activity_ar_camera.xml" value="0.2" />
+        <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/activity_ar_camera.xml" value="0.4" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/activity_calibration.xml" value="0.264" />
+        <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/calibration_layout.xml" value="0.264" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/calibration_menu_ar.xml" value="0.264" />
+        <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/fragment_notifications.xml" value="0.12864583333333332" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/item_channel.xml" value="0.20208333333333334" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/item_port.xml" value="0.4" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/menu_ar.xml" value="0.37423312883435583" />
