@@ -44,8 +44,4 @@ open class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ItemChannelAdapt
 
     open fun onClickBuilder(view: View, index: Int) {}
 
-
-    fun functionrnd(int: Int){
-        Log.e("TAG",int.toString())
-    }
 }

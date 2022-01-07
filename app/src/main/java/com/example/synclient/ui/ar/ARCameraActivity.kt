@@ -2,6 +2,8 @@ package com.example.synclient.ui.ar
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -18,6 +20,7 @@ import com.example.synclient.arLogic.ManagerAR
 import com.example.synclient.calibrationHelper.CalibrationHelper
 import com.example.synclient.entities.ItemChannel
 import com.example.synclient.entities.PortCalibrationStatus
+import com.google.ar.core.AugmentedImageDatabase
 import com.google.ar.core.Config
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
@@ -110,6 +113,11 @@ class ARCameraActivity : AppCompatActivity() {
         var config = managerAR.arFragment.arSceneView.session?.config
         if (config != null) {
             config.focusMode = Config.FocusMode.AUTO
+            val bitmapQR = BitmapFactory.decodeResource(resources, R.drawable.demo_img2)
+            val aid = AugmentedImageDatabase(managerAR.arFragment.arSceneView.session)
+            aid.addImage("qrCode", bitmapQR, 0.015f)
+            config.augmentedImageDatabase = aid
+            config.planeFindingMode = Config.PlaneFindingMode.DISABLED
             config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
             managerAR.arFragment.arSceneView.session?.configure(config)
         }
