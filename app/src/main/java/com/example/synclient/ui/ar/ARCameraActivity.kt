@@ -2,15 +2,16 @@ package com.example.synclient.ui.ar
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.RadioButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,8 +37,8 @@ import vnarpc.SweepType
  */
 class ARCameraActivity : AppCompatActivity() {
     var itemsChannel = ArrayList<ItemChannel>()
-    private var adapter = object: ChannelAdapter() {
-        override fun onClickBuilder(view: View, index: Int){
+    private var adapter = object : ChannelAdapter() {
+        override fun onClickBuilder(view: View, index: Int) {
             currentChannelNumber = index
             onChannelChanged()
         }
@@ -169,11 +170,11 @@ class ARCameraActivity : AppCompatActivity() {
         runBlocking { receivedText += "SweepType: " + CalibrationHelper.getSweepType() + "\n" }
         runBlocking { receivedText += "PointsCount: " + CalibrationHelper.getPointsCount() + "\n" }
         runBlocking { receivedText += "TriggerMode: " + CalibrationHelper.getTriggerMode() + "\n" }
-        var receivedMode : SweepType.sweep_type
-        runBlocking { receivedMode= CalibrationHelper.getSweepType() }
+        var receivedMode: SweepType.sweep_type
+        runBlocking { receivedMode = CalibrationHelper.getSweepType() }
         var receivedSpan: Array<Double>?
-        runBlocking { receivedSpan = CalibrationHelper.getSpan(receivedMode)}
-        runBlocking { receivedText += "Span: "+ "min: "+ receivedSpan!![0] +" max: "+ receivedSpan!![1] +" result: "+ (receivedSpan!![1] - receivedSpan!![0]) + "\n" }
+        runBlocking { receivedSpan = CalibrationHelper.getSpan(receivedMode) }
+        runBlocking { receivedText += "Span: " + "min: " + receivedSpan!![0] + " max: " + receivedSpan!![1] + " result: " + (receivedSpan!![1] - receivedSpan!![0]) + "\n" }
         runBlocking { receivedText += "RfOut: " + CalibrationHelper.getRfOut() + "\n" }
         info?.text = receivedText
     }
@@ -372,22 +373,24 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     // Заполняет список каналов элементами
-    fun uploadRV(){
+    fun uploadRV() {
         itemsChannel.clear()
         getChannelCount()
         for (i in 0..channelsCount)
-            itemsChannel.add(ItemChannel(id = i,name = "Ch $i",isActive = false))
+            itemsChannel.add(ItemChannel(id = i, name = "Ch $i", isActive = false))
         adapter.setData(itemsChannel)
         val channelRV = this.findViewById<RecyclerView>(R.id.channelRV)
-        channelRV.layoutManager = LinearLayoutManager(this,
-            LinearLayoutManager.VERTICAL,false)
+        channelRV.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.VERTICAL, false
+        )
         channelRV.adapter = adapter
     }
 
-// Спрятать или показать список (false/true)
-    fun hideRV(hide: Boolean){
+    // Спрятать или показать список (false/true)
+    fun hideRV(hide: Boolean) {
         val channelRV = this.findViewById<RecyclerView>(R.id.channelRV)
-        if(hide)
+        if (hide)
             channelRV.visibility = View.GONE
         else
             channelRV.visibility = View.VISIBLE

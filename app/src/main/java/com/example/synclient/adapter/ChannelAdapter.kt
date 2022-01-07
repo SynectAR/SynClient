@@ -2,17 +2,13 @@ package com.example.synclient.adapter
 
 
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.synclient.R
 import com.example.synclient.entities.ItemChannel
-import com.example.synclient.entities.PortCalibrationStatus
 
 
 open class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ItemChannelAdapter>() {

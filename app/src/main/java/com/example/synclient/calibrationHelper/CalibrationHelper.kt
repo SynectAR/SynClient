@@ -8,12 +8,11 @@ import vnarpc.SweepType
 object CalibrationHelper {
     val clientStub = GRPCConnectionHelper.setupConnection()
 
-    suspend fun getConnectionStatus() :String?
-    {
-        var receivedStatus : String? = null
+    suspend fun getConnectionStatus(): String? {
+        var receivedStatus: String? = null
         runBlocking {
             val responseStatus = async { clientStub.isConnected() }
-            receivedStatus=responseStatus.await()
+            receivedStatus = responseStatus.await()
         }
         return receivedStatus
     }
@@ -66,88 +65,81 @@ object CalibrationHelper {
         }
     }
 
-    suspend fun getReadyStatus(): Boolean?
-    {
-        var responseState:Boolean? = null
+    suspend fun getReadyStatus(): Boolean? {
+        var responseState: Boolean? = null
         runBlocking {
-            val receivedState= async { clientStub.isReady() }
-            responseState=receivedState.await()
+            val receivedState = async { clientStub.isReady() }
+            responseState = receivedState.await()
         }
         return responseState
     }
 
-    suspend fun  getSweepType() : SweepType.sweep_type
-    {
+    suspend fun getSweepType(): SweepType.sweep_type {
         var responseType: SweepType.sweep_type
         runBlocking {
-            val receivedType= async { clientStub.sweepType() }
-            responseType=receivedType.await()
+            val receivedType = async { clientStub.sweepType() }
+            responseType = receivedType.await()
         }
         return responseType
     }
 
-    suspend fun getPointsCount() : Int?
-    {
-        var responseCount : Int? = null
+    suspend fun getPointsCount(): Int? {
+        var responseCount: Int? = null
         runBlocking {
-            val receivedCount= async { clientStub.pointsCount() }
-            responseCount=receivedCount.await()
+            val receivedCount = async { clientStub.pointsCount() }
+            responseCount = receivedCount.await()
         }
         return responseCount
     }
 
-    suspend fun getTriggerMode() : String?
-    {
-        var responseMode : String? = null
+    suspend fun getTriggerMode(): String? {
+        var responseMode: String? = null
         runBlocking {
-            val receivedMode= async{ clientStub.triggerMode()}
-            responseMode=receivedMode.await()
+            val receivedMode = async { clientStub.triggerMode() }
+            responseMode = receivedMode.await()
         }
         return responseMode
     }
 
-    suspend fun getSpan(sweepType : SweepType.sweep_type) : Array<Double>?
-    {
+    suspend fun getSpan(sweepType: SweepType.sweep_type): Array<Double>? {
         var responseMinMax: Array<Double>? = null
         runBlocking {
-            val receivedMinMax= async { clientStub.span(sweepType) }
-            responseMinMax= receivedMinMax.await()
+            val receivedMinMax = async { clientStub.span(sweepType) }
+            responseMinMax = receivedMinMax.await()
         }
         return responseMinMax
     }
 
-    suspend fun  getRfOut() : Boolean?
-    {
+    suspend fun getRfOut(): Boolean? {
         var responseRF: Boolean? = null
         runBlocking {
-            val receivedRF= async { clientStub.rfOut() }
-            responseRF=receivedRF.await()
+            val receivedRF = async { clientStub.rfOut() }
+            responseRF = receivedRF.await()
         }
         return responseRF
     }
 
-    suspend fun getCalibrationType() : String?
-    {
-        var responseType : String? = null
+    suspend fun getCalibrationType(): String? {
+        var responseType: String? = null
         runBlocking {
             val receivedType = async { clientStub.calibrationType() }
             responseType = receivedType.await()
         }
         return responseType
     }
-    suspend fun getPortList() : MutableList<Int>?
-    {
-        var responseList : MutableList<Int>? = null
+
+    suspend fun getPortList(): MutableList<Int>? {
+        var responseList: MutableList<Int>? = null
         runBlocking {
-            val receivedList= async { clientStub.portList()}
-            responseList= receivedList.await()
+            val receivedList = async { clientStub.portList() }
+            responseList = receivedList.await()
         }
         return responseList
     }
-    suspend fun getChoosePortsSolt2(firstPort: Int,secondPort: Int)
-    {
+
+    suspend fun getChoosePortsSolt2(firstPort: Int, secondPort: Int) {
         runBlocking {
-            val responseSolt2 = async { clientStub.choosePortsSolt2(firstPort,secondPort) }
+            val responseSolt2 = async { clientStub.choosePortsSolt2(firstPort, secondPort) }
         }
     }
 

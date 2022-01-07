@@ -109,14 +109,14 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
     suspend fun calibrationType(): String {
         val request = EmptyMessage.newBuilder().build()
         val response = stub.calibrationType(request)
-        var responseType= response.type
+        var responseType = response.type
         return responseType
     }
 
     suspend fun portList(): MutableList<Int>? {
         val request = EmptyMessage.newBuilder().build()
         val response = stub.portList(request)
-        var responseList= response.portsList
+        var responseList = response.portsList
         return responseList
     }
 

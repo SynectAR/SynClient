@@ -1,10 +1,5 @@
 package com.example.synclient.arLogic;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import com.example.synclient.R;
-import com.google.ar.core.AugmentedImageDatabase;
 import com.google.ar.core.Config;
 import com.google.ar.core.Session;
 import com.google.ar.sceneform.ux.ArFragment;
