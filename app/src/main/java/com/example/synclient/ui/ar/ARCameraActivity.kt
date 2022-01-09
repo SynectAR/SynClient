@@ -30,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import vnarpc.SweepType
+import vnarpc.sweep_type
 
 
 /**
@@ -77,6 +78,7 @@ class ARCameraActivity : AppCompatActivity() {
             listOfVectors.add(Vector3(0.02f + 0.04f * i, -0.0055f, -0.03f))
             listOfQuaternion.add(Quaternion.axisAngle(Vector3(-60f, 0f, 0f), 1f))
         }
+
 
         managerAR.setAugmentedImagesOnUpdateListener(listOfVectors, listOfQuaternion)
 
@@ -167,13 +169,13 @@ class ARCameraActivity : AppCompatActivity() {
         runBlocking {
             receivedText += "Ready Status: " + CalibrationHelper.getReadyStatus() + "\n"
         }
-        runBlocking { receivedText += "SweepType: " + CalibrationHelper.getSweepType() + "\n" }
-        runBlocking { receivedText += "PointsCount: " + CalibrationHelper.getPointsCount() + "\n" }
+        runBlocking { receivedText += "SweepType: " + CalibrationHelper.getSweepType(currentChannelNumber) + "\n" }
+        runBlocking { receivedText += "PointsCount: " + CalibrationHelper.getPointsCount(currentChannelNumber) + "\n" }
         runBlocking { receivedText += "TriggerMode: " + CalibrationHelper.getTriggerMode() + "\n" }
-        var receivedMode: SweepType.sweep_type
-        runBlocking { receivedMode = CalibrationHelper.getSweepType() }
+        var receivedMode: sweep_type
+        runBlocking { receivedMode = CalibrationHelper.getSweepType(currentChannelNumber) }
         var receivedSpan: Array<Double>?
-        runBlocking { receivedSpan = CalibrationHelper.getSpan(receivedMode) }
+        runBlocking { receivedSpan = CalibrationHelper.getSpan(receivedMode,currentChannelNumber) }
         runBlocking { receivedText += "Span: " + "min: " + receivedSpan!![0] + " max: " + receivedSpan!![1] + " result: " + (receivedSpan!![1] - receivedSpan!![0]) + "\n" }
         runBlocking { receivedText += "RfOut: " + CalibrationHelper.getRfOut() + "\n" }
         info?.text = receivedText
@@ -209,7 +211,7 @@ class ARCameraActivity : AppCompatActivity() {
         val buttonThru = view?.findViewById<Button>(R.id.buttonThru)
         val buttonApply = view?.findViewById<Button>(R.id.buttonApply)
         buttonReturn?.setOnClickListener {
-            runBlocking { CalibrationHelper.getReset() }
+            runBlocking { CalibrationHelper.getReset(currentChannelNumber) }
             managerAR.layoutView.destroyView()
             managerAR.showLayout(R.layout.menu_ar)
             CoroutineScope(Dispatchers.IO).launch {
@@ -223,8 +225,8 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses.get(checked)
             portStatus?.open = true
             updateMenuUI()
-            runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "O") }
-            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
+            runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "O",currentChannelNumber) }
+            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort,currentChannelNumber)!! }
 
         }
         buttonShort?.setOnClickListener {
@@ -233,8 +235,8 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses.get(checked)
             portStatus?.short = true
             updateMenuUI()
-            runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "S") }
-            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
+            runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "S",currentChannelNumber) }
+            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort,currentChannelNumber)!! }
         }
         buttonLoad?.setOnClickListener {
             findCheckedPort()
@@ -242,8 +244,8 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses.get(checked)
             portStatus?.load = true
             updateMenuUI()
-            runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "L") }
-            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
+            runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "L",currentChannelNumber) }
+            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort,currentChannelNumber)!! }
         }
         buttonThru?.setOnClickListener {
             val index = listCalibration.indexOf(listCalibration.indexOf(selectedPort - 1))
@@ -258,12 +260,12 @@ class ARCameraActivity : AppCompatActivity() {
 
             updateMenuUI()
 
-            runBlocking { CalibrationHelper.getPortMeasureThru(selectedPort, nextPort) }
-            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
+            runBlocking { CalibrationHelper.getPortMeasureThru(selectedPort, nextPort,currentChannelNumber) }
+            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort,currentChannelNumber)!! }
         }
         buttonApply?.setOnClickListener {
             if (checkApply())
-                runBlocking { CalibrationHelper.getApply() }
+                runBlocking { CalibrationHelper.getApply(currentChannelNumber) }
             else
                 Toast.makeText(
                     this, "Калибровка не завершена",
@@ -281,14 +283,14 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     fun statusOnClick(v: View) {
-        runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort)!! }
+        runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort,currentChannelNumber)!! }
     }
 
 
     // Запрашивает у сервера число активных портов в текущем канале
     fun getChannelPorts() {
         listCalibration.clear()
-        listCalibration = mutableListOf(0, 1)
+        runBlocking { listCalibration= CalibrationHelper.getPortList(currentChannelNumber)!! }
     }
 
     // Перед калибровкой заполняет карту значениями для каждого используемого порта

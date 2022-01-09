@@ -25,16 +25,17 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         return response.portcount
     }
 
-    suspend fun portStatus(port: Int): Array<Boolean> {
-        val request = Port.newBuilder().setPort(port).build()
+    suspend fun portStatus(port: Int,channel : Int): Array<Boolean> {
+        val request = PortAndChannel.newBuilder().setPort(port).setChannel(channel).build()
         val response = stub.getPortStatus(request)
         var responseArray = arrayOf(response.open, response.short, response.load)
         return responseArray
     }
 
-    suspend fun measurePort(port: Int, type: String) {
+    suspend fun measurePort(port: Int, type: String,channel: Int) {
         val request = MeasureParams.newBuilder()
             .setPort(port)
+            .setChannel(channel)
             .setType(type)
             .setGender(true)
             .build()
@@ -42,23 +43,24 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         println("Received: ${response}")
     }
 
-    suspend fun measureThru(firstPort: Int, secondPort: Int) {
-        val request = PortsPair.newBuilder()
-            .setFirstport(firstPort)
-            .setSecondport(secondPort)
+    suspend fun measureThru(firstPort: Int, secondPort: Int,channel: Int) {
+        val request = ThruParams.newBuilder()
+            .setChannel(channel)
+            .setRcvport(firstPort)
+            .setSrcport(secondPort)
             .build()
         val response = stub.measureThru(request)
         println("Received: ${response}")
     }
 
-    suspend fun apply() {
-        val request = EmptyMessage.newBuilder().build()
+    suspend fun apply(channel: Int) {
+        val request = Channel.newBuilder().setChannel(channel).build()
         val response = stub.apply(request)
         println("Received: ${response} ")
     }
 
-    suspend fun reset() {
-        val request = EmptyMessage.newBuilder().build()
+    suspend fun reset(channel: Int) {
+        val request = Channel.newBuilder().setChannel(channel).build()
         val response = stub.reset(request)
         println("Received: ${response} ")
     }
@@ -71,15 +73,15 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
     }
 
     // Возможо не правильный тип возврата данных
-    suspend fun sweepType(): SweepType.sweep_type {
-        val request = EmptyMessage.newBuilder().build()
+    suspend fun sweepType(channel: Int): sweep_type {
+        val request = Channel.newBuilder().setChannel(channel).build()
         val response = stub.sweepType(request)
         var responseType = response.type
         return responseType
     }
 
-    suspend fun pointsCount(): Int {
-        val request = EmptyMessage.newBuilder().build()
+    suspend fun pointsCount(channel: Int): Int {
+        val request = Channel.newBuilder().setChannel(channel).build()
         val response = stub.pointsCount(request)
         var responseCount = response.count
         return responseCount
@@ -92,8 +94,8 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         return responseMode
     }
 
-    suspend fun span(sweepType: SweepType.sweep_type): Array<Double> {
-        val request = SweepType.newBuilder().setType(sweepType).build()
+    suspend fun span(sweepType: sweep_type,channel: Int): Array<Double> {
+        val request = SweepTypeAndChannel.newBuilder().setType(sweepType).setChannel(channel).build()
         val response = stub.span(request)
         var responseMinMax = arrayOf(response.min, response.max)
         return responseMinMax
@@ -106,24 +108,25 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         return responseRF
     }
 
-    suspend fun calibrationType(): String {
-        val request = EmptyMessage.newBuilder().build()
+    suspend fun calibrationType(channel: Int): String {
+        val request = Channel.newBuilder().setChannel(channel).build()
         val response = stub.calibrationType(request)
         var responseType = response.type
         return responseType
     }
 
-    suspend fun portList(): MutableList<Int>? {
-        val request = EmptyMessage.newBuilder().build()
+    suspend fun portList(channel: Int): MutableList<Int>? {
+        val request = Channel.newBuilder().setChannel(channel).build()
         val response = stub.portList(request)
         var responseList = response.portsList
         return responseList
     }
 
-    suspend fun choosePortsSolt2(firstPort: Int, secondPort: Int) {
+    //TODO: Дописать с передачей выбранных портов для калибровки
+    suspend fun choosePortsSolt2(channel: Int) {
         val request =
-            PortsPair.newBuilder().setFirstport(firstPort).setSecondport(secondPort).build()
-        val response = stub.choosePortsSolt2(request)
+            SoltPorts.newBuilder().setChannel(channel).setPorts(0 , 0).build()
+        val response = stub.chooseSoltPorts(request)
         println("Received: ${response} ")
     }
 
