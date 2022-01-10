@@ -372,7 +372,10 @@ class ARCameraActivity : AppCompatActivity() {
 
     // Запрашивает у сервера число каналов
     fun getChannelCount(): Int {
-        return 4
+        var channelAmount: Int = 4
+        runBlocking { channelAmount = CalibrationHelper.getChannelCount() }
+        Log.e("TAG","Channel_amount: $channelAmount")
+        return channelAmount
     }
 
     // Заполняет список каналов элементами

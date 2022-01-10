@@ -145,8 +145,8 @@ object CalibrationHelper {
         }
     }
 
-    suspend fun getChannelCount() : Int? {
-        var responseCount : Int? = null
+    suspend fun getChannelCount() : Int {
+        var responseCount : Int = 0
         runBlocking { val receivedCount = async { clientStub.channelCount() }
         responseCount =  receivedCount.await()
         }
