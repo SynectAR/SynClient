@@ -227,8 +227,6 @@ class ARCameraActivity : AppCompatActivity() {
             portStatus?.open = true
             updateMenuUI()
             runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "O",currentChannelNumber) }
-            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort,currentChannelNumber)!! }
-
         }
         buttonShort?.setOnClickListener {
             findCheckedPort()
@@ -237,7 +235,6 @@ class ARCameraActivity : AppCompatActivity() {
             portStatus?.short = true
             updateMenuUI()
             runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "S",currentChannelNumber) }
-            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort,currentChannelNumber)!! }
         }
         buttonLoad?.setOnClickListener {
             findCheckedPort()
@@ -246,23 +243,22 @@ class ARCameraActivity : AppCompatActivity() {
             portStatus?.load = true
             updateMenuUI()
             runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "L",currentChannelNumber) }
-            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort,currentChannelNumber)!! }
         }
         buttonThru?.setOnClickListener {
-            val index = listCalibration.indexOf(listCalibration.indexOf(selectedPort - 1))
-            val nextPort = listCalibration[index + 1] + 1
-
             findCheckedPort()
             val checked = selectedPort - 1
-            val portStatus = mapOfPortsStatuses.get(checked)
-            val portStatusSecond = mapOfPortsStatuses.get(nextPort - 1)
-            portStatus?.thru = true
-            portStatusSecond?.thru = true
+            val index = listCalibration.indexOf(listCalibration.indexOf(checked))
+            Log.e("TAG", "index: $index")
 
+            val nextPort = listCalibration[index] + 1
+            Log.e("TAG", "nextPort: $nextPort")
+
+
+            val portStatus = mapOfPortsStatuses[checked]
+            portStatus?.thru = true
             updateMenuUI()
 
             runBlocking { CalibrationHelper.getPortMeasureThru(selectedPort, nextPort,currentChannelNumber) }
-            runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort,currentChannelNumber)!! }
         }
         buttonApply?.setOnClickListener {
             if (checkApply())
@@ -301,6 +297,7 @@ class ARCameraActivity : AppCompatActivity() {
             mapOfPortsStatuses[it] =
                 PortCalibrationStatus(open = false, short = false, load = false, thru = false)
         }
+        mapOfPortsStatuses[listCalibration[listCalibration.size - 1]]!!.thru = true
     }
 
     // Меняет цвета портов и обновляет их
