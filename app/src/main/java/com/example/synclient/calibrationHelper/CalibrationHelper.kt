@@ -139,9 +139,9 @@ object CalibrationHelper {
     }
 
     //TODO: Дописать Метод
-    suspend fun getChoosePortsSolt2(firstPort: Int, secondPort: Int,channel: Int) {
+    suspend fun getChoosePortsSolt2(portArray: MutableIterable<Int>,channel: Int) {
         runBlocking {
-            val responseSolt2 = async { clientStub.choosePortsSolt2(channel) }
+            val responseSolt2 = async { clientStub.choosePortsSolt2(channel,portArray) }
         }
     }
 

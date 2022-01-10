@@ -123,9 +123,9 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
     }
 
     //TODO: Дописать с передачей выбранных портов для калибровки
-    suspend fun choosePortsSolt2(channel: Int) {
+    suspend fun choosePortsSolt2(channel: Int,portArray: MutableIterable<Int>) {
         val request =
-            SoltPorts.newBuilder().setChannel(channel).setPorts(0 , 0).build()
+            SoltPorts.newBuilder().setChannel(channel).addAllPorts(portArray).build()
         val response = stub.chooseSoltPorts(request)
         println("Received: ${response} ")
     }
