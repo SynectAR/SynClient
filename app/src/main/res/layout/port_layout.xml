@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/portNumberText"
-        android:layout_width="160dp"
+        android:layout_width="224dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:background="@drawable/bg_widget_ar_info"
@@ -17,8 +17,8 @@
         android:padding="16dp"
         android:text=""
         android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:textColor="@color/white"
+        android:textSize="45sp" />
 
     <RadioButton
         android:id="@+id/portChecked"

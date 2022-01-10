@@ -75,8 +75,8 @@ class LayoutViewBuilder {
         anchorNode = AnchorNode(anchor)
         node = TransformableNode(arFragment.transformationSystem)
         scene = arFragment.arSceneView.scene
-        node.scaleController.minScale = 0.05f
-        node.scaleController.maxScale = 0.051f
+        node.scaleController.minScale = 0.1f
+        node.scaleController.maxScale = 0.11f
         //Корректирует расположение виджета в зависимости от найденного anchor.
 
         node.worldPosition = vector

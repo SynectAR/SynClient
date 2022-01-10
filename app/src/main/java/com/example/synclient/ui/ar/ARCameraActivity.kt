@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.RadioButton
@@ -289,8 +290,8 @@ class ARCameraActivity : AppCompatActivity() {
 
     // Запрашивает у сервера число активных портов в текущем канале
     fun getChannelPorts() {
-        listCalibration.clear()
-        runBlocking { listCalibration= CalibrationHelper.getPortList(currentChannelNumber)!! }
+        runBlocking { listCalibration = CalibrationHelper.getPortList(currentChannelNumber)!! }
+        Log.e("TAG",listCalibration.toString())
     }
 
     // Перед калибровкой заполняет карту значениями для каждого используемого порта
@@ -401,6 +402,8 @@ class ARCameraActivity : AppCompatActivity() {
     private fun onChannelChanged() {
         val channelNumberView = this.findViewById<TextView>(R.id.channelNumber)
         channelNumberView.text = "Channel $currentChannelNumber"
+        getChannelPorts()
+        menuBind()
     }
 
 }

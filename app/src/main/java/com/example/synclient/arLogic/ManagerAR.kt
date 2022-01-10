@@ -23,7 +23,7 @@ import kotlin.collections.MutableList as MutableList1
 class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
     //Созданием пустого массива координат, хранящихся в типе float.
     var portsTransport = Array(3) { Array(3) { 0.0f } }
-    var menuVector = Vector3(0.2f, 0f, -0.080f)
+    var menuVector = Vector3(-0.1f, 0f, 0f)
     val menuQuaternion: Quaternion = Quaternion.axisAngle(Vector3(-90f, 0f, 0f), 1f)
 
     //Переменная, содержащая стандартный отступ для всех виджетов от найденной поверхности.
