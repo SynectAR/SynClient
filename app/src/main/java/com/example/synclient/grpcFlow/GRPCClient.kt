@@ -130,6 +130,15 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         println("Received: ${response} ")
     }
 
+    suspend fun channelCount() : Int
+    {
+        val request = EmptyMessage.newBuilder().build()
+        val response = stub.channelCount(request)
+        var responseCount = response.count
+        println("Received: ${response} ")
+        return responseCount
+    }
+
 
     override fun close() {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS)

@@ -29,6 +29,11 @@ service VnaRpc {
     rpc portList (Channel) returns (ActivePorts) {}
     // выбор портов для солт2
     rpc chooseSoltPorts (SoltPorts) returns (EmptyMessage) {}
+    rpc channelCount(EmptyMessage) returns (ChannelCount) {}
+}
+
+message ChannelCount {
+    int32 count = 1;
 }
 
 enum sweep_type {

@@ -145,4 +145,12 @@ object CalibrationHelper {
         }
     }
 
+    suspend fun getChannelCount() : Int? {
+        var responseCount : Int? = null
+        runBlocking { val receivedCount = async { clientStub.channelCount() }
+        responseCount =  receivedCount.await()
+        }
+        return responseCount
+    }
+
 }
