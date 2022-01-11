@@ -8,7 +8,7 @@ object GRPCConnectionHelper {
         //.forAddress("10.0.2.2", port)
         val port = System.getenv("PORT")?.toInt() ?: 50051
         val channel = ManagedChannelBuilder
-            .forAddress("192.168.1.187", port)
+            .forAddress("192.168.1.85", port)
             .usePlaintext()
             .build()
         val client = GRPCClient(channel)

@@ -80,7 +80,6 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
                 }
             }
         }
-
     }
 
     fun setAugmentedImagesOnUpdateListener(

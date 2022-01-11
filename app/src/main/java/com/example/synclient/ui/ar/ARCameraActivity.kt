@@ -41,7 +41,7 @@ class ARCameraActivity : AppCompatActivity() {
     var itemsChannel = ArrayList<ItemChannel>()
     private var adapter = object : ChannelAdapter() {
         override fun onClickBuilder(view: View, index: Int) {
-            currentChannelNumber = index
+            currentChannelNumber = index+1
             onChannelChanged()
         }
     }
@@ -107,7 +107,7 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun waitForLayout(layoutKind: Int) {
-        while (managerAR.layoutView.view == null) {
+        while ((managerAR.layoutView.view == null)&&(managerAR.isCreated)) {
             Thread.sleep(5)
         }
         handler.sendEmptyMessage(layoutKind)
@@ -130,7 +130,6 @@ class ARCameraActivity : AppCompatActivity() {
     private fun menuBind() {
         uploadRV()
         hideRV(false)
-        changeChannelPorts()
         val view = managerAR.layoutView.view
         val buttonAbout = view?.findViewById<Button>(R.id.buttonAbout)
         val calibrationButton = view?.findViewById<Button>(R.id.buttonCalibration)
@@ -148,6 +147,7 @@ class ARCameraActivity : AppCompatActivity() {
                 waitForLayout(3)
             }
         }
+        changeChannelPorts()
     }
 
     private fun infoBind() {
@@ -369,7 +369,7 @@ class ARCameraActivity : AppCompatActivity() {
 
     // Запрашивает у сервера число каналов
     fun getChannelCount(): Int {
-        var channelAmount: Int = 4
+        var channelAmount: Int = 8
         runBlocking { channelAmount = CalibrationHelper.getChannelCount() }
         Log.e("TAG","Channel_amount: $channelAmount")
         return channelAmount
@@ -379,7 +379,7 @@ class ARCameraActivity : AppCompatActivity() {
     fun uploadRV() {
         itemsChannel.clear()
         getChannelCount()
-        for (i in 0..channelsCount)
+        for (i in 1..channelsCount)
             itemsChannel.add(ItemChannel(id = i, name = "Ch $i", isActive = false))
         adapter.setData(itemsChannel)
         val channelRV = this.findViewById<RecyclerView>(R.id.channelRV)
