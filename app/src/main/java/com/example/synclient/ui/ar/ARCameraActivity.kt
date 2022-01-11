@@ -116,6 +116,7 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun menuBind() {
+        managerAR.createLine(1, 2)
         uploadRV()
         hideRV(false)
         changeChannelPorts()

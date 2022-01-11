@@ -26,7 +26,7 @@ class PortViewBuilder {
     lateinit var context: Context
     lateinit var infoView: View
     var isChecked = false
-
+    lateinit var  node: TransformableNode
     /**
      * Метод для создания и отображения порта устройства.
      *
@@ -80,10 +80,9 @@ class PortViewBuilder {
         quaternion: Quaternion
     ) {
         var anchorNode = AnchorNode(anchor)
-        var node = TransformableNode(arFragment.transformationSystem)
-
-        node.scaleController.minScale = 0.025f
-        node.scaleController.maxScale = 0.03f
+        node = TransformableNode(arFragment.transformationSystem)
+        node.scaleController.minScale = 0.0250f
+        node.scaleController.maxScale = 0.0251f
 
         //Корректирует расположение виджета в зависимости от найденного anchor.
         node.worldPosition = vector
@@ -92,6 +91,8 @@ class PortViewBuilder {
         node.renderable = viewRenderable
         arFragment.arSceneView.scene.addChild(anchorNode)
         node.select()
+
+
         //Находишь необходимый TextView для отоброжения номера порта.
         view = viewRenderable.view
         val portRadio: RadioButton = view.findViewById<RadioButton>(R.id.portChecked)
@@ -137,43 +138,5 @@ class PortViewBuilder {
         portText.text = text
     }
 
-    fun showPortInfo(text: String) {
 
-    }
-
-    private fun displayPortInfo(
-        arFragment: ArFragment,
-        anchor: Anchor,
-        viewRenderable: ViewRenderable,
-        vector: Vector3,
-        quaternion: Quaternion
-    ) {
-        var anchorNode = AnchorNode(anchor)
-        var node = TransformableNode(arFragment.transformationSystem)
-
-        node.scaleController.minScale = 0.025f
-        node.scaleController.maxScale = 0.03f
-        vector.y += 0.01f
-        node.worldPosition = vector
-        node.worldRotation = quaternion
-        node.parent = anchorNode
-        node.renderable = viewRenderable
-        arFragment.arSceneView.scene.addChild(anchorNode)
-
-        infoView = viewRenderable.view
-        val infoEditText = infoView.findViewById<TextView>(R.id.portInfoEditText)
-        infoEditText.setText(
-            "1. Вкл выкл\n" +
-                    "2. Стартовая и конечная\n" +
-                    "3. Кол-во точек\n" +
-                    "4. Тип стимула\n" +
-                    "5. Частота пол. Фильтра\n" +
-                    "6. Мощность \n" +
-                    "7. Калиброван или нет"
-        )
-        infoView.setOnClickListener {
-            node.parent = null
-        }
-
-    }
 }

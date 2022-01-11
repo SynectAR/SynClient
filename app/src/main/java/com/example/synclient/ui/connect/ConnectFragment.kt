@@ -52,7 +52,7 @@ class ConnectFragment : Fragment() {
 
         // Отслеживание изменений гироскопа
         var context = this.context as Context
-        val sensorManager: SensorManager? = getSystemService(context, SensorManager::class.java)
+       /* val sensorManager: SensorManager? = getSystemService(context, SensorManager::class.java)
         val mAccelerometer = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         var sensorListener = object: GyroscopeAdapter() {
             override fun vectorController(vector3: Vector3){
@@ -60,7 +60,7 @@ class ConnectFragment : Fragment() {
                 Log.e("TAG", vector3.toString())
             }
         }
-        sensorManager.registerListener(sensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(sensorListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL)*/
 
 
         val button = view?.findViewById(R.id.button_connect) as Button
