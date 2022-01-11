@@ -48,6 +48,7 @@ class ARCameraActivity : AppCompatActivity() {
 
     private lateinit var handler: Handler
     var currentChannelNumber = 1
+    var first = true
     var channelsCount = 1
     var mapOfPortsStatuses: MutableMap<Int, PortCalibrationStatus> =
         mutableMapOf<Int, PortCalibrationStatus>()
@@ -107,7 +108,7 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun waitForLayout(layoutKind: Int) {
-        while ((managerAR.layoutView.view == null)&&(managerAR.isCreated)) {
+        while (managerAR.layoutView.view == null) {
             Thread.sleep(5)
         }
         handler.sendEmptyMessage(layoutKind)
@@ -129,6 +130,10 @@ class ARCameraActivity : AppCompatActivity() {
 
     private fun menuBind() {
         uploadRV()
+        if(!first)
+            changeChannelPorts()
+        else
+            first = false
         hideRV(false)
         val view = managerAR.layoutView.view
         val buttonAbout = view?.findViewById<Button>(R.id.buttonAbout)
@@ -147,7 +152,7 @@ class ARCameraActivity : AppCompatActivity() {
                 waitForLayout(3)
             }
         }
-        changeChannelPorts()
+
     }
 
     private fun infoBind() {
