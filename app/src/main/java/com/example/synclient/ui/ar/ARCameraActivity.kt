@@ -1,12 +1,14 @@
 package com.example.synclient.ui.ar
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -100,6 +102,9 @@ class ARCameraActivity : AppCompatActivity() {
             waitForConfig()
             waitForLayout(1)
         }
+
+        val channelNumberView = this.findViewById<TextView>(R.id.channelNumber)
+        channelNumberView.visibility = View.INVISIBLE
     }
 
     private fun waitForConfig() {
@@ -132,8 +137,10 @@ class ARCameraActivity : AppCompatActivity() {
         uploadRV()
         if(!first)
             changeChannelPorts()
-        else
+        else{
             first = false
+        }
+
         hideRV(false)
         val view = managerAR.layoutView.view
         val buttonAbout = view?.findViewById<Button>(R.id.buttonAbout)
@@ -252,22 +259,22 @@ class ARCameraActivity : AppCompatActivity() {
         buttonThru?.setOnClickListener {
             findCheckedPort()
             val checked = selectedPort - 1
-            val index = listCalibration.indexOf(listCalibration.indexOf(checked))
-            Log.e("TAG", "index: $index")
-
-            val nextPort = listCalibration[index] + 1
-            Log.e("TAG", "nextPort: $nextPort")
-
-
+            val index = listCalibration.indexOf(checked)
+            val nextPort = listCalibration[index + 1]
             val portStatus = mapOfPortsStatuses[checked]
             portStatus?.thru = true
             updateMenuUI()
-
             runBlocking { CalibrationHelper.getPortMeasureThru(selectedPort, nextPort,currentChannelNumber) }
         }
         buttonApply?.setOnClickListener {
-            if (checkApply())
+            if (checkApply()){
                 runBlocking { CalibrationHelper.getApply(currentChannelNumber) }
+                managerAR.layoutView.destroyView()
+                managerAR.showLayout(R.layout.menu_ar)
+                CoroutineScope(Dispatchers.IO).launch {
+                    waitForLayout(1)
+                }
+            }
             else
                 Toast.makeText(
                     this, "Калибровка не завершена",
@@ -291,7 +298,14 @@ class ARCameraActivity : AppCompatActivity() {
 
     // Запрашивает у сервера число активных портов в текущем канале
     fun getChannelPorts() {
+
         runBlocking { listCalibration = CalibrationHelper.getPortList(currentChannelNumber)!! }
+        listCalibration = try{
+            listCalibration.sorted() as MutableList<Int>
+        } catch (exception: Throwable){
+            mutableListOf<Int>()
+        }
+
         Log.e("TAG",listCalibration.toString())
     }
 
@@ -406,8 +420,8 @@ class ARCameraActivity : AppCompatActivity() {
 
     private fun onChannelChanged() {
         val channelNumberView = this.findViewById<TextView>(R.id.channelNumber)
+        channelNumberView.visibility = View.VISIBLE
         channelNumberView.text = "Channel $currentChannelNumber"
-        getChannelPorts()
         menuBind()
     }
 
