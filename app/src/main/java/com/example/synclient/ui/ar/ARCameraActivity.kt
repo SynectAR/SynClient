@@ -233,6 +233,7 @@ class ARCameraActivity : AppCompatActivity() {
                         managerAR.returnColor()
                     }
                     managerAR.indexLastChangedPort = nextPort
+                    managerAR.createLine(index,nextPort)
                     managerAR.portList[nextPort].changePortColor(Color.YELLOW, false)
                 } catch (exception: Throwable) {
                     if (managerAR.indexLastChangedPort != -1) {

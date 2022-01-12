@@ -22,6 +22,7 @@ import com.google.ar.sceneform.ux.TransformableNode
  * Класс для создания и отображения обьекта порта устройства.
  */
 class PortViewBuilder {
+    lateinit var node: TransformableNode
     lateinit var view: View
     lateinit var context: Context
     lateinit var infoView: View
@@ -82,7 +83,7 @@ class PortViewBuilder {
         quaternion: Quaternion
     ) {
         var anchorNode = AnchorNode(anchor)
-        var node = TransformableNode(arFragment.transformationSystem)
+        node = TransformableNode(arFragment.transformationSystem)
 
         node.scaleController.minScale = 0.025f
         node.scaleController.maxScale = 0.03f
