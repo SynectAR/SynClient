@@ -56,7 +56,7 @@ class ARCameraActivity : AppCompatActivity() {
     var managerAR: ManagerAR = ManagerAR(this, this)
     var selectedPort: Int = -1
     var portArray: Array<Boolean> = arrayOf(false, false, false)
-    val calibrationTextHelper = this.findViewById<TextView>(R.id.textViewHelper)
+    lateinit var calibrationTextHelper:TextView
 
 
     override fun onAttachedToWindow() {
@@ -67,6 +67,7 @@ class ARCameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ar_camera)
+        calibrationTextHelper = this.findViewById<TextView>(R.id.textViewHelper)
         channelsCount = getChannelCount()
         // Создание CustomArFragment и инициализация работы с
         // распознованием картинок через AugmentedImages.
@@ -184,6 +185,8 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun infoBind() {
+        if(currentChannelNumber == -1)
+            currentChannelNumber = 1
         hideRV(true)
         val view = managerAR.layoutView.view
         val buttonReturn = view?.findViewById<Button>(R.id.buttonInfoReturn)
@@ -224,6 +227,8 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun calibrationBind() {
+        if(currentChannelNumber == -1)
+            currentChannelNumber = 1
         hideRV(true)
         managerAR.indexLastChangedPort = -1
         changeChannelPorts(Color.rgb(244, 0, 0))
@@ -361,11 +366,11 @@ class ARCameraActivity : AppCompatActivity() {
 
     // Возвращает выбранный порт
     fun findCheckedPort() {
-        if(selectedPort != -1) calibrationTextHelper.setText("")
         managerAR.portList.forEachIndexed { index, portViewBuilder ->
             if (portViewBuilder.isChecked)
                 selectedPort = index + 1
         }
+        if(selectedPort != -1) calibrationTextHelper.text = ""
     }
 
     fun statusOnClick(v: View) {

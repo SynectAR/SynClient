@@ -11,5 +11,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#DDDCDC</color>
     <color name="alpha_gray">#16DDDCDC</color>
+    <color name="lizard_green">#0b572e</color>
     <color name="transparent">#00FFFFFF</color>
 </resources>

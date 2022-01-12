@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/scene_form_fragment"
         app:layout_constraintEnd_toEndOf="@+id/scene_form_fragment"
         app:layout_constraintStart_toStartOf="@+id/scene_form_fragment"
