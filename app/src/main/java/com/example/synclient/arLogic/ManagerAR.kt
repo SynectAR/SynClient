@@ -35,6 +35,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
     lateinit var anchor: Anchor
     lateinit var arFragment: ArFragment
     var myContext: Context = context
+    var indexLastChangedPort = 0
     private var activity: ARCameraActivity = activity
 
 
@@ -104,7 +105,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
 
     fun changePortsColor(color: Int) {
         portList.forEach {
-            it.changePortColor(color)
+            it.changePortColor(color, true)
         }
     }
 
@@ -126,5 +127,12 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
         var config = Config(session)
         config.augmentedImageDatabase = null
         return config
+    }
+
+    fun returnColor() {
+        portList[indexLastChangedPort].changePortColor(
+            portList[indexLastChangedPort].portColor,
+            false
+        )
     }
 }

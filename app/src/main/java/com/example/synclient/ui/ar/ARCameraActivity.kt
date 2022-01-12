@@ -1,14 +1,12 @@
 package com.example.synclient.ui.ar
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -32,7 +30,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import vnarpc.SweepType
 import vnarpc.sweep_type
 
 
@@ -43,7 +40,7 @@ class ARCameraActivity : AppCompatActivity() {
     var itemsChannel = ArrayList<ItemChannel>()
     private var adapter = object : ChannelAdapter() {
         override fun onClickBuilder(view: View, index: Int) {
-            currentChannelNumber = index+1
+            currentChannelNumber = index + 1
             onChannelChanged()
         }
     }
@@ -135,10 +132,26 @@ class ARCameraActivity : AppCompatActivity() {
 
     private fun menuBind() {
         uploadRV()
-        if(!first)
-            changeChannelPorts()
-        else{
+        if (!first)
+            changeChannelPorts(Color.WHITE)
+        else {
             first = false
+        }
+
+        val portList = managerAR.portList
+        portList.forEach {
+            val port = it
+            val radioButton = it.view.findViewById<RadioButton>(R.id.portChecked)
+            radioButton.setOnClickListener {
+                port.isChecked = !port.isChecked
+                radioButton.isChecked = port.isChecked
+                if (port.isChecked) {
+                    portList.forEach {
+                        it.statustTo(false)
+                    }
+                    port.statustTo(true)
+                }
+            }
         }
 
         hideRV(false)
@@ -182,13 +195,21 @@ class ARCameraActivity : AppCompatActivity() {
         runBlocking {
             receivedText += "Ready Status: " + CalibrationHelper.getReadyStatus() + "\n"
         }
-        runBlocking { receivedText += "SweepType: " + CalibrationHelper.getSweepType(currentChannelNumber) + "\n" }
-        runBlocking { receivedText += "PointsCount: " + CalibrationHelper.getPointsCount(currentChannelNumber) + "\n" }
+        runBlocking {
+            receivedText += "SweepType: " + CalibrationHelper.getSweepType(
+                currentChannelNumber
+            ) + "\n"
+        }
+        runBlocking {
+            receivedText += "PointsCount: " + CalibrationHelper.getPointsCount(
+                currentChannelNumber
+            ) + "\n"
+        }
         runBlocking { receivedText += "TriggerMode: " + CalibrationHelper.getTriggerMode() + "\n" }
         var receivedMode: sweep_type
         runBlocking { receivedMode = CalibrationHelper.getSweepType(currentChannelNumber) }
         var receivedSpan: Array<Double>?
-        runBlocking { receivedSpan = CalibrationHelper.getSpan(receivedMode,currentChannelNumber) }
+        runBlocking { receivedSpan = CalibrationHelper.getSpan(receivedMode, currentChannelNumber) }
         runBlocking { receivedText += "Span: " + "min: " + receivedSpan!![0] + " max: " + receivedSpan!![1] + " result: " + (receivedSpan!![1] - receivedSpan!![0]) + "\n" }
         runBlocking { receivedText += "RfOut: " + CalibrationHelper.getRfOut() + "\n" }
         info?.text = receivedText
@@ -196,13 +217,29 @@ class ARCameraActivity : AppCompatActivity() {
 
     private fun calibrationBind() {
         hideRV(true)
+        managerAR.indexLastChangedPort = -1
+        changeChannelPorts(Color.rgb(244, 0, 0))
         fillPortStatus()
         // Делаем так чтобы только 1 порт был активен и тут же обновляем UI
         val portList = managerAR.portList
-        portList.forEach {
+        portList.forEachIndexed { index, it ->
             val port = it
             val radioButton = it.view.findViewById<RadioButton>(R.id.portChecked)
             radioButton.setOnClickListener {
+                try {
+                    val indexInList = listCalibration.indexOf(index)
+                    val nextPort = listCalibration[index + 1]
+                    if (managerAR.indexLastChangedPort != -1) {
+                        managerAR.returnColor()
+                    }
+                    managerAR.indexLastChangedPort = nextPort
+                    managerAR.portList[nextPort].changePortColor(Color.YELLOW, false)
+                } catch (exception: Throwable) {
+                    if (managerAR.indexLastChangedPort != -1) {
+                        managerAR.returnColor()
+                        managerAR.indexLastChangedPort = -1
+                    }
+                }
                 port.isChecked = !port.isChecked
                 radioButton.isChecked = port.isChecked
                 if (port.isChecked) {
@@ -238,7 +275,14 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses.get(checked)
             portStatus?.open = true
             updateMenuUI()
-            runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "O",currentChannelNumber) }
+            runBlocking {
+                CalibrationHelper.getPortMeasure(
+                    selectedPort,
+                    "O",
+                    currentChannelNumber
+                )
+            }
+            updatePortColor(checked)
         }
         buttonShort?.setOnClickListener {
             findCheckedPort()
@@ -246,7 +290,14 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses.get(checked)
             portStatus?.short = true
             updateMenuUI()
-            runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "S",currentChannelNumber) }
+            runBlocking {
+                CalibrationHelper.getPortMeasure(
+                    selectedPort,
+                    "S",
+                    currentChannelNumber
+                )
+            }
+            updatePortColor(checked)
         }
         buttonLoad?.setOnClickListener {
             findCheckedPort()
@@ -254,7 +305,14 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses.get(checked)
             portStatus?.load = true
             updateMenuUI()
-            runBlocking { CalibrationHelper.getPortMeasure(selectedPort, "L",currentChannelNumber) }
+            runBlocking {
+                CalibrationHelper.getPortMeasure(
+                    selectedPort,
+                    "L",
+                    currentChannelNumber
+                )
+            }
+            updatePortColor(checked)
         }
         buttonThru?.setOnClickListener {
             findCheckedPort()
@@ -264,18 +322,24 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses[checked]
             portStatus?.thru = true
             updateMenuUI()
-            runBlocking { CalibrationHelper.getPortMeasureThru(selectedPort, nextPort,currentChannelNumber) }
+            runBlocking {
+                CalibrationHelper.getPortMeasureThru(
+                    selectedPort,
+                    nextPort,
+                    currentChannelNumber
+                )
+            }
+            updatePortColor(checked)
         }
         buttonApply?.setOnClickListener {
-            if (checkApply()){
+            if (checkApply()) {
                 runBlocking { CalibrationHelper.getApply(currentChannelNumber) }
                 managerAR.layoutView.destroyView()
                 managerAR.showLayout(R.layout.menu_ar)
                 CoroutineScope(Dispatchers.IO).launch {
                     waitForLayout(1)
                 }
-            }
-            else
+            } else
                 Toast.makeText(
                     this, "Калибровка не завершена",
                     Toast.LENGTH_LONG
@@ -292,21 +356,22 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     fun statusOnClick(v: View) {
-        runBlocking { portArray = CalibrationHelper.getPortStatus(selectedPort,currentChannelNumber)!! }
+        runBlocking {
+            portArray = CalibrationHelper.getPortStatus(selectedPort, currentChannelNumber)!!
+        }
     }
 
 
     // Запрашивает у сервера число активных портов в текущем канале
     fun getChannelPorts() {
-
         runBlocking { listCalibration = CalibrationHelper.getPortList(currentChannelNumber)!! }
-        listCalibration = try{
+        listCalibration = try {
             listCalibration.sorted() as MutableList<Int>
-        } catch (exception: Throwable){
+        } catch (exception: Throwable) {
             mutableListOf<Int>()
         }
 
-        Log.e("TAG",listCalibration.toString())
+        Log.e("TAG", listCalibration.toString())
     }
 
     // Перед калибровкой заполняет карту значениями для каждого используемого порта
@@ -319,17 +384,17 @@ class ARCameraActivity : AppCompatActivity() {
         mapOfPortsStatuses[listCalibration[listCalibration.size - 1]]!!.thru = true
     }
 
-    // Меняет цвета портов и обновляет их
-    fun changeChannelPorts() {
+    // Меняет цвета портов на заданный цвет и обновляет их
+    fun changeChannelPorts(color: Int) {
         getChannelPorts()
         val listPort = managerAR.portList
         listPort.forEach {
             it.statustTo(false)
-            it.changePortColor(Color.GRAY)
+            it.changePortColor(Color.GRAY, true)
             it.changeActive(false)
         }
         listCalibration.forEach {
-            listPort[it].changePortColor(Color.WHITE)
+            listPort[it].changePortColor(color, true)
             listPort[it].changeActive(true)
         }
         managerAR.refreshPorts()
@@ -374,6 +439,15 @@ class ARCameraActivity : AppCompatActivity() {
             buttonThru?.setBackgroundColor(Color.WHITE)
     }
 
+    fun updatePortColor(id: Int) {
+        val portStatus = mapOfPortsStatuses[id]
+        if (portStatus != null) {
+            if (portStatus.short && portStatus.load && portStatus.load && portStatus.thru) {
+                managerAR.portList[id].changePortColor(Color.rgb(0, 244, 0), true)
+            }
+        }
+    }
+
     // Проверяет используемые порты на состояние проверки
     fun checkApply(): Boolean {
         listCalibration.forEach {
@@ -390,7 +464,7 @@ class ARCameraActivity : AppCompatActivity() {
     fun getChannelCount(): Int {
         var channelAmount: Int = 8
         runBlocking { channelAmount = CalibrationHelper.getChannelCount() }
-        Log.e("TAG","Channel_amount: $channelAmount")
+        Log.e("TAG", "Channel_amount: $channelAmount")
         return channelAmount
     }
 
