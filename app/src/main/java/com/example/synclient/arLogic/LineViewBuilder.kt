@@ -40,9 +40,9 @@ class LineViewBuilder {
         val directionFromTopToBottom = difference.normalized()
         val rotationFromAToB = Quaternion.lookRotation(directionFromTopToBottom, Vector3.up())
 
-        MaterialFactory.makeOpaqueWithColor(context, Color(0f,0f,0f)).thenAccept {
+        MaterialFactory.makeOpaqueWithColor(context, Color(1f,1f,0f)).thenAccept {
             val model = ShapeFactory.makeCube(
-                Vector3(.005f, .005f, difference.length()),
+                Vector3(.003f, .001f, difference.length()),
                 Vector3.zero(), it
             )
 

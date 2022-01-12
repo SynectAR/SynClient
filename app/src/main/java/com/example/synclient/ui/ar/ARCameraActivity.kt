@@ -131,6 +131,9 @@ class ARCameraActivity : AppCompatActivity() {
     }
 
     private fun menuBind() {
+        if(managerAR.lineList.size > 0)
+            managerAR.lineList[managerAR.lineList.size-1].destroyView()
+
         uploadRV()
         if (!first)
             changeChannelPorts(Color.WHITE)
@@ -234,9 +237,11 @@ class ARCameraActivity : AppCompatActivity() {
                     }
                     managerAR.indexLastChangedPort = nextPort
                     managerAR.createLine(listOfVectors[index],listOfVectors[nextPort])
-                    managerAR.portList[nextPort].changePortColor(Color.YELLOW, false)
+                    //managerAR.portList[nextPort].changePortColor(Color.YELLOW, false)
                 } catch (exception: Throwable) {
                     if (managerAR.indexLastChangedPort != -1) {
+                        if(managerAR.lineList.size > 0)
+                            managerAR.lineList[managerAR.lineList.size-1].destroyView()
                         managerAR.returnColor()
                         managerAR.indexLastChangedPort = -1
                     }
