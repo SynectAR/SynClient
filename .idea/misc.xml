@@ -18,6 +18,8 @@
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.1296875" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1296875" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1296875" />
+        <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/drawable/lizard_logo.xml" value="0.14635416666666667" />
+        <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/drawable/lizard_logo_app.xml" value="0.14635416666666667" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/about_channel_ar.xml" value="0.264" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/activity_ar_camera.xml" value="0.264" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/activity_calibration.xml" value="0.264" />
@@ -33,6 +35,7 @@
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/port_info.xml" value="0.264" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/layout/port_layout.xml" value="0.2" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/menu/bottom_nav_menu.xml" value="0.11354166666666667" />
+        <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/mipmap-anydpi-v26/app_logo.xml" value="0.14583333333333334" />
         <entry key="..\:/Workbench Android/SynectAR/SynClient/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1296875" />
       </map>
     </option>
