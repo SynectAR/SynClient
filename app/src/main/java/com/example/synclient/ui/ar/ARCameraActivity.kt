@@ -47,7 +47,7 @@ class ARCameraActivity : AppCompatActivity() {
 
     var listOfVectors = mutableListOf<Vector3>()
     private lateinit var handler: Handler
-    var currentChannelNumber = 1
+    var currentChannelNumber = -1
     var first = true
     var channelsCount = 1
     var mapOfPortsStatuses: MutableMap<Int, PortCalibrationStatus> =
@@ -56,6 +56,7 @@ class ARCameraActivity : AppCompatActivity() {
     var managerAR: ManagerAR = ManagerAR(this, this)
     var selectedPort: Int = -1
     var portArray: Array<Boolean> = arrayOf(false, false, false)
+    val calibrationTextHelper = this.findViewById<TextView>(R.id.textViewHelper)
 
 
     override fun onAttachedToWindow() {
@@ -102,6 +103,7 @@ class ARCameraActivity : AppCompatActivity() {
 
         val channelNumberView = this.findViewById<TextView>(R.id.channelNumber)
         channelNumberView.visibility = View.INVISIBLE
+        calibrationTextHelper.setText("Наведите камеру на изображение, находящееся на устройтве.")
     }
 
     private fun waitForConfig() {
@@ -175,7 +177,8 @@ class ARCameraActivity : AppCompatActivity() {
                 waitForLayout(3)
             }
         }
-
+        if(currentChannelNumber == -1) calibrationTextHelper.setText("Выберите канал для проведения калибровки.")
+        else calibrationTextHelper.setText("")
     }
 
     private fun infoBind() {
@@ -351,10 +354,12 @@ class ARCameraActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
         }
+        calibrationTextHelper.setText("Нажмите на порт для выбора калибруемого порта.")
     }
 
     // Возвращает выбранный порт
     fun findCheckedPort() {
+        if(selectedPort != -1) calibrationTextHelper.setText("")
         managerAR.portList.forEachIndexed { index, portViewBuilder ->
             if (portViewBuilder.isChecked)
                 selectedPort = index + 1
