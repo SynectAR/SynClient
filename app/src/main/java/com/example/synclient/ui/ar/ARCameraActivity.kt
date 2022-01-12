@@ -72,12 +72,12 @@ class ARCameraActivity : AppCompatActivity() {
         // распознованием картинок через AugmentedImages.
         val listOfQuaternion = mutableListOf<Quaternion>()
         for (i in 0..7) {
-            listOfVectors.add(Vector3(0.04f + 0.04f * i, 0.006f, 0.004f))
+            listOfVectors.add(Vector3(0.04f + 0.04f * i, 0.006f, 0.003f))
             listOfQuaternion.add(Quaternion.axisAngle(Vector3(-90f, 0f, 0f), 1f))
         }
 
         for (i in 0..7) {
-            listOfVectors.add(Vector3(0.02f + 0.04f * i, -0.0055f, -0.03f))
+            listOfVectors.add(Vector3(0.02f + 0.04f * i, -0.0076f, -0.03f))
             listOfQuaternion.add(Quaternion.axisAngle(Vector3(-60f, 0f, 0f), 1f))
         }
 
@@ -122,9 +122,11 @@ class ARCameraActivity : AppCompatActivity() {
         var config = managerAR.arFragment.arSceneView.session?.config
         if (config != null) {
             config.focusMode = Config.FocusMode.AUTO
-            val bitmapQR = BitmapFactory.decodeResource(resources, R.drawable.demo_img2)
+            val bitmapQR = BitmapFactory.decodeResource(resources, R.drawable.demo_img4)
+            val bitmapLizard = BitmapFactory.decodeResource(resources, R.drawable.demo_img2)
             val aid = AugmentedImageDatabase(managerAR.arFragment.arSceneView.session)
             aid.addImage("qrCode", bitmapQR, 0.015f)
+            aid.addImage("lizard",bitmapLizard,0.015f)
             config.augmentedImageDatabase = aid
             config.planeFindingMode = Config.PlaneFindingMode.DISABLED
             config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE

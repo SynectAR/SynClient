@@ -11,11 +11,6 @@ import com.example.synclient.R
 
 
 class ConnectFragment : Fragment() {
-    private var isConnected: Boolean = false
-    private lateinit var handler: Handler
-    private lateinit var bitmap: Bitmap
-    private lateinit var deviceInfo: String
-    private var port = 8000
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

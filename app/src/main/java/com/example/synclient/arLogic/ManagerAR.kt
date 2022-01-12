@@ -1,7 +1,6 @@
 package com.example.synclient.arLogic
 
 import android.content.Context
-import android.util.Log
 import com.example.synclient.R
 import com.example.synclient.ui.ar.ARCameraActivity
 import com.google.ar.core.Anchor
@@ -61,7 +60,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
             if (image.trackingState == TrackingState.TRACKING
                 && image.trackingMethod == AugmentedImage.TrackingMethod.FULL_TRACKING
             ) {
-                if (image.name.equals("qrCode")) {
+                if (image.name.equals("qrCode") || image.name.equals("lizard")) {
                     anchor = image.createAnchor(image.centerPose)
                     isFound = true
                     showLayout(R.layout.menu_ar)
@@ -139,8 +138,8 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
 
 
     fun createLine(point1: Vector3, point2: Vector3) {
-        if(lineList.size > 0)
-            lineList[lineList.size-1].destroyView()
+        if (lineList.size > 0)
+            lineList[lineList.size - 1].destroyView()
         var line = LineViewBuilder()
         line.createLine(
             arFragment,
