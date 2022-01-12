@@ -43,7 +43,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
     //Лист, содержащий в себе все PortAR обьекты.
     var portList = mutableListOf<PortViewBuilder>()
     var layoutView: LayoutViewBuilder = LayoutViewBuilder()
-    var lineView: LineViewBuilder = LineViewBuilder()
+    var lineList = mutableListOf<LineViewBuilder>()
 
     /**
      * Метод для поиска изображения и создания anchor в ее центре.
@@ -138,16 +138,18 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
     }
 
 
-    fun createLine(portNumber1: Int, portNumber2: Int) {
-        Log.e("TAG","port1: $portNumber1 port2: $portNumber2")
-        lineView = LineViewBuilder()
-        lineView.createLine(
+    fun createLine(point1: Vector3, point2: Vector3) {
+        if(lineList.size > 0)
+            lineList[lineList.size-1].destroyView()
+        var line = LineViewBuilder()
+        line.createLine(
             arFragment,
             anchor,
             myContext,
-            portList[portNumber1-1].node,
-            portList[portNumber2-1].node
+            point1,
+            point2
         )
+        lineList.add(line)
     }
 
 

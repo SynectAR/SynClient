@@ -45,6 +45,7 @@ class ARCameraActivity : AppCompatActivity() {
         }
     }
 
+    var listOfVectors = mutableListOf<Vector3>()
     private lateinit var handler: Handler
     var currentChannelNumber = 1
     var first = true
@@ -68,7 +69,6 @@ class ARCameraActivity : AppCompatActivity() {
         channelsCount = getChannelCount()
         // Создание CustomArFragment и инициализация работы с
         // распознованием картинок через AugmentedImages.
-        val listOfVectors = mutableListOf<Vector3>()
         val listOfQuaternion = mutableListOf<Quaternion>()
         for (i in 0..7) {
             listOfVectors.add(Vector3(0.04f + 0.04f * i, 0.006f, 0.004f))
@@ -228,12 +228,12 @@ class ARCameraActivity : AppCompatActivity() {
             radioButton.setOnClickListener {
                 try {
                     val indexInList = listCalibration.indexOf(index)
-                    val nextPort = listCalibration[index + 1]
+                    val nextPort = listCalibration[indexInList + 1]
                     if (managerAR.indexLastChangedPort != -1) {
                         managerAR.returnColor()
                     }
                     managerAR.indexLastChangedPort = nextPort
-                    managerAR.createLine(index,nextPort)
+                    managerAR.createLine(listOfVectors[index],listOfVectors[nextPort])
                     managerAR.portList[nextPort].changePortColor(Color.YELLOW, false)
                 } catch (exception: Throwable) {
                     if (managerAR.indexLastChangedPort != -1) {
@@ -472,7 +472,8 @@ class ARCameraActivity : AppCompatActivity() {
     // Заполняет список каналов элементами
     fun uploadRV() {
         itemsChannel.clear()
-        getChannelCount()
+        if (!first)
+            channelsCount = getChannelCount()
         for (i in 1..channelsCount)
             itemsChannel.add(ItemChannel(id = i, name = "Ch $i", isActive = false))
         adapter.setData(itemsChannel)

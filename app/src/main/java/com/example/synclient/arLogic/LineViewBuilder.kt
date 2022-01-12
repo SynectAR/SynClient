@@ -31,13 +31,10 @@ class LineViewBuilder {
         arFragment: ArFragment,
         anchor: Anchor,
         context: Context,
-        node1: TransformableNode,
-        node2: TransformableNode
+        point1: Vector3,
+        point2: Vector3
     ) {
         this.context = context
-
-        val point1: Vector3 = node1.worldPosition
-        val point2: Vector3 = node2.worldPosition
 
         val difference = Vector3.subtract(point1, point2)
         val directionFromTopToBottom = difference.normalized()
@@ -54,7 +51,7 @@ class LineViewBuilder {
             scene = arFragment.arSceneView.scene
 
             //Корректирует расположение виджета в зависимости от найденного anchor.
-            node.worldPosition = Vector3.add(Vector3.add(point1, point2),Vector3(0f,0.0f,0.0f))
+            node.worldPosition = Vector3.add(Vector3.add(Vector3.add(point1, point2),Vector3(0f,0.0f,0.0f)).scaled(0.5f),Vector3(-0.005f,0.01f,-0.01f))
             node.worldRotation = rotationFromAToB
             node.parent = anchorNode
             node.renderable = model
@@ -64,6 +61,7 @@ class LineViewBuilder {
     }
 
     fun destroyView() {
-        view.visibility = View.GONE
+        scene.removeChild(anchorNode)
+        node.parent = null
     }
 }
