@@ -85,8 +85,8 @@ class PortViewBuilder {
         var anchorNode = AnchorNode(anchor)
         node = TransformableNode(arFragment.transformationSystem)
 
-        node.scaleController.minScale = 0.025f
-        node.scaleController.maxScale = 0.03f
+        node.scaleController.minScale = 0.0250f
+        node.scaleController.maxScale = 0.0251f
 
         //Корректирует расположение виджета в зависимости от найденного anchor.
         node.worldPosition = vector

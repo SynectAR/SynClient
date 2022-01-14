@@ -60,7 +60,7 @@ class ManagerAR constructor(context: Context, activity: ARCameraActivity) {
             if (image.trackingState == TrackingState.TRACKING
                 && image.trackingMethod == AugmentedImage.TrackingMethod.FULL_TRACKING
             ) {
-                if (image.name.equals("qrCode") || image.name.equals("lizard")) {
+                if (image.name.equals("qrCode")) {
                     anchor = image.createAnchor(image.centerPose)
                     isFound = true
                     showLayout(R.layout.menu_ar)
