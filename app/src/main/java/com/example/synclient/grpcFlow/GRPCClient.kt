@@ -11,11 +11,11 @@ import java.util.concurrent.TimeUnit
 public class GRPCClient(private val channel: ManagedChannel) : Closeable {
     private val stub: VnaRpcCoroutineStub = VnaRpcCoroutineStub(channel)
 
-    suspend fun sayHello(name: String): String {
-        val request = HelloRequest.newBuilder().setName(name).build()
-        val response = stub.sayHello(request)
-        println("Received: ${response.message}")
-        return response.message
+    suspend fun isConnected(): String {
+        val request = EmptyMessage.newBuilder().build()
+        val response = stub.isConnected(request)
+        var responseStatus = response.connectionState.toString()
+        return responseStatus
     }
 
     suspend fun portCount(): Int {
@@ -25,18 +25,17 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         return response.portcount
     }
 
-    suspend fun portStatus(port: Int): Boolean {
-        val request = Port.newBuilder().build()
+    suspend fun portStatus(port: Int,channel : Int): Array<Boolean> {
+        val request = PortAndChannel.newBuilder().setPort(port).setChannel(channel).build()
         val response = stub.getPortStatus(request)
-        if (response.open) return response.open
-        if (response.short) return response.short
-        if (response.load) return response.load
-        else return false
+        var responseArray = arrayOf(response.open, response.short, response.load)
+        return responseArray
     }
 
-    suspend fun measurePort(port: Int, type: String) {
+    suspend fun measurePort(port: Int, type: String,channel: Int) {
         val request = MeasureParams.newBuilder()
             .setPort(port)
+            .setChannel(channel)
             .setType(type)
             .setGender(true)
             .build()
@@ -44,26 +43,102 @@ public class GRPCClient(private val channel: ManagedChannel) : Closeable {
         println("Received: ${response}")
     }
 
-    suspend fun measureThru(firstPort: Int, secondPort: Int) {
-        val request = PortsPair.newBuilder()
-            .setFirstport(firstPort)
-            .setSecondport(secondPort)
+    suspend fun measureThru(firstPort: Int, secondPort: Int,channel: Int) {
+        val request = ThruParams.newBuilder()
+            .setChannel(channel)
+            .setRcvport(firstPort)
+            .setSrcport(secondPort)
             .build()
         val response = stub.measureThru(request)
         println("Received: ${response}")
     }
 
-    suspend fun apply() {
-        val request = EmptyMessage.newBuilder().build()
+    suspend fun apply(channel: Int) {
+        val request = Channel.newBuilder().setChannel(channel).build()
+        val response = stub.apply(request)
+        println("Received: ${response} ")
+    }
+
+    suspend fun reset(channel: Int) {
+        val request = Channel.newBuilder().setChannel(channel).build()
         val response = stub.reset(request)
         println("Received: ${response} ")
     }
 
-    suspend fun reset() {
+    suspend fun isReady(): Boolean {
         val request = EmptyMessage.newBuilder().build()
-        val response = stub.reset(request)
+        val response = stub.isReady(request)
+        var responseState = response.state
+        return responseState
+    }
+
+    // Возможо не правильный тип возврата данных
+    suspend fun sweepType(channel: Int): sweep_type {
+        val request = Channel.newBuilder().setChannel(channel).build()
+        val response = stub.sweepType(request)
+        var responseType = response.type
+        return responseType
+    }
+
+    suspend fun pointsCount(channel: Int): Int {
+        val request = Channel.newBuilder().setChannel(channel).build()
+        val response = stub.pointsCount(request)
+        var responseCount = response.count
+        return responseCount
+    }
+
+    suspend fun triggerMode(): String {
+        val request = EmptyMessage.newBuilder().build()
+        val response = stub.triggerMode(request)
+        var responseMode = response.triggermode.toString()
+        return responseMode
+    }
+
+    suspend fun span(sweepType: sweep_type,channel: Int): Array<Double> {
+        val request = SweepTypeAndChannel.newBuilder().setType(sweepType).setChannel(channel).build()
+        val response = stub.span(request)
+        var responseMinMax = arrayOf(response.min, response.max)
+        return responseMinMax
+    }
+
+    suspend fun rfOut(): Boolean {
+        val request = EmptyMessage.newBuilder().build()
+        val response = stub.rfOut(request)
+        var responseRF = response.state
+        return responseRF
+    }
+
+    suspend fun calibrationType(channel: Int): String {
+        val request = Channel.newBuilder().setChannel(channel).build()
+        val response = stub.calibrationType(request)
+        var responseType = response.type
+        return responseType
+    }
+
+    suspend fun portList(channel: Int): MutableList<Int>? {
+        val request = Channel.newBuilder().setChannel(channel).build()
+        val response = stub.portList(request)
+        var responseList = response.portsList
+        return responseList
+    }
+
+    //TODO: Дописать с передачей выбранных портов для калибровки
+    suspend fun choosePortsSolt2(channel: Int,portArray: MutableIterable<Int>) {
+        val request =
+            SoltPorts.newBuilder().setChannel(channel).addAllPorts(portArray).build()
+        val response = stub.chooseSoltPorts(request)
         println("Received: ${response} ")
     }
+
+    suspend fun channelCount() : Int
+    {
+        val request = EmptyMessage.newBuilder().build()
+        val response = stub.channelCount(request)
+        var responseCount = response.count
+        println("Received: ${response} ")
+        return responseCount
+    }
+
 
     override fun close() {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS)
@@ -86,8 +161,7 @@ suspend fun main(args: Array<String>) {
 
     //val user = args.singleOrNull() ?: 0
     val user = args.singleOrNull() ?: "world"
-    client.sayHello(user)
-    //client.sayHello("TestName")
+
     println("Поздоровался ли?")
     channel.shutdown()
 }

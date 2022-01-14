@@ -11,18 +11,6 @@
         android:label="@string/title_connect"
         tools:layout="@layout/fragment_connect" />
 
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.synclient.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.synclient.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
-
     <activity
         android:id="@+id/navigation_ar"
         android:name="com.example.synclient.ui.ar.ARCameraActivity"

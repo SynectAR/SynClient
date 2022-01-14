@@ -1,31 +1,116 @@
 syntax = "proto3";
 
-package vnarpc; //vnarpc
+package vnarpc;
 
 option java_multiple_files = true;
 
 service VnaRpc {
-    rpc SayHello (HelloRequest) returns (HelloReply) {}
+    rpc isConnected (EmptyMessage) returns (ConnectionState) {}
+
     rpc getPortCount (EmptyMessage) returns (PortCount) {}
-    rpc getPortStatus (Port) returns (PortStatus) {}
+    rpc getPortStatus (PortAndChannel) returns (PortStatus) {}
     rpc measurePort (MeasureParams) returns (EmptyMessage) {}
-    rpc measureThru (PortsPair) returns (EmptyMessage) {}
-    rpc apply (EmptyMessage) returns (EmptyMessage) {}
-    rpc reset (EmptyMessage) returns (EmptyMessage) {}
+    rpc measureThru (ThruParams) returns (EmptyMessage) {}
+    rpc apply (Channel) returns (EmptyMessage) {}
+    rpc reset (Channel) returns (EmptyMessage) {}
+
+
+    rpc isReady (EmptyMessage) returns (State) {} // вкл выкл для устройства
+    rpc sweepType (Channel) returns (SweepType) {} // режим измерения
+    rpc pointsCount (Channel) returns (Points) {} // количество точек
+    rpc triggerMode (EmptyMessage) returns (TriggerMode) {} // триггер
+    // span если измерение по мощности то по мощности иначе частота
+    rpc span (SweepTypeAndChannel) returns (Span) {}
+    // rfout
+    rpc rfOut (EmptyMessage) returns (State) {}
+    // откалиброван или нет
+    rpc calibrationType (Channel) returns (CalibrationType) {}
+    // список используемых портов в канале
+    rpc portList (Channel) returns (ActivePorts) {}
+    // выбор портов для солт2
+    rpc chooseSoltPorts (SoltPorts) returns (EmptyMessage) {}
+    rpc channelCount(EmptyMessage) returns (ChannelCount) {}
 }
 
+message ChannelCount {
+    int32 count = 1;
+}
 
-message EmptyMessage {}
+enum sweep_type {
+    linear = 0;
+    logarithmic = 1;
+    power = 2;
+    segment = 3;
+}
 
-message Port {
+message SweepTypeAndChannel {
+    sweep_type type = 1;
+    int32 channel = 2;
+}
+
+message SoltPorts {
+    repeated int32 ports = 1;
+    int32 channel = 2;
+}
+
+message Channel {
+    int32 channel = 1;
+}
+
+message ThruParams {
+    int32 channel = 1;
+    int32 srcport = 2;
+    int32 rcvport = 3;
+}
+
+message ActivePorts {
+    repeated int32 ports = 1;
+}
+
+message CalibrationType {
+    string type = 1;
+}
+
+message Span {
+    double min = 1;
+    double max = 2;
+}
+
+message TriggerMode {
+    enum mode {
+        continuous = 0;
+        hold = 1;
+    }
+    mode triggermode = 1;
+}
+
+message Points {
+    int32 count = 1;
+}
+
+message ConnectionState {
+    string connectionState = 1;
+}
+
+message SweepType {
+    sweep_type type = 1;
+}
+
+message State {
+    bool state = 1;
+}
+
+message PortAndChannel {
     int32 port = 1;
+    int32 channel = 2;
 }
 
 //номер порта, тип нагрузки, гендер
 message MeasureParams {
     int32 port = 1;
-    string type = 2;
-    bool gender = 3;
+    int32 channel = 2;
+    string type = 3;
+    bool gender = 4;
 }
 
 // статус порта open short load gender
@@ -36,21 +121,8 @@ message PortStatus {
     bool gender = 4;
 }
 
-// пара портов для измерения на перемычке
-message PortsPair {
-    int32 firstport = 1;
-    int32 secondport = 2;
-}
-
 message PortCount {
     int32 portcount = 3;
 }
 
-message HelloRequest {
-    string name = 1;
-}
-
-// The response message containing the greetings
-message HelloReply {
-    string message = 1;
-}
+message EmptyMessage {}

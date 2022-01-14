@@ -6,33 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".ui.ar.ARCameraActivity">
 
+
     <fragment
         android:id="@+id/scene_form_fragment"
         android:name="com.example.synclient.arLogic.CustomArFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/scene_form_fragment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.39"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-    </HorizontalScrollView>
-
-    <Button
-        android:id="@+id/buttonReturn"
+    <TextView
+        android:id="@+id/textViewHelper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="finishActivity"
-        android:text="Вернуться"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_weight="1"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/scene_form_fragment"
+        app:layout_constraintEnd_toEndOf="@+id/scene_form_fragment"
+        app:layout_constraintStart_toStartOf="@+id/scene_form_fragment"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/scene_form_fragment"
+        tools:layout_editor_absoluteX="0dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/channelRV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:paddingStart="0dp"
+            tools:listitem="@layout/item_channel" />
+
+        <TextView
+            android:id="@+id/channelNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Channel 1"
+            android:textSize="20dp" />
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
