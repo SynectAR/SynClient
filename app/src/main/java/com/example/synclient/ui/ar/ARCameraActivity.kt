@@ -277,11 +277,13 @@ class ARCameraActivity : AppCompatActivity() {
         val buttonThru = view?.findViewById<Button>(R.id.buttonThru)
         val buttonApply = view?.findViewById<Button>(R.id.buttonApply)
         buttonReturn?.setOnClickListener {
-            runBlocking { CalibrationHelper.getReset(currentChannelNumber) }
             managerAR.layoutView.destroyView()
             managerAR.showLayout(R.layout.menu_ar)
             CoroutineScope(Dispatchers.IO).launch {
                 waitForLayout(1)
+            }
+            CoroutineScope(Dispatchers.Default).launch {
+                runBlocking { CalibrationHelper.getReset(currentChannelNumber) }
             }
         }
 
@@ -291,13 +293,16 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses.get(checked)
             portStatus?.open = true
             updateMenuUI()
-            runBlocking {
-                CalibrationHelper.getPortMeasure(
-                    selectedPort,
-                    "O",
-                    currentChannelNumber
-                )
+            CoroutineScope(Dispatchers.Default).launch {
+                runBlocking {
+                    CalibrationHelper.getPortMeasure(
+                        selectedPort,
+                        "O",
+                        currentChannelNumber
+                    )
+                }
             }
+
             updatePortColor(checked)
         }
         buttonShort?.setOnClickListener {
@@ -306,13 +311,16 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses.get(checked)
             portStatus?.short = true
             updateMenuUI()
-            runBlocking {
-                CalibrationHelper.getPortMeasure(
-                    selectedPort,
-                    "S",
-                    currentChannelNumber
-                )
+            CoroutineScope(Dispatchers.Default).launch {
+                runBlocking {
+                    CalibrationHelper.getPortMeasure(
+                        selectedPort,
+                        "S",
+                        currentChannelNumber
+                    )
+                }
             }
+
             updatePortColor(checked)
         }
         buttonLoad?.setOnClickListener {
@@ -321,12 +329,14 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses.get(checked)
             portStatus?.load = true
             updateMenuUI()
-            runBlocking {
-                CalibrationHelper.getPortMeasure(
-                    selectedPort,
-                    "L",
-                    currentChannelNumber
-                )
+            CoroutineScope(Dispatchers.Default).launch {
+                runBlocking {
+                    CalibrationHelper.getPortMeasure(
+                        selectedPort,
+                        "L",
+                        currentChannelNumber
+                    )
+                }
             }
             updatePortColor(checked)
         }
@@ -338,12 +348,14 @@ class ARCameraActivity : AppCompatActivity() {
             val portStatus = mapOfPortsStatuses[checked]
             portStatus?.thru = true
             updateMenuUI()
-            runBlocking {
-                CalibrationHelper.getPortMeasureThru(
-                    selectedPort,
-                    nextPort,
-                    currentChannelNumber
-                )
+            CoroutineScope(Dispatchers.Default).launch {
+                runBlocking {
+                    CalibrationHelper.getPortMeasureThru(
+                        selectedPort,
+                        nextPort,
+                        currentChannelNumber
+                    )
+                }
             }
             updatePortColor(checked)
         }
